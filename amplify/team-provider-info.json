@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-sparkinternshipweb-dev-130617-authRole",
+      "UnauthRoleArn": "arn:aws:iam::658838994814:role/amplify-sparkinternshipweb-dev-130617-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::658838994814:role/amplify-sparkinternshipweb-dev-130617-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-sparkinternshipweb-dev-130617-deployment",
+      "UnauthRoleName": "amplify-sparkinternshipweb-dev-130617-unauthRole",
+      "StackName": "amplify-sparkinternshipweb-dev-130617",
+      "StackId": "arn:aws:cloudformation:us-west-2:658838994814:stack/amplify-sparkinternshipweb-dev-130617/ebbf7e40-0fa5-11ee-a406-026e6b178b5f",
+      "AmplifyAppId": "d6c69cwzp02ot"
+    },
+    "categories": {
+      "auth": {
+        "sparkinternshipweb6aceb457": {}
+      },
+      "api": {
+        "sparkinternshipweb": {}
+      }
+    }
+  }
+}
