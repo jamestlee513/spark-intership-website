@@ -3,6 +3,7 @@ import "./App.css";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 
+// This is the app (this comment is very useful)
 function App() {
   return (
     <div className="App">
