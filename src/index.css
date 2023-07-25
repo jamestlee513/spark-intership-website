@@ -11,3 +11,24 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+body {
+  padding: 20px;
+  letter-spacing: 1px;
+}
+
+.active {
+  font-weight: bold;
+}
+
+.register-form {
+  margin-top: 20px;
+}
+
+.form-details {
+  margin-top: 20px;
+}
+
+.form-details > div {
+  margin: 10px;
+}
