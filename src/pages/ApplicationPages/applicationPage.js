@@ -6,9 +6,9 @@ export default function ApplicationPage() {
     return (
         <div>
             <p>Hello Matthew, Thank you for applying for the Spark Internship, unfortunately we decided to reject your application</p>
-            <li>  
-                <Link to="/">Home Page</Link>  
-            </li>  
+            <Link to="/">Home Page</Link> 
+            <br/>
+            <Link to="/review">Review Page</Link>   
         </div>
     )
 }
