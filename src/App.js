@@ -13,10 +13,10 @@ function App() {
     <div className="App">  
     <Routes> 
         { /* Put your page(s) here */}
-        <Route exact path='/' element={< HomePage />}></Route>  
-        <Route exact path='/application' element={< ApplicationPage />}></Route>  
-        <Route exact path='/review' element={< ReviewPage />}></Route>  
-        <Route exact path='/submit' element={< SubmitPage />}></Route>  
+        <Route path='/' element ={<HomePage/>}/>
+        <Route path='/application' element={<ApplicationPage />}/>
+        <Route path='/review' element={<ReviewPage />}/>
+        <Route path='/submit' element={<SubmitPage />}/>
     </Routes>
     </div>  
     </BrowserRouter>   
