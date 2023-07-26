@@ -14,7 +14,8 @@ const ReviewPage = () => {
             <p>{stuff.phoneNumber}</p>
             <h1>City</h1>
             <p>{stuff.city}</p>
-            <Link to="/submit">Submit</Link>
+            <Link to="/application"
+            state={{stuff: {firstName: stuff.firstName, lastName: stuff.lastName, email: stuff.email, phoneNumber: stuff.phone, city: stuff.city, resume: stuff.resume, coverLetter: stuff.coverLetter}}}>Submit</Link>
         </div>
     )
 }
