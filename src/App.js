@@ -6,6 +6,7 @@ import ApplicationPage from "./pages/ApplicationPages/applicationPage";
 import HomePage from "./pages/HomePage/homePage";
 import ReviewPage from "./pages/ApplicationPages/reviewPage";
 import SubmitPage from "./pages/ApplicationPages/submitPage";
+import CreateListingsPage from "./pages/JobListingsPages/creationPage"
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path='/application' element={<ApplicationPage />}/>
         <Route path='/review' element={<ReviewPage />}/>
         <Route path='/submit' element={<SubmitPage />}/>
+        <Route path='/create' element={<CreateListingsPage/>}/>
     </Routes>
     </div>  
     </BrowserRouter>   
