@@ -1,5 +1,5 @@
 import "./App.css";
-import { Routes, Route, BrowserRouter, Link } from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 import ApplicationPage from "./pages/ApplicationPages/applicationPage";
