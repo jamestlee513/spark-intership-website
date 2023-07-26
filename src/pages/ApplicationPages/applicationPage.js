@@ -1,23 +1,68 @@
-import React, { useState } from 'react'
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react'
+import { useLocation, useNavigate } from "react-router-dom";
 import { Form } from 'react-bootstrap';
 
 const ApplicationPage = (props) => {
+  let location = useLocation();
+  const navigate = useNavigate()
   const [state, setState] = useState({
     firstName: '',
     lastName: '',
     email: '',
     city: '',
-    phone: ''
+    phone: '',
+    errors: { firstName: '', lastName: '', email: '', city: '' , phone: '', resume: '', coverLetter: ''}
   });
-
   const [resume, setResume] = useState(null);
+  const [coverLetter, setCoverLetter] = useState(null);
   const [resumeURL, setResumeURL] = useState('');
+  const [coverLetterURL, setCoverLetterURL] = useState('');
 
-  const handleFileChange = (event) => {
+  useEffect(() => {
+    if (location.state != null) {
+      const {stuff} = location.state
+      if (stuff != null) {
+        setState(() => ({
+          firstName: stuff.firstName,
+          lastName: stuff.lastName,
+          email: stuff.email,
+          city: stuff.city,
+          phone: stuff.phone,
+        }));
+        setResume(stuff.resume)
+        setCoverLetter(stuff.coverLetter)
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setResumeURL(reader.result);
+        };
+        if (stuff.resume !== null) {
+          reader.readAsDataURL(stuff.resume);
+        }
+
+        const reader2 = new FileReader();
+        reader2.onloadend = () => {
+          setCoverLetterURL(reader2.result);
+        };
+        if (stuff.coverLetter !== null) {
+          reader2.readAsDataURL(stuff.coverLetter);
+        }
+      }
+    }
+  }, [])
+
+
+ 
+
+  const handleResumeChange = (event) => {
     const selectedFile = event.target.files[0];
     setResume(selectedFile);
-    displayFile(selectedFile);
+    displayResume(selectedFile);
+  };
+
+  const handleCoverLetterChange = (event) => {
+    const selectedFile = event.target.files[0];
+    setCoverLetter(selectedFile);
+    displayCoverLetter(selectedFile);
   };
 
   const handleInputChange = (event) => {
@@ -28,18 +73,58 @@ const ApplicationPage = (props) => {
     }));
   };
 
-  const displayFile = (file) => {
+  const displayResume = (file) => {
     const reader = new FileReader();
     reader.onloadend = () => {
       setResumeURL(reader.result);
     };
-    if (file !== null) {
-      reader.readAsDataURL(file);
-    }
-    
+    reader.readAsDataURL(file);
   };
 
+  const displayCoverLetter = (file) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setCoverLetterURL(reader.result);
+    };
+    reader.readAsDataURL(file);
+  }; 
 
+  const handleValidation = () => {
+    const { firstName, lastName, email, city, phone, resume, coverLetter } = this.state;
+    let errors = { firstName: '', lastName: '', email: '', city: '' , phone: '', resume: '', coverLetter: ''};
+
+    if (!firstName) {
+     errors.firstName = 'First name is required';
+    }
+
+    if (!lastName) {
+      errors.lastName = 'Last name is required';
+    }
+
+    if (!email) {
+      errors.email = 'Email is required';
+    }
+
+    if (!city) {
+      errors.city = 'City is required'
+    }
+
+    if (!phone) {
+      errors.phone = 'Phone number is required'
+    }
+
+    if (!resume) {
+      errors.resume = 'Resume is required';
+    }
+
+    setState((prevState) => ({
+      ...prevState,
+      errors: {errors}
+    }));
+  }
+
+
+  const { errors } = state;
   return (
     <div>
     <h1>Registration Form</h1>
@@ -50,15 +135,19 @@ const ApplicationPage = (props) => {
           type="text"
           placeholder="Enter first name"
           name="firstName"
+          defaultValue = {state.firstName}
           onChange={handleInputChange}
         />
+        
       </Form.Group>
+      
       <Form.Group controlId="lastName">
         <Form.Label>Last name</Form.Label>
         <Form.Control
           type="text"
           placeholder="Enter last name"
           name="lastName"
+          defaultValue = {state.lastName}
           onChange={handleInputChange}
         />
       </Form.Group>
@@ -68,15 +157,17 @@ const ApplicationPage = (props) => {
           type="email"
           placeholder="Enter email"
           name="email"
+          defaultValue = {state.email}
           onChange={handleInputChange}
         />
       </Form.Group>
-      <Form.Group controlId="address">
-        <Form.Label>Address</Form.Label>
+      <Form.Group controlId="city">
+        <Form.Label>City</Form.Label>
         <Form.Control
           type="text"
-          placeholder="Enter address"
-          name="address"
+          placeholder="Enter city, state"
+          name="city"
+          defaultValue = {state.city}
           onChange={handleInputChange}
         />
       </Form.Group>
@@ -86,15 +177,18 @@ const ApplicationPage = (props) => {
           type="text"
           placeholder="Enter phone"
           name="phone"
+          defaultValue = {state.phone}
           onChange={handleInputChange}
         />
       </Form.Group>
-      <Form>
-        <input type="file" onChange={handleFileChange} accept=".pdf,.doc,.docx" />
+      <Form controlId="resume"
+        defaultValue = {state.resume}>
+      <Form.Label>Resume</Form.Label>
+        <input type="file" onChange={handleResumeChange} accept=".pdf,.doc,.docx" />
       </Form>
       {resumeURL && (
         <div>
-          <h3>Preview:</h3>
+          <h3>Resume:</h3>
           {resume.type === 'application/pdf' ? (
             <embed src={resumeURL} width="300" height="200" type="application/pdf" />
           ) : (
@@ -102,10 +196,29 @@ const ApplicationPage = (props) => {
           )}
         </div>
       )}
-      <Link to="/review"
-      state={{stuff: {firstName: state.firstName, lastName: state.lastName, email: state.email, phoneNumber: state.phone, city: state.address, resume: resume}}}>
-        <button>Submit </button>
-      </Link>
+      <Form controlId="coverLetter"
+      defaultValue = {state.coverLetter}>
+      <Form.Label>Cover Letter</Form.Label>
+        <input type="file" onChange={handleCoverLetterChange} accept=".pdf,.doc,.docx" />
+      </Form>
+      {coverLetterURL && (
+        <div>
+          <h3>Cover Letter:</h3>
+          {coverLetter.type === 'application/pdf' ? (
+            <embed src={coverLetterURL} width="300" height="200" type="application/pdf" />
+          ) : (
+            <img src={coverLetterURL} alt="Uploaded Resume" />
+          )}
+        </div>
+      )}
+      <button onClick={() => {
+                navigate("/review", {state: {stuff: {firstName: state.firstName,
+                lastName: state.lastName,
+                email: state.email,
+                phoneNumber: state.phone, 
+                city: state.city, 
+                resume: resume, 
+                coverLetter: coverLetter}}})}}> Submit </button>
     </Form>
   </div>
   )

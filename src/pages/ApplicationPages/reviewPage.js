@@ -61,7 +61,7 @@ const ReviewPage = () => {
                 </div>
             )}
             <button onClick={() => {
-                navigate("/application", {stuff: {firstName: stuff.firstName, lastName: stuff.lastName, email: stuff.email, phoneNumber: stuff.phone, city: stuff.city, resume: resume, coverLetter: coverLetter}})}}> No no no no wait wait wait </button>
+                navigate("/application", {state: {stuff: {firstName: stuff.firstName, lastName: stuff.lastName, email: stuff.email, phone: stuff.phoneNumber, city: stuff.city, resume: stuff.resume, coverLetter: stuff.coverLetter}}})}}> No no no no wait wait wait </button>
             <button onClick={() => {
             navigate("/submit")}}> Submit </button>
         </div>
