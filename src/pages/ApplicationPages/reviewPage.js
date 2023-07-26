@@ -14,8 +14,7 @@ const ReviewPage = () => {
             <p>{stuff.phoneNumber}</p>
             <h1>City</h1>
             <p>{stuff.city}</p>
-            <Link to="/submit"
-            >Submit</Link>
+            <Link to="/submit">Submit</Link>
         </div>
     )
 }

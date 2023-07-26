@@ -14,7 +14,7 @@ function App() {
     <Routes> 
         { /* Put your page(s) here */}
         <Route path='/' element ={<HomePage/>}/>
-        <Route path='/application' element={<ApplicationPage />} component = {ApplicationPage}/>
+        <Route path='/application' element={<ApplicationPage />}/>
         <Route path='/review' element={<ReviewPage />}/>
         <Route path='/submit' element={<SubmitPage />}/>
     </Routes>
