@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
-import { Link, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from 'react'
+import { useLocation, useNavigate } from "react-router-dom";
 import { Form } from 'react-bootstrap';
 
 const ApplicationPage = (props) => {
-
+  let location = useLocation();
+  const navigate = useNavigate()
   const [state, setState] = useState({
     firstName: '',
     lastName: '',
@@ -12,14 +13,45 @@ const ApplicationPage = (props) => {
     phone: '',
     errors: { firstName: '', lastName: '', email: '', city: '' , phone: '', resume: '', coverLetter: ''}
   });
-
-
-
-
   const [resume, setResume] = useState(null);
   const [coverLetter, setCoverLetter] = useState(null);
   const [resumeURL, setResumeURL] = useState('');
   const [coverLetterURL, setCoverLetterURL] = useState('');
+
+  useEffect(() => {
+    if (location.state != null) {
+      const {stuff} = location.state
+      if (stuff != null) {
+        setState(() => ({
+          firstName: stuff.firstName,
+          lastName: stuff.lastName,
+          email: stuff.email,
+          city: stuff.city,
+          phone: stuff.phone,
+        }));
+        setResume(stuff.resume)
+        setCoverLetter(stuff.coverLetter)
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setResumeURL(reader.result);
+        };
+        if (stuff.resume !== null) {
+          reader.readAsDataURL(stuff.resume);
+        }
+
+        const reader2 = new FileReader();
+        reader2.onloadend = () => {
+          setCoverLetterURL(reader2.result);
+        };
+        if (stuff.coverLetter !== null) {
+          reader2.readAsDataURL(stuff.coverLetter);
+        }
+      }
+    }
+  }, [])
+
+
+ 
 
   const handleResumeChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -46,9 +78,7 @@ const ApplicationPage = (props) => {
     reader.onloadend = () => {
       setResumeURL(reader.result);
     };
-    if (file !== null) {
-      reader.readAsDataURL(file);
-    }
+    reader.readAsDataURL(file);
   };
 
   const displayCoverLetter = (file) => {
@@ -56,9 +86,7 @@ const ApplicationPage = (props) => {
     reader.onloadend = () => {
       setCoverLetterURL(reader.result);
     };
-    if (file !== null) {
-      reader.readAsDataURL(file);
-    }
+    reader.readAsDataURL(file);
   }; 
 
   const handleValidation = () => {
@@ -107,6 +135,7 @@ const ApplicationPage = (props) => {
           type="text"
           placeholder="Enter first name"
           name="firstName"
+          defaultValue = {state.firstName}
           onChange={handleInputChange}
         />
         
@@ -118,6 +147,7 @@ const ApplicationPage = (props) => {
           type="text"
           placeholder="Enter last name"
           name="lastName"
+          defaultValue = {state.lastName}
           onChange={handleInputChange}
         />
       </Form.Group>
@@ -127,6 +157,7 @@ const ApplicationPage = (props) => {
           type="email"
           placeholder="Enter email"
           name="email"
+          defaultValue = {state.email}
           onChange={handleInputChange}
         />
       </Form.Group>
@@ -136,6 +167,7 @@ const ApplicationPage = (props) => {
           type="text"
           placeholder="Enter city, state"
           name="city"
+          defaultValue = {state.city}
           onChange={handleInputChange}
         />
       </Form.Group>
@@ -145,10 +177,12 @@ const ApplicationPage = (props) => {
           type="text"
           placeholder="Enter phone"
           name="phone"
+          defaultValue = {state.phone}
           onChange={handleInputChange}
         />
       </Form.Group>
-      <Form controlId="resume">
+      <Form controlId="resume"
+        defaultValue = {state.resume}>
       <Form.Label>Resume</Form.Label>
         <input type="file" onChange={handleResumeChange} accept=".pdf,.doc,.docx" />
       </Form>
@@ -162,7 +196,8 @@ const ApplicationPage = (props) => {
           )}
         </div>
       )}
-      <Form controlId="coverLetter">
+      <Form controlId="coverLetter"
+      defaultValue = {state.coverLetter}>
       <Form.Label>Cover Letter</Form.Label>
         <input type="file" onChange={handleCoverLetterChange} accept=".pdf,.doc,.docx" />
       </Form>
@@ -176,10 +211,14 @@ const ApplicationPage = (props) => {
           )}
         </div>
       )}
-      <Link to="/review"
-      state={{stuff: {firstName: state.firstName, lastName: state.lastName, email: state.email, phoneNumber: state.phone, city: state.city, resume: resume, coverLetter: coverLetter}}}>
-        <button>Submit </button>
-      </Link>
+      <button onClick={() => {
+                navigate("/review", {state: {stuff: {firstName: state.firstName,
+                lastName: state.lastName,
+                email: state.email,
+                phoneNumber: state.phone, 
+                city: state.city, 
+                resume: resume, 
+                coverLetter: coverLetter}}})}}> Submit </button>
     </Form>
   </div>
   )
