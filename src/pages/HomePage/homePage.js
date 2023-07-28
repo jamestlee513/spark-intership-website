@@ -4,7 +4,11 @@ import Footer from '../../ui-components/Footer';
 
 export default function HomePage() {
     return (
-     <><ul className="App-header">
+     <>
+     <div style={{ textAlign: 'right', paddingRight: '20px' }}>
+        <Link to="/profile">Profile</Link>
+      </div>
+     <ul className="App-header">
         <li>
           <Link to="/application">Application Page</Link>
         </li>
