@@ -1,5 +1,8 @@
 import React, {useState, useRef, useEffect} from 'react'
 import { Routes, Route, BrowserRouter, Link } from "react-router-dom";
+import { API, graphqlOperation } from 'aws-amplify';
+import { DataStore } from '@aws-amplify/datastore';
+import { JobListing } from '../../models';
 
 export default function CreateListing() {
   const jobName = useRef()
@@ -11,7 +14,8 @@ export default function CreateListing() {
   const contact = useRef()
 
 
-  function makeListing(e) {
+
+  async function makeListing(e) {
     const name = jobName.current.value
     const discription = jobDiscription.current.value
     const info = companyInfo.current.value
@@ -24,8 +28,18 @@ export default function CreateListing() {
     if (loc === '') return
     if (date === '') return
     if (con === '') return
-    console.log("this works")
+    const remoteValue = document.getElementById("remote").checked
+    await DataStore.save(new JobListing({
+      "title": name,
+      "description": discription,
+      "companyInfo": info,
+      "location": loc,
+      "remote": remoteValue,
+      "deadline": date,
+      "contactInfo": [con]
+    }))
   }
+
 
   return (
     <>
@@ -39,7 +53,7 @@ export default function CreateListing() {
       </div>
       <div>
         CompanyInfo:
-        <input ref={companyInfo} type ="text" />
+        <textarea ref={companyInfo} name="Text1" cols="40" rows="5" />
       </div>
       <div>
         Location:
@@ -47,7 +61,7 @@ export default function CreateListing() {
       </div>
       <div>
         Remote:
-        <input ref={remote} type ="checkbox" />
+        <input ref={remote} type ="checkbox" id="remote" />
       </div>
       <div>
         Deadline:
