@@ -3,12 +3,16 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 import { API } from "aws-amplify";
 import { DataStore } from '@aws-amplify/datastore';
 import { Application } from '../../models';
+import {Fade} from '@mui/material'
 
 
 const ReviewPage = () => {
     
     const {stuff} = useLocation().state
     const navigate = useNavigate()
+    if (stuff == null) {
+        navigate('/application')
+    }
 
     const resume = stuff.resume
     const [resumeURL, setResumeURL] = useState('');
@@ -48,6 +52,8 @@ const ReviewPage = () => {
 
     return (
         <div>
+            <Fade in={true}>
+                <div>
             <h1>First Name</h1>
             <p>{stuff.firstName}</p>
             <h1>Last Name</h1>
@@ -83,6 +89,8 @@ const ReviewPage = () => {
             <button onClick={() => {
                 navigate("/application", {state: {stuff: {firstName: stuff.firstName, lastName: stuff.lastName, email: stuff.email, phone: stuff.phoneNumber, city: stuff.city, resume: stuff.resume, coverLetter: stuff.coverLetter}}})}}> No no no no wait wait wait </button>
             <button onClick={submit}> Submit </button>
+                </div>
+            </Fade>
         </div>
     )
 }

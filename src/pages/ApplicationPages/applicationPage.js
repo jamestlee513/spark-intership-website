@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from "react-router-dom";
 import { Form } from 'react-bootstrap';
+import {Slide} from '@mui/material'
 
 const ApplicationPage = (props) => {
   let location = useLocation();
@@ -11,6 +12,7 @@ const ApplicationPage = (props) => {
     email: '',
     city: '',
     phone: '',
+    page: 1,
     errors: { firstName: '', lastName: '', email: '', city: '' , phone: '', resume: '', coverLetter: ''}
   });
   const [resume, setResume] = useState(null);
@@ -28,6 +30,7 @@ const ApplicationPage = (props) => {
           email: stuff.email,
           city: stuff.city,
           phone: stuff.phone,
+          page: 4
         }));
         setResume(stuff.resume)
         setCoverLetter(stuff.coverLetter)
@@ -123,9 +126,11 @@ const ApplicationPage = (props) => {
     }));
   }
 
-
   const { errors } = state;
   return (
+      <div>
+        <h1>Hello I am the progress bar</h1>
+      <Slide direction={state.page===1 ? "left" : "right"} in={state.page === 1} mountOnEnter unmountOnExit>
     <div>
     <h1>Registration Form</h1>
     <Form className="register-form">
@@ -211,16 +216,41 @@ const ApplicationPage = (props) => {
           )}
         </div>
       )}
-      <button onClick={() => {
-                navigate("/review", {state: {stuff: {firstName: state.firstName,
-                lastName: state.lastName,
-                email: state.email,
-                phoneNumber: state.phone, 
-                city: state.city, 
-                resume: resume, 
-                coverLetter: coverLetter}}})}}> Submit </button>
     </Form>
+      <button onClick={() =>{setState({page: 2})}}> Next </button>
   </div>
+
+      </Slide>
+        <Slide direction={state.page===2 ? "left" : "right"} in={state.page === 2} mountOnEnter unmountOnExit>
+          <div>
+            <h1> page 2 </h1>
+            <button onClick={() =>{setState({page: 1})}}> Previous </button>
+            <button onClick={() =>{setState({page: 3})}}> Next </button>
+          </div>
+        </Slide>
+        <Slide direction={state.page===3 ? "left" : "right"} in={state.page === 3} mountOnEnter unmountOnExit>
+          <div>
+            <h1> page 3 </h1>
+            <button onClick={() =>{setState({page: 2})}}> Previous </button>
+            <button onClick={() =>{setState({page: 4})}}> Next </button>
+          </div>
+        </Slide>
+        <Slide direction={state.page===4 ? "left" : "right"} in={state.page === 4} mountOnEnter unmountOnExit>
+          <div>
+            <h1> page 4 </h1>
+            <button onClick={() =>{setState({page: 3})}}> Previous </button>
+            <button onClick={() => {
+            navigate("/review", {state: {stuff: {firstName: state.firstName,
+                  lastName: state.lastName,
+                  email: state.email,
+                  phoneNumber: state.phone,
+                  city: state.city,
+                  resume: resume,
+                  coverLetter: coverLetter}}})}}> Submit </button>
+          </div>
+        </Slide>
+      </div>
+
   )
 }
 
