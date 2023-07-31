@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from "react-router-dom";
 import { Form } from 'react-bootstrap';
-import {Slide} from '@mui/material'
+import {Slide, Box} from '@mui/material'
 
 const ApplicationPage = (props) => {
   let location = useLocation();
@@ -13,6 +13,7 @@ const ApplicationPage = (props) => {
     city: '',
     phone: '',
     page: 1,
+    prev: 0,
     errors: { firstName: '', lastName: '', email: '', city: '' , phone: '', resume: '', coverLetter: ''}
   });
   const [resume, setResume] = useState(null);
@@ -30,7 +31,8 @@ const ApplicationPage = (props) => {
           email: stuff.email,
           city: stuff.city,
           phone: stuff.phone,
-          page: 4
+          page: 1,
+          prev: 0
         }));
         setResume(stuff.resume)
         setCoverLetter(stuff.coverLetter)
@@ -126,11 +128,33 @@ const ApplicationPage = (props) => {
     }));
   }
 
+  const numSize = 50
+  const circle = (pg) => {
+    return {
+      borderRadius: "50%",
+      width: `${numSize * 52 / 32}px`,
+      height: `${numSize * 52 / 32}px`,
+      padding: `${numSize * 8 / 32}px`,
+
+      background: state.page == pg ? "gray" : "black",
+      color: "white",
+      textAlign: "center",
+
+      font: `${numSize}px Arial, sans-serif`
+    }
+  }
+  console.log(state.prev<1 || (state.prev===1 && state.page<1) ? "left" : "right")
   const { errors } = state;
   return (
       <div>
-        <h1>Hello I am the progress bar</h1>
-      <Slide direction={state.page===1 ? "left" : "right"} in={state.page === 1} mountOnEnter unmountOnExit>
+        <div style={{display: "flex", justifyContent: "space-between", width: "500px", margin: "auto", backgroundColor: "black", background: "linear-gradient(to top, transparent, transparent 45%, black 45%, black 55%, transparent 55%, transparent 100%)", backgroundSize: "70% 100%", backgroundPosition: "50% 50%", backgroundRepeat: "no-repeat"}}>
+          <p style={circle(1)} onClick={() => {setState({page: 1, prev: state.page})}}> 1 </p>
+          <p style={circle(2)} onClick={() => {setState({page: 2, prev: state.page})}}> 2 </p>
+          <p style={circle(3)} onClick={() => {setState({page: 3, prev: state.page})}}> 3 </p>
+          <p style={circle(4)} onClick={() => {setState({page: 4, prev: state.page})}}> 4 </p>
+        </div>
+        <div style={{display: "flex", justifyContent:"center", overflow: "hidden"}}>
+      <Slide direction={(state.prev===1 && state.page<1) ? "left" : "right"} in={state.page === 1} mountOnEnter unmountOnExit>
     <div>
     <h1>Registration Form</h1>
     <Form className="register-form">
@@ -217,28 +241,28 @@ const ApplicationPage = (props) => {
         </div>
       )}
     </Form>
-      <button onClick={() =>{setState({page: 2})}}> Next </button>
+      <button onClick={() =>{setState({page: 2, prev: state.page})}}> Next </button>
   </div>
 
       </Slide>
-        <Slide direction={state.page===2 ? "left" : "right"} in={state.page === 2} mountOnEnter unmountOnExit>
+        <Slide direction={state.prev<2 || (state.prev===2 && state.page<2) ? "left" : "right"} in={state.page === 2} mountOnEnter unmountOnExit>
           <div>
             <h1> page 2 </h1>
-            <button onClick={() =>{setState({page: 1})}}> Previous </button>
-            <button onClick={() =>{setState({page: 3})}}> Next </button>
+            <button onClick={() =>{setState({page: 1, prev: state.page})}}> Previous </button>
+            <button onClick={() =>{setState({page: 3, prev: state.page})}}> Next </button>
           </div>
         </Slide>
-        <Slide direction={state.page===3 ? "left" : "right"} in={state.page === 3} mountOnEnter unmountOnExit>
+        <Slide direction={state.prev<3 || (state.prev===3 && state.page<3) ? "left" : "right"} in={state.page === 3} mountOnEnter unmountOnExit>
           <div>
             <h1> page 3 </h1>
-            <button onClick={() =>{setState({page: 2})}}> Previous </button>
-            <button onClick={() =>{setState({page: 4})}}> Next </button>
+            <button onClick={() =>{setState({page: 2, prev: state.page})}}> Previous </button>
+            <button onClick={() =>{setState({page: 4, prev: state.page})}}> Next </button>
           </div>
         </Slide>
-        <Slide direction={state.page===4 ? "left" : "right"} in={state.page === 4} mountOnEnter unmountOnExit>
+        <Slide direction={state.prev<4 || (state.prev===4 && state.page<4) ? "left" : "right"} in={state.page === 4} mountOnEnter unmountOnExit>
           <div>
             <h1> page 4 </h1>
-            <button onClick={() =>{setState({page: 3})}}> Previous </button>
+            <button onClick={() =>{setState({page: 3, prev: state.page})}}> Previous </button>
             <button onClick={() => {
             navigate("/review", {state: {stuff: {firstName: state.firstName,
                   lastName: state.lastName,
@@ -249,6 +273,7 @@ const ApplicationPage = (props) => {
                   coverLetter: coverLetter}}})}}> Submit </button>
           </div>
         </Slide>
+        </div>
       </div>
 
   )
