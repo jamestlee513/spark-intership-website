@@ -11,6 +11,9 @@ const ApplicationPage = (props) => {
     lastName: '',
     email: '',
     city: '',
+    state: '',
+    zipCode: '',
+    address: '',
     phone: '',
     page: 1,
     prev: 0,
@@ -136,7 +139,7 @@ const ApplicationPage = (props) => {
       height: `${numSize * 52 / 32}px`,
       padding: `${numSize * 8 / 32}px`,
 
-      background: state.page == pg ? "gray" : "black",
+      background: state.page === pg ? "gray" : "black",
       color: "white",
       textAlign: "center",
 
@@ -167,9 +170,7 @@ const ApplicationPage = (props) => {
           defaultValue = {state.firstName}
           onChange={handleInputChange}
         />
-        
       </Form.Group>
-      
       <Form.Group controlId="lastName">
         <Form.Label>Last name</Form.Label>
         <Form.Control
@@ -190,59 +191,69 @@ const ApplicationPage = (props) => {
           onChange={handleInputChange}
         />
       </Form.Group>
+      <Form.Group controlId="phone">
+        <Form.Label>Phone</Form.Label>
+        <Form.Control
+            type="text"
+            placeholder="Enter phone"
+            name="phone"
+            defaultValue = {state.phone}
+            onChange={handleInputChange}
+        />
+      </Form.Group>
+      <Form.Group controlId="address">
+        <Form.Label>Address</Form.Label>
+        <Form.Control
+            type="text"
+            placeholder="Enter address"
+            name="address"
+            defaultValue = {state.address}
+            onChange={handleInputChange}
+        />
+      </Form.Group>
       <Form.Group controlId="city">
         <Form.Label>City</Form.Label>
         <Form.Control
           type="text"
-          placeholder="Enter city, state"
+          placeholder="Enter city"
           name="city"
           defaultValue = {state.city}
           onChange={handleInputChange}
         />
       </Form.Group>
-      <Form.Group controlId="phone">
-        <Form.Label>Phone</Form.Label>
+      <Form.Group controlId="state">
+        <Form.Label>State</Form.Label>
         <Form.Control
-          type="text"
-          placeholder="Enter phone"
-          name="phone"
-          defaultValue = {state.phone}
-          onChange={handleInputChange}
+            type="text"
+            placeholder="Enter state"
+            name="state"
+            defaultValue = {state.state}
+            onChange={handleInputChange}
         />
       </Form.Group>
-      <Form controlId="resume"
-        defaultValue = {state.resume}>
-      <Form.Label>Resume</Form.Label>
-        <input type="file" onChange={handleResumeChange} accept=".pdf,.doc,.docx" />
-      </Form>
-      {resumeURL && (
-        <div>
-          <h3>Resume:</h3>
-          {resume.type === 'application/pdf' ? (
-            <embed src={resumeURL} width="300" height="200" type="application/pdf" />
-          ) : (
-            <img src={resumeURL} alt="Uploaded Resume" />
-          )}
-        </div>
-      )}
-      <Form controlId="coverLetter"
-      defaultValue = {state.coverLetter}>
-      <Form.Label>Cover Letter</Form.Label>
-        <input type="file" onChange={handleCoverLetterChange} accept=".pdf,.doc,.docx" />
-      </Form>
-      {coverLetterURL && (
-        <div>
-          <h3>Cover Letter:</h3>
-          {coverLetter.type === 'application/pdf' ? (
-            <embed src={coverLetterURL} width="300" height="200" type="application/pdf" />
-          ) : (
-            <img src={coverLetterURL} alt="Uploaded Resume" />
-          )}
-        </div>
-      )}
+      <Form.Group controlId="country">
+        <Form.Label>Country</Form.Label>
+        <Form.Control
+            type="text"
+            placeholder="Enter country"
+            name="country"
+            defaultValue = {state.country}
+            onChange={handleInputChange}
+        />
+      </Form.Group>
+      <Form.Group controlId="zipCode">
+        <Form.Label>Zip Code</Form.Label>
+        <Form.Control
+            type="number"
+            placeholder="Enter Zip Code"
+            name="zipCode"
+            defaultValue = {state.zipCode}
+            onChange={handleInputChange}
+        />
+      </Form.Group>
     </Form>
       <button onClick={() =>{setState({page: 2, prev: state.page})}}> Next </button>
-  </div>
+    </div>
 
       </Slide>
         <Slide direction={state.prev<2 || (state.prev===2 && state.page<2) ? "left" : "right"} in={state.page === 2} mountOnEnter unmountOnExit>
@@ -262,6 +273,36 @@ const ApplicationPage = (props) => {
         <Slide direction={state.prev<4 || (state.prev===4 && state.page<4) ? "left" : "right"} in={state.page === 4} mountOnEnter unmountOnExit>
           <div>
             <h1> page 4 </h1>
+            <Form controlId="resume"
+                  defaultValue = {state.resume}>
+              <Form.Label>Resume</Form.Label>
+              <input type="file" onChange={handleResumeChange} accept=".pdf,.doc,.docx" />
+            </Form>
+            {resumeURL && (
+                <div>
+                  <h3>Resume:</h3>
+                  {resume.type === 'application/pdf' ? (
+                      <embed src={resumeURL} width="300" height="200" type="application/pdf" />
+                  ) : (
+                      <img src={resumeURL} alt="Uploaded Resume" />
+                  )}
+                </div>
+            )}
+            <Form controlId="coverLetter"
+                  defaultValue = {state.coverLetter}>
+              <Form.Label>Cover Letter</Form.Label>
+              <input type="file" onChange={handleCoverLetterChange} accept=".pdf,.doc,.docx" />
+            </Form>
+            {coverLetterURL && (
+                <div>
+                  <h3>Cover Letter:</h3>
+                  {coverLetter.type === 'application/pdf' ? (
+                      <embed src={coverLetterURL} width="300" height="200" type="application/pdf" />
+                  ) : (
+                      <img src={coverLetterURL} alt="Uploaded Resume" />
+                  )}
+                </div>
+            )}
             <button onClick={() =>{setState({page: 3, prev: state.page})}}> Previous </button>
             <button onClick={() => {
             navigate("/review", {state: {stuff: {firstName: state.firstName,
