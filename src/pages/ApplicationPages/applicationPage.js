@@ -259,22 +259,22 @@ const ApplicationPage = (props) => {
         />
       </Form.Group>
     </Form>
-      <button onClick={() =>{setState({page: 2, prev: state.page})}}> Next </button>
+      <button onClick={() =>{changePage(2)}}> Next </button>
     </div>
 
       </Slide>
         <Slide direction={state.prev<2 || (state.prev===2 && state.page<2) ? "left" : "right"} in={state.page === 2} mountOnEnter unmountOnExit>
           <div>
             <h1> page 2 </h1>
-            <button onClick={() =>{setState({page: 1, prev: state.page})}}> Previous </button>
-            <button onClick={() =>{setState({page: 3, prev: state.page})}}> Next </button>
+            <button onClick={() =>{changePage(1)}}> Previous </button>
+            <button onClick={() =>{changePage(3)}}> Next </button>
           </div>
         </Slide>
         <Slide direction={state.prev<3 || (state.prev===3 && state.page<3) ? "left" : "right"} in={state.page === 3} mountOnEnter unmountOnExit>
           <div>
             <h1> page 3 </h1>
-            <button onClick={() =>{setState({page: 2, prev: state.page})}}> Previous </button>
-            <button onClick={() =>{setState({page: 4, prev: state.page})}}> Next </button>
+            <button onClick={() =>{changePage(2)}}> Previous </button>
+            <button onClick={() =>{changePage(4)}}> Next </button>
           </div>
         </Slide>
         <Slide direction={state.prev<4 || (state.prev===4 && state.page<4) ? "left" : "right"} in={state.page === 4} mountOnEnter unmountOnExit>
@@ -310,7 +310,7 @@ const ApplicationPage = (props) => {
                   )}
                 </div>
             )}
-            <button onClick={() =>{setState({page: 3, prev: state.page})}}> Previous </button>
+            <button onClick={() =>{changePage(3)}}> Previous </button>
             <button onClick={() => {
             navigate("/review", {state: {stuff: {firstName: state.firstName,
                   lastName: state.lastName,
