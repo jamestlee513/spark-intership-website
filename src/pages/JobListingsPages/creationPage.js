@@ -3,6 +3,7 @@ import { Routes, Route, BrowserRouter, Link } from "react-router-dom";
 import { API, graphqlOperation } from 'aws-amplify';
 import { DataStore } from '@aws-amplify/datastore';
 import { JobListing } from '../../models';
+import ContactList from './contactList';
 
 export default function CreateListing() {
   const jobName = useRef()
@@ -12,6 +13,8 @@ export default function CreateListing() {
   const remote = useRef()
   const deadline = useRef()
   const contact = useRef()
+  const [contacts, setContacts] = useState([])
+  const [contactID, setContactID] = useState(0)
 
 
 
@@ -21,14 +24,18 @@ export default function CreateListing() {
     const info = companyInfo.current.value
     const loc = location.current.value
     const date = deadline.current.value
-    const con = contact.current.value
+    //const con = contact.current.value
+    if (contacts.length === 0) return
+    console.log(contactArray)
     if (name === '') return
     if (discription === '') return
     if (info === '') return
     if (loc === '') return
     if (date === '') return
-    if (con === '') return
     const remoteValue = document.getElementById("remote").checked
+    const contactArray = contacts.map(con => {
+      return con.name
+    })
     await DataStore.save(new JobListing({
       "title": name,
       "description": discription,
@@ -36,8 +43,23 @@ export default function CreateListing() {
       "location": loc,
       "remote": remoteValue,
       "deadline": date,
-      "contactInfo": [con]
+      "contactInfo": contactArray
     }))
+  }
+
+  function addContact() {
+    const con = contact.current.value
+    if (con === '') return
+    setContacts(prevContacts => {
+      setContactID(contactID + 1)
+      return [...prevContacts, {id: contactID, name: con}]
+    })
+    contact.current.value = null
+  }
+
+  function deleteContact(con) {
+    const newContacts = contacts.filter(contact => con.id !== contact.id)
+    setContacts(newContacts)
   }
 
 
@@ -67,9 +89,13 @@ export default function CreateListing() {
         Deadline:
         <input ref={deadline} type ="date" />
       </div>
+      <div> 
+        <ContactList contacts={contacts} deleteContact={deleteContact}/>
+      </div>
       <div>
         Contact Info:
         <input ref={contact} type ="text" />
+        <button onClick={addContact}>add</button>
       </div>
       <button onClick={makeListing}>create</button>
     </>
