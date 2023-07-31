@@ -7,6 +7,7 @@ import HomePage from "./pages/HomePage/homePage";
 import ReviewPage from "./pages/ApplicationPages/reviewPage";
 import SubmitPage from "./pages/ApplicationPages/submitPage";
 import CreateListingsPage from "./pages/JobListingsPages/creationPage"
+import ProfilePage from "./pages/ProfilePage/profilePage"
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path='/review' element={<ReviewPage />}/>
         <Route path='/submit' element={<SubmitPage />}/>
         <Route path='/create' element={<CreateListingsPage/>}/>
+        <Route path='/profile' element={<ProfilePage/>}/>
     </Routes>
     </div>  
     </BrowserRouter>   

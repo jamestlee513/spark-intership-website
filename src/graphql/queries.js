@@ -1,29 +1,81 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getTodo = /* GraphQL */ `
-  query GetTodo($id: ID!) {
-    getTodo(id: $id) {
+export const getApplication = /* GraphQL */ `
+  query GetApplication($id: ID!) {
+    getApplication(id: $id) {
       id
-      name
-      description
+      firstName
+      lastNam
+      email
+      phone
+      city
+      resume
+      coverLetter
       createdAt
       updatedAt
       __typename
     }
   }
 `;
-export const listTodos = /* GraphQL */ `
-  query ListTodos(
-    $filter: ModelTodoFilterInput
+export const listApplications = /* GraphQL */ `
+  query ListApplications(
+    $filter: ModelApplicationFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listTodos(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listApplications(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        name
+        firstName
+        lastNam
+        email
+        phone
+        city
+        resume
+        coverLetter
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getJobListing = /* GraphQL */ `
+  query GetJobListing($id: ID!) {
+    getJobListing(id: $id) {
+      id
+      title
+      description
+      companyInfo
+      location
+      remote
+      deadline
+      contactInfo
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listJobListings = /* GraphQL */ `
+  query ListJobListings(
+    $filter: ModelJobListingFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listJobListings(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        title
         description
+        companyInfo
+        location
+        remote
+        deadline
+        contactInfo
         createdAt
         updatedAt
         __typename

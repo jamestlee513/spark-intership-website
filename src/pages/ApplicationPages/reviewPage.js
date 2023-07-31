@@ -1,9 +1,18 @@
 import React, {useState} from 'react'
 import {Link, useLocation, useNavigate} from "react-router-dom";
+import { API, graphqlOperation } from 'aws-amplify';
+import { DataStore } from '@aws-amplify/datastore';
+import { Application } from '../../models';
+import {Fade} from '@mui/material'
+
 
 const ReviewPage = () => {
+    
     const {stuff} = useLocation().state
     const navigate = useNavigate()
+    if (stuff == null) {
+        navigate('/application')
+    }
 
     const resume = stuff.resume
     const [resumeURL, setResumeURL] = useState('');
@@ -26,8 +35,25 @@ const ReviewPage = () => {
         reader2.readAsDataURL(coverLetter);
     }
 
+    async function submit() {
+        await DataStore.save(
+            new Application({
+                "firstName": stuff.firstName,
+                "lastName": stuff.lastName,
+                "email": stuff.email,
+                "phone": stuff.phoneNumber,
+                "city": stuff.city,
+                "resume": stuff.resume.name,
+                "coverLetter": stuff.coverLetter.name
+            })
+        );
+        navigate("/submit")
+    }
+
     return (
         <div>
+            <Fade in={true}>
+                <div>
             <h1>First Name</h1>
             <p>{stuff.firstName}</p>
             <h1>Last Name</h1>
@@ -62,8 +88,9 @@ const ReviewPage = () => {
             )}
             <button onClick={() => {
                 navigate("/application", {state: {stuff: {firstName: stuff.firstName, lastName: stuff.lastName, email: stuff.email, phone: stuff.phoneNumber, city: stuff.city, resume: stuff.resume, coverLetter: stuff.coverLetter}}})}}> No no no no wait wait wait </button>
-            <button onClick={() => {
-            navigate("/submit")}}> Submit </button>
+            <button onClick={submit}> Submit </button>
+                </div>
+            </Fade>
         </div>
     )
 }
