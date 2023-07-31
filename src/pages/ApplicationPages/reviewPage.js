@@ -1,13 +1,8 @@
 import React, {useState} from 'react'
 import {Link, useLocation, useNavigate} from "react-router-dom";
-import {API} from "aws-amplify";
-import {DataStore} from '@aws-amplify/datastore';
-import {Application} from '../../models';
-=======
 import { API, graphqlOperation } from 'aws-amplify';
 import { DataStore } from '@aws-amplify/datastore';
 import { Application } from '../../models';
->>>>>>> 36bcaa6775f550290152b75f2e1fce032e2ffc9a
 import {Fade} from '@mui/material'
 
 
