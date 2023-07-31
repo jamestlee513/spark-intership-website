@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from "react-router-dom";
+import {Auth} from 'aws-amplify';
 import { Form } from 'react-bootstrap';
 import {Slide, Box} from '@mui/material'
+import {Application} from "../../models"
+import {DataStore} from "@aws-amplify/datastore";
 
 const ApplicationPage = (props) => {
   let location = useLocation();
@@ -15,6 +18,7 @@ const ApplicationPage = (props) => {
     zipCode: '',
     address: '',
     phone: '',
+    job: 'SWE',
     page: 1,
     prev: 0,
     errors: { firstName: '', lastName: '', email: '', city: '' , phone: '', resume: '', coverLetter: ''}
@@ -28,7 +32,7 @@ const ApplicationPage = (props) => {
     if (location.state != null) {
       const {stuff} = location.state
       if (stuff != null) {
-        setState(() => ({
+        setState({
           firstName: stuff.firstName,
           lastName: stuff.lastName,
           email: stuff.email,
@@ -36,7 +40,7 @@ const ApplicationPage = (props) => {
           phone: stuff.phone,
           page: 1,
           prev: 0
-        }));
+        });
         setResume(stuff.resume)
         setCoverLetter(stuff.coverLetter)
         const reader = new FileReader();
@@ -55,7 +59,32 @@ const ApplicationPage = (props) => {
           reader2.readAsDataURL(stuff.coverLetter);
         }
       }
+    } else {
+      (async ()=>{
+        const attributes = await Auth.currentUserInfo()
+        setState((prevState) => ({
+          ...prevState,
+          email: attributes.email
+        }));
+        const app = await DataStore.query(Application, (a)=>a.and(a=>[a.email.eq(state.email), a.job.eq(state.job)]))
+      if (app) {
+        setState({
+            firstName: app.firstName,
+            lastName: app.lastName,
+            email: app.email,
+            city: app.city,
+            state: app.state,
+            zipCode: app.zipCode,
+            address: app.address,
+            phone: app.phone,
+            job: 'SWE',
+            page: 1,
+            prev: 0,
+            errors: { firstName: '', lastName: '', email: '', city: '' , phone: '', resume: '', coverLetter: ''}})
+      }})()
     }
+
+
   }, [])
 
 
@@ -185,16 +214,6 @@ const ApplicationPage = (props) => {
           placeholder="Enter last name"
           name="lastName"
           defaultValue = {state.lastName}
-          onChange={handleInputChange}
-        />
-      </Form.Group>
-      <Form.Group controlId="email">
-        <Form.Label>Email</Form.Label>
-        <Form.Control
-          type="email"
-          placeholder="Enter email"
-          name="email"
-          defaultValue = {state.email}
           onChange={handleInputChange}
         />
       </Form.Group>
