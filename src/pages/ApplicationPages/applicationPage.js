@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from "react-router-dom";
 import { Form } from 'react-bootstrap';
 import {Slide, Box} from '@mui/material'
+import {
+  FormCheckout 
+ } from '../../ui-components';
 
 const ApplicationPage = (props) => {
   let location = useLocation();
@@ -147,6 +150,7 @@ const ApplicationPage = (props) => {
   const { errors } = state;
   return (
       <div>
+        <FormCheckout />
         <div style={{display: "flex", justifyContent: "space-between", width: "500px", margin: "auto", backgroundColor: "black", background: "linear-gradient(to top, transparent, transparent 45%, black 45%, black 55%, transparent 55%, transparent 100%)", backgroundSize: "70% 100%", backgroundPosition: "50% 50%", backgroundRepeat: "no-repeat"}}>
           <p style={circle(1)} onClick={() => {setState({page: 1, prev: state.page})}}> 1 </p>
           <p style={circle(2)} onClick={() => {setState({page: 2, prev: state.page})}}> 2 </p>

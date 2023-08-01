@@ -13,10 +13,17 @@
     },
     "categories": {
       "auth": {
-        "sparkinternshipweb6aceb457": {}
+        "sparkinternshipweb6aceb457": {},
+        "sparkinternshipweb": {}
       },
       "api": {
         "sparkinternshipweb": {}
+      },
+      "function": {
+        "sparkinternshipwebe2c2bb07e2c2bb07PreSignup": {
+          "deploymentBucketName": "amplify-sparkinternshipweb-dev-130617-deployment",
+          "s3Key": "amplify-builds/sparkinternshipwebe2c2bb07e2c2bb07PreSignup-4e2f466b343057696e66-build.zip"
+        }
       }
     }
   }

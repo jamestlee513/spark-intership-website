@@ -6,11 +6,182 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import {
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  SwitchField,
+  Text,
+  TextAreaField,
+  TextField,
+  useTheme,
+} from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Application } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== "" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height="inherit" width="inherit" maxHeight={"7rem"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: "pointer",
+                  alignItems: "center",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? "#B8CEF9" : "",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: "pointer",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: "M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z",
+                      stroke: "black",
+                    },
+                  ]}
+                  ariaLabel="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation="horizontal" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent="flex-end">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children="Cancel"
+              type="button"
+              size="small"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size="small"
+            variation="link"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? "Save" : "Add"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
 export default function ApplicationCreateForm(props) {
   const {
     clearOnSuccess = true,
@@ -30,6 +201,14 @@ export default function ApplicationCreateForm(props) {
     city: "",
     resume: "",
     coverLetter: "",
+    address: "",
+    state: "",
+    zipcode: "",
+    country: "",
+    education: [],
+    project: [],
+    job: "",
+    completeApplication: false,
   };
   const [firstName, setFirstName] = React.useState(initialValues.firstName);
   const [lastName, setLastName] = React.useState(initialValues.lastName);
@@ -40,6 +219,16 @@ export default function ApplicationCreateForm(props) {
   const [coverLetter, setCoverLetter] = React.useState(
     initialValues.coverLetter
   );
+  const [address, setAddress] = React.useState(initialValues.address);
+  const [state, setState] = React.useState(initialValues.state);
+  const [zipcode, setZipcode] = React.useState(initialValues.zipcode);
+  const [country, setCountry] = React.useState(initialValues.country);
+  const [education, setEducation] = React.useState(initialValues.education);
+  const [project, setProject] = React.useState(initialValues.project);
+  const [job, setJob] = React.useState(initialValues.job);
+  const [completeApplication, setCompleteApplication] = React.useState(
+    initialValues.completeApplication
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setFirstName(initialValues.firstName);
@@ -49,16 +238,38 @@ export default function ApplicationCreateForm(props) {
     setCity(initialValues.city);
     setResume(initialValues.resume);
     setCoverLetter(initialValues.coverLetter);
+    setAddress(initialValues.address);
+    setState(initialValues.state);
+    setZipcode(initialValues.zipcode);
+    setCountry(initialValues.country);
+    setEducation(initialValues.education);
+    setCurrentEducationValue("");
+    setProject(initialValues.project);
+    setCurrentProjectValue("");
+    setJob(initialValues.job);
+    setCompleteApplication(initialValues.completeApplication);
     setErrors({});
   };
+  const [currentEducationValue, setCurrentEducationValue] = React.useState("");
+  const educationRef = React.createRef();
+  const [currentProjectValue, setCurrentProjectValue] = React.useState("");
+  const projectRef = React.createRef();
   const validations = {
-    firstName: [{ type: "Required" }],
-    lastName: [{ type: "Required" }],
-    email: [{ type: "Required" }, { type: "Email" }],
-    phone: [{ type: "Required" }, { type: "Phone" }],
-    city: [{ type: "Required" }],
-    resume: [{ type: "Required" }],
+    firstName: [],
+    lastName: [],
+    email: [],
+    phone: [{ type: "Phone" }],
+    city: [],
+    resume: [],
     coverLetter: [],
+    address: [],
+    state: [],
+    zipcode: [],
+    country: [],
+    education: [{ type: "JSON" }],
+    project: [{ type: "JSON" }],
+    job: [],
+    completeApplication: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -93,6 +304,14 @@ export default function ApplicationCreateForm(props) {
           city,
           resume,
           coverLetter,
+          address,
+          state,
+          zipcode,
+          country,
+          education,
+          project,
+          job,
+          completeApplication,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -122,7 +341,24 @@ export default function ApplicationCreateForm(props) {
               modelFields[key] = undefined;
             }
           });
-          await DataStore.save(new Application(modelFields));
+          const modelFieldsToSave = {
+            firstName: modelFields.firstName,
+            lastName: modelFields.lastName,
+            email: modelFields.email,
+            phone: modelFields.phone,
+            city: modelFields.city,
+            resume: modelFields.resume,
+            coverLetter: modelFields.coverLetter,
+            address: modelFields.address,
+            state: modelFields.state,
+            zipcode: modelFields.zipcode,
+            country: modelFields.country,
+            job: modelFields.job,
+            completeApplication: modelFields.completeApplication,
+            education: modelFields.education.map((s) => JSON.parse(s)),
+            project: modelFields.project.map((s) => JSON.parse(s)),
+          };
+          await DataStore.save(new Application(modelFieldsToSave));
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -138,14 +374,35 @@ export default function ApplicationCreateForm(props) {
       {...getOverrideProps(overrides, "ApplicationCreateForm")}
       {...rest}
     >
+      <Flex
+        justifyContent="space-between"
+        {...getOverrideProps(overrides, "CTAFlex")}
+      >
+        <Button
+          children="Clear"
+          type="reset"
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          {...getOverrideProps(overrides, "ClearButton")}
+        ></Button>
+        <Flex
+          gap="15px"
+          {...getOverrideProps(overrides, "RightAlignCTASubFlex")}
+        >
+          <Button
+            children="Submit"
+            type="submit"
+            variation="primary"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, "SubmitButton")}
+          ></Button>
+        </Flex>
+      </Flex>
       <TextField
-        label={
-          <span style={{ display: "inline-flex" }}>
-            <span>First name</span>
-            <span style={{ color: "red" }}>*</span>
-          </span>
-        }
-        isRequired={true}
+        label="First name"
+        isRequired={false}
         isReadOnly={false}
         value={firstName}
         onChange={(e) => {
@@ -159,6 +416,14 @@ export default function ApplicationCreateForm(props) {
               city,
               resume,
               coverLetter,
+              address,
+              state,
+              zipcode,
+              country,
+              education,
+              project,
+              job,
+              completeApplication,
             };
             const result = onChange(modelFields);
             value = result?.firstName ?? value;
@@ -174,13 +439,8 @@ export default function ApplicationCreateForm(props) {
         {...getOverrideProps(overrides, "firstName")}
       ></TextField>
       <TextField
-        label={
-          <span style={{ display: "inline-flex" }}>
-            <span>Last name</span>
-            <span style={{ color: "red" }}>*</span>
-          </span>
-        }
-        isRequired={true}
+        label="Last name"
+        isRequired={false}
         isReadOnly={false}
         value={lastName}
         onChange={(e) => {
@@ -194,6 +454,14 @@ export default function ApplicationCreateForm(props) {
               city,
               resume,
               coverLetter,
+              address,
+              state,
+              zipcode,
+              country,
+              education,
+              project,
+              job,
+              completeApplication,
             };
             const result = onChange(modelFields);
             value = result?.lastName ?? value;
@@ -209,13 +477,8 @@ export default function ApplicationCreateForm(props) {
         {...getOverrideProps(overrides, "lastName")}
       ></TextField>
       <TextField
-        label={
-          <span style={{ display: "inline-flex" }}>
-            <span>Email</span>
-            <span style={{ color: "red" }}>*</span>
-          </span>
-        }
-        isRequired={true}
+        label="Email"
+        isRequired={false}
         isReadOnly={false}
         value={email}
         onChange={(e) => {
@@ -229,6 +492,14 @@ export default function ApplicationCreateForm(props) {
               city,
               resume,
               coverLetter,
+              address,
+              state,
+              zipcode,
+              country,
+              education,
+              project,
+              job,
+              completeApplication,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
@@ -244,13 +515,8 @@ export default function ApplicationCreateForm(props) {
         {...getOverrideProps(overrides, "email")}
       ></TextField>
       <TextField
-        label={
-          <span style={{ display: "inline-flex" }}>
-            <span>Phone</span>
-            <span style={{ color: "red" }}>*</span>
-          </span>
-        }
-        isRequired={true}
+        label="Phone"
+        isRequired={false}
         isReadOnly={false}
         type="tel"
         value={phone}
@@ -265,6 +531,14 @@ export default function ApplicationCreateForm(props) {
               city,
               resume,
               coverLetter,
+              address,
+              state,
+              zipcode,
+              country,
+              education,
+              project,
+              job,
+              completeApplication,
             };
             const result = onChange(modelFields);
             value = result?.phone ?? value;
@@ -280,13 +554,8 @@ export default function ApplicationCreateForm(props) {
         {...getOverrideProps(overrides, "phone")}
       ></TextField>
       <TextField
-        label={
-          <span style={{ display: "inline-flex" }}>
-            <span>City</span>
-            <span style={{ color: "red" }}>*</span>
-          </span>
-        }
-        isRequired={true}
+        label="City"
+        isRequired={false}
         isReadOnly={false}
         value={city}
         onChange={(e) => {
@@ -300,6 +569,14 @@ export default function ApplicationCreateForm(props) {
               city: value,
               resume,
               coverLetter,
+              address,
+              state,
+              zipcode,
+              country,
+              education,
+              project,
+              job,
+              completeApplication,
             };
             const result = onChange(modelFields);
             value = result?.city ?? value;
@@ -315,13 +592,8 @@ export default function ApplicationCreateForm(props) {
         {...getOverrideProps(overrides, "city")}
       ></TextField>
       <TextField
-        label={
-          <span style={{ display: "inline-flex" }}>
-            <span>Resume</span>
-            <span style={{ color: "red" }}>*</span>
-          </span>
-        }
-        isRequired={true}
+        label="Resume"
+        isRequired={false}
         isReadOnly={false}
         value={resume}
         onChange={(e) => {
@@ -335,6 +607,14 @@ export default function ApplicationCreateForm(props) {
               city,
               resume: value,
               coverLetter,
+              address,
+              state,
+              zipcode,
+              country,
+              education,
+              project,
+              job,
+              completeApplication,
             };
             const result = onChange(modelFields);
             value = result?.resume ?? value;
@@ -365,6 +645,14 @@ export default function ApplicationCreateForm(props) {
               city,
               resume,
               coverLetter: value,
+              address,
+              state,
+              zipcode,
+              country,
+              education,
+              project,
+              job,
+              completeApplication,
             };
             const result = onChange(modelFields);
             value = result?.coverLetter ?? value;
@@ -379,32 +667,352 @@ export default function ApplicationCreateForm(props) {
         hasError={errors.coverLetter?.hasError}
         {...getOverrideProps(overrides, "coverLetter")}
       ></TextField>
-      <Flex
-        justifyContent="space-between"
-        {...getOverrideProps(overrides, "CTAFlex")}
+      <TextField
+        label="Address"
+        isRequired={false}
+        isReadOnly={false}
+        value={address}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              lastName,
+              email,
+              phone,
+              city,
+              resume,
+              coverLetter,
+              address: value,
+              state,
+              zipcode,
+              country,
+              education,
+              project,
+              job,
+              completeApplication,
+            };
+            const result = onChange(modelFields);
+            value = result?.address ?? value;
+          }
+          if (errors.address?.hasError) {
+            runValidationTasks("address", value);
+          }
+          setAddress(value);
+        }}
+        onBlur={() => runValidationTasks("address", address)}
+        errorMessage={errors.address?.errorMessage}
+        hasError={errors.address?.hasError}
+        {...getOverrideProps(overrides, "address")}
+      ></TextField>
+      <TextField
+        label="State"
+        isRequired={false}
+        isReadOnly={false}
+        value={state}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              lastName,
+              email,
+              phone,
+              city,
+              resume,
+              coverLetter,
+              address,
+              state: value,
+              zipcode,
+              country,
+              education,
+              project,
+              job,
+              completeApplication,
+            };
+            const result = onChange(modelFields);
+            value = result?.state ?? value;
+          }
+          if (errors.state?.hasError) {
+            runValidationTasks("state", value);
+          }
+          setState(value);
+        }}
+        onBlur={() => runValidationTasks("state", state)}
+        errorMessage={errors.state?.errorMessage}
+        hasError={errors.state?.hasError}
+        {...getOverrideProps(overrides, "state")}
+      ></TextField>
+      <TextField
+        label="Zipcode"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={zipcode}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              lastName,
+              email,
+              phone,
+              city,
+              resume,
+              coverLetter,
+              address,
+              state,
+              zipcode: value,
+              country,
+              education,
+              project,
+              job,
+              completeApplication,
+            };
+            const result = onChange(modelFields);
+            value = result?.zipcode ?? value;
+          }
+          if (errors.zipcode?.hasError) {
+            runValidationTasks("zipcode", value);
+          }
+          setZipcode(value);
+        }}
+        onBlur={() => runValidationTasks("zipcode", zipcode)}
+        errorMessage={errors.zipcode?.errorMessage}
+        hasError={errors.zipcode?.hasError}
+        {...getOverrideProps(overrides, "zipcode")}
+      ></TextField>
+      <TextField
+        label="Country"
+        isRequired={false}
+        isReadOnly={false}
+        value={country}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              lastName,
+              email,
+              phone,
+              city,
+              resume,
+              coverLetter,
+              address,
+              state,
+              zipcode,
+              country: value,
+              education,
+              project,
+              job,
+              completeApplication,
+            };
+            const result = onChange(modelFields);
+            value = result?.country ?? value;
+          }
+          if (errors.country?.hasError) {
+            runValidationTasks("country", value);
+          }
+          setCountry(value);
+        }}
+        onBlur={() => runValidationTasks("country", country)}
+        errorMessage={errors.country?.errorMessage}
+        hasError={errors.country?.hasError}
+        {...getOverrideProps(overrides, "country")}
+      ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              lastName,
+              email,
+              phone,
+              city,
+              resume,
+              coverLetter,
+              address,
+              state,
+              zipcode,
+              country,
+              education: values,
+              project,
+              job,
+              completeApplication,
+            };
+            const result = onChange(modelFields);
+            values = result?.education ?? values;
+          }
+          setEducation(values);
+          setCurrentEducationValue("");
+        }}
+        currentFieldValue={currentEducationValue}
+        label={"Education"}
+        items={education}
+        hasError={errors?.education?.hasError}
+        errorMessage={errors?.education?.errorMessage}
+        setFieldValue={setCurrentEducationValue}
+        inputFieldRef={educationRef}
+        defaultFieldValue={""}
       >
-        <Button
-          children="Clear"
-          type="reset"
-          onClick={(event) => {
-            event.preventDefault();
-            resetStateValues();
+        <TextAreaField
+          label="Education"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentEducationValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.education?.hasError) {
+              runValidationTasks("education", value);
+            }
+            setCurrentEducationValue(value);
           }}
-          {...getOverrideProps(overrides, "ClearButton")}
-        ></Button>
-        <Flex
-          gap="15px"
-          {...getOverrideProps(overrides, "RightAlignCTASubFlex")}
-        >
-          <Button
-            children="Submit"
-            type="submit"
-            variation="primary"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
-            {...getOverrideProps(overrides, "SubmitButton")}
-          ></Button>
-        </Flex>
-      </Flex>
+          onBlur={() => runValidationTasks("education", currentEducationValue)}
+          errorMessage={errors.education?.errorMessage}
+          hasError={errors.education?.hasError}
+          ref={educationRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "education")}
+        ></TextAreaField>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              lastName,
+              email,
+              phone,
+              city,
+              resume,
+              coverLetter,
+              address,
+              state,
+              zipcode,
+              country,
+              education,
+              project: values,
+              job,
+              completeApplication,
+            };
+            const result = onChange(modelFields);
+            values = result?.project ?? values;
+          }
+          setProject(values);
+          setCurrentProjectValue("");
+        }}
+        currentFieldValue={currentProjectValue}
+        label={"Project"}
+        items={project}
+        hasError={errors?.project?.hasError}
+        errorMessage={errors?.project?.errorMessage}
+        setFieldValue={setCurrentProjectValue}
+        inputFieldRef={projectRef}
+        defaultFieldValue={""}
+      >
+        <TextAreaField
+          label="Project"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentProjectValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.project?.hasError) {
+              runValidationTasks("project", value);
+            }
+            setCurrentProjectValue(value);
+          }}
+          onBlur={() => runValidationTasks("project", currentProjectValue)}
+          errorMessage={errors.project?.errorMessage}
+          hasError={errors.project?.hasError}
+          ref={projectRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "project")}
+        ></TextAreaField>
+      </ArrayField>
+      <TextField
+        label="Job"
+        isRequired={false}
+        isReadOnly={false}
+        value={job}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              lastName,
+              email,
+              phone,
+              city,
+              resume,
+              coverLetter,
+              address,
+              state,
+              zipcode,
+              country,
+              education,
+              project,
+              job: value,
+              completeApplication,
+            };
+            const result = onChange(modelFields);
+            value = result?.job ?? value;
+          }
+          if (errors.job?.hasError) {
+            runValidationTasks("job", value);
+          }
+          setJob(value);
+        }}
+        onBlur={() => runValidationTasks("job", job)}
+        errorMessage={errors.job?.errorMessage}
+        hasError={errors.job?.hasError}
+        {...getOverrideProps(overrides, "job")}
+      ></TextField>
+      <SwitchField
+        label="Complete application"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={completeApplication}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              lastName,
+              email,
+              phone,
+              city,
+              resume,
+              coverLetter,
+              address,
+              state,
+              zipcode,
+              country,
+              education,
+              project,
+              job,
+              completeApplication: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.completeApplication ?? value;
+          }
+          if (errors.completeApplication?.hasError) {
+            runValidationTasks("completeApplication", value);
+          }
+          setCompleteApplication(value);
+        }}
+        onBlur={() =>
+          runValidationTasks("completeApplication", completeApplication)
+        }
+        errorMessage={errors.completeApplication?.errorMessage}
+        hasError={errors.completeApplication?.hasError}
+        {...getOverrideProps(overrides, "completeApplication")}
+      ></SwitchField>
     </Grid>
   );
 }
