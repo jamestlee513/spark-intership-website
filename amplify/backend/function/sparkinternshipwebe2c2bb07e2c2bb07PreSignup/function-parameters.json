@@ -1,0 +1,23 @@
+{
+  "trigger": true,
+  "modules": [
+    "email-filter-allowlist"
+  ],
+  "parentResource": "sparkinternshipwebe2c2bb07e2c2bb07",
+  "functionName": "sparkinternshipwebe2c2bb07e2c2bb07PreSignup",
+  "resourceName": "sparkinternshipwebe2c2bb07e2c2bb07PreSignup",
+  "parentStack": "auth",
+  "triggerEnvs": "[]",
+  "triggerDir": "/snapshot/repo/build/node_modules/@aws-amplify/amplify-category-auth/provider-utils/awscloudformation/triggers/PreSignup",
+  "triggerTemplate": "PreSignup.json.ejs",
+  "triggerEventPath": "PreSignup.event.json",
+  "roleName": "sparkinternshipwebe2c2bb07e2c2bb07PreSignup",
+  "skipEdit": true,
+  "permissions": {
+    "api": {
+      "sparkinternshipweb": [
+        "Query"
+      ]
+    }
+  }
+}
