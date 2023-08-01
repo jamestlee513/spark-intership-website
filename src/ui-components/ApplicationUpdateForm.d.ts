@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SwitchFieldProps, TextAreaFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 import { Application } from "../models";
 export declare type ValidationResponse = {
@@ -21,6 +21,14 @@ export declare type ApplicationUpdateFormInputValues = {
     city?: string;
     resume?: string;
     coverLetter?: string;
+    address?: string;
+    state?: string;
+    zipcode?: number;
+    country?: string;
+    education?: string[];
+    project?: string[];
+    job?: string;
+    completeApplication?: boolean;
 };
 export declare type ApplicationUpdateFormValidationValues = {
     firstName?: ValidationFunction<string>;
@@ -30,6 +38,14 @@ export declare type ApplicationUpdateFormValidationValues = {
     city?: ValidationFunction<string>;
     resume?: ValidationFunction<string>;
     coverLetter?: ValidationFunction<string>;
+    address?: ValidationFunction<string>;
+    state?: ValidationFunction<string>;
+    zipcode?: ValidationFunction<number>;
+    country?: ValidationFunction<string>;
+    education?: ValidationFunction<string>;
+    project?: ValidationFunction<string>;
+    job?: ValidationFunction<string>;
+    completeApplication?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type ApplicationUpdateFormOverridesProps = {
@@ -41,6 +57,14 @@ export declare type ApplicationUpdateFormOverridesProps = {
     city?: PrimitiveOverrideProps<TextFieldProps>;
     resume?: PrimitiveOverrideProps<TextFieldProps>;
     coverLetter?: PrimitiveOverrideProps<TextFieldProps>;
+    address?: PrimitiveOverrideProps<TextFieldProps>;
+    state?: PrimitiveOverrideProps<TextFieldProps>;
+    zipcode?: PrimitiveOverrideProps<TextFieldProps>;
+    country?: PrimitiveOverrideProps<TextFieldProps>;
+    education?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    project?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    job?: PrimitiveOverrideProps<TextFieldProps>;
+    completeApplication?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type ApplicationUpdateFormProps = React.PropsWithChildren<{
     overrides?: ApplicationUpdateFormOverridesProps | undefined | null;

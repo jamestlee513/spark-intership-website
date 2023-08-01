@@ -25,11 +25,5 @@ export type AmplifyDependentResourcesAttributes = {
       "Name": "string",
       "Region": "string"
     }
-  },
-  "storage": {
-    "s3sparkinternshipwebstorage27315bb5": {
-      "BucketName": "string",
-      "Region": "string"
-    }
   }
 }
