@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
 import {Link, useLocation, useNavigate} from "react-router-dom";
-import { API, graphqlOperation } from 'aws-amplify';
-import { DataStore } from '@aws-amplify/datastore';
-import { Application } from '../../models';
+import {Auth} from 'aws-amplify';
+import {DataStore} from '@aws-amplify/datastore';
+import {Application} from '../../models';
 import {Fade} from '@mui/material'
 
 
@@ -36,18 +36,29 @@ const ReviewPage = () => {
     }
 
     async function submit() {
+        const attributes = await Auth.currentUserInfo()
+        const apps = await DataStore.query(Application, (a) => a.and(a => [a.email.eq(attributes.attributes.email), a.job.eq(stuff.job)]))
+        for (const app of apps) {
+            await DataStore.delete(app)
+        }
         await DataStore.save(
             new Application({
                 "firstName": stuff.firstName,
                 "lastName": stuff.lastName,
-                "email": stuff.email,
+                "email": attributes.attributes.email,
                 "phone": stuff.phoneNumber,
                 "city": stuff.city,
                 "resume": stuff.resume.name,
-                "coverLetter": stuff.coverLetter.name
+                "coverLetter": stuff.coverLetter.name,
+                "zipcode": Number(stuff.zipCode),
+                "country": stuff.country,
+                "state": stuff.state,
+                "address": stuff.address,
+                "job": stuff.job,
+                "completeApplication": true
             })
         );
-        navigate("/submit")
+        navigate("/submit", {state: {job: stuff.job}})
     }
 
     return (
@@ -58,8 +69,6 @@ const ReviewPage = () => {
                     <p>{stuff.firstName}</p>
                     <h1>Last Name</h1>
                     <p>{stuff.lastName}</p>
-                    <h1>Email</h1>
-                    <p>{stuff.email}</p>
                     <h1>Phone Number</h1>
                     <p>{stuff.phoneNumber}</p>
                     <h1>Address</h1>
@@ -88,7 +97,7 @@ const ReviewPage = () => {
                             {resume.type === 'application/pdf' ? (
                                 <embed src={coverLetterURL} width="300" height="200" type="application/pdf"/>
                             ) : (
-                                <img src={coverLetterURL} alt="Uploaded Resume"/>
+                                <img src={coverLetterURL} alt="Uploaded Cover Letter"/>
                             )}
                         </div>
                     )}
@@ -102,7 +111,12 @@ const ReviewPage = () => {
                                     phone: stuff.phoneNumber,
                                     city: stuff.city,
                                     resume: stuff.resume,
-                                    coverLetter: stuff.coverLetter
+                                    coverLetter: stuff.coverLetter,
+                                    zipCode: stuff.zipCode,
+                                    country: stuff.country,
+                                    state: stuff.state,
+                                    address: stuff.address,
+                                    job: stuff.job
                                 }
                             }
                         })
