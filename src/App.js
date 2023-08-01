@@ -8,6 +8,8 @@ import ReviewPage from "./pages/ApplicationPages/reviewPage";
 import SubmitPage from "./pages/ApplicationPages/submitPage";
 import CreateListingsPage from "./pages/JobListingsPages/creationPage"
 import ProfilePage from "./pages/ProfilePage/profilePage"
+import  JobListingsPage from "./pages/JobListingsPages/jobListingsPage";
+import { JobListing } from "./models";
 
 function App() {
   return (
@@ -21,6 +23,7 @@ function App() {
         <Route path='/submit' element={<SubmitPage />}/>
         <Route path='/create' element={<CreateListingsPage/>}/>
         <Route path='/profile' element={<ProfilePage/>}/>
+        <Route path='/listings' element={<JobListingsPage/>}/>
     </Routes>
     </div>  
     </BrowserRouter>   
