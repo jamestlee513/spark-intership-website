@@ -1,12 +1,34 @@
+type Project {
+  projectName: String
+  projectDesc: String
+  Role: String
+  fileURL: String
+}
+
+type Education {
+  unversity: String
+  major: String
+  expectedGrad: Int
+  GPA: Float
+}
+
 type Application @model @auth(rules: [{allow: public}]) {
-  id: ID!
-  firstName: String!
-  lastName: String!
-  email: AWSEmail!
-  phone: AWSPhone!
-  city: String!
-  resume: String!
+  firstName: String
+  lastName: String
+  email: String
+  phone: AWSPhone
+  city: String
+  resume: String
   coverLetter: String
+  id: ID!
+  address: String
+  state: String
+  zipcode: Int
+  country: String
+  education: [Education]
+  project: [Project]
+  job: String
+  completeApplication: Boolean
 }
 
 type JobListing @model @auth(rules: [{allow: public}]) {

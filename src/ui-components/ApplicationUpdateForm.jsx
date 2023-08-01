@@ -6,7 +6,13 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import {
+  Button,
+  Flex,
+  Grid,
+  SwitchField,
+  TextField,
+} from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Application } from "../models";
 import { fetchByPath, validateField } from "./utils";
@@ -31,6 +37,12 @@ export default function ApplicationUpdateForm(props) {
     city: "",
     resume: "",
     coverLetter: "",
+    address: "",
+    state: "",
+    zipcode: "",
+    country: "",
+    job: "",
+    completeApplication: false,
   };
   const [firstName, setFirstName] = React.useState(initialValues.firstName);
   const [lastName, setLastName] = React.useState(initialValues.lastName);
@@ -40,6 +52,14 @@ export default function ApplicationUpdateForm(props) {
   const [resume, setResume] = React.useState(initialValues.resume);
   const [coverLetter, setCoverLetter] = React.useState(
     initialValues.coverLetter
+  );
+  const [address, setAddress] = React.useState(initialValues.address);
+  const [state, setState] = React.useState(initialValues.state);
+  const [zipcode, setZipcode] = React.useState(initialValues.zipcode);
+  const [country, setCountry] = React.useState(initialValues.country);
+  const [job, setJob] = React.useState(initialValues.job);
+  const [completeApplication, setCompleteApplication] = React.useState(
+    initialValues.completeApplication
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -53,6 +73,12 @@ export default function ApplicationUpdateForm(props) {
     setCity(cleanValues.city);
     setResume(cleanValues.resume);
     setCoverLetter(cleanValues.coverLetter);
+    setAddress(cleanValues.address);
+    setState(cleanValues.state);
+    setZipcode(cleanValues.zipcode);
+    setCountry(cleanValues.country);
+    setJob(cleanValues.job);
+    setCompleteApplication(cleanValues.completeApplication);
     setErrors({});
   };
   const [applicationRecord, setApplicationRecord] =
@@ -68,13 +94,19 @@ export default function ApplicationUpdateForm(props) {
   }, [idProp, applicationModelProp]);
   React.useEffect(resetStateValues, [applicationRecord]);
   const validations = {
-    firstName: [{ type: "Required" }],
-    lastName: [{ type: "Required" }],
-    email: [{ type: "Required" }, { type: "Email" }],
-    phone: [{ type: "Required" }, { type: "Phone" }],
-    city: [{ type: "Required" }],
-    resume: [{ type: "Required" }],
+    firstName: [],
+    lastName: [],
+    email: [],
+    phone: [{ type: "Phone" }],
+    city: [],
+    resume: [],
     coverLetter: [],
+    address: [],
+    state: [],
+    zipcode: [],
+    country: [],
+    job: [],
+    completeApplication: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -109,6 +141,12 @@ export default function ApplicationUpdateForm(props) {
           city,
           resume,
           coverLetter,
+          address,
+          state,
+          zipcode,
+          country,
+          job,
+          completeApplication,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -157,7 +195,7 @@ export default function ApplicationUpdateForm(props) {
     >
       <TextField
         label="First name"
-        isRequired={true}
+        isRequired={false}
         isReadOnly={false}
         value={firstName}
         onChange={(e) => {
@@ -171,6 +209,12 @@ export default function ApplicationUpdateForm(props) {
               city,
               resume,
               coverLetter,
+              address,
+              state,
+              zipcode,
+              country,
+              job,
+              completeApplication,
             };
             const result = onChange(modelFields);
             value = result?.firstName ?? value;
@@ -187,7 +231,7 @@ export default function ApplicationUpdateForm(props) {
       ></TextField>
       <TextField
         label="Last name"
-        isRequired={true}
+        isRequired={false}
         isReadOnly={false}
         value={lastName}
         onChange={(e) => {
@@ -201,6 +245,12 @@ export default function ApplicationUpdateForm(props) {
               city,
               resume,
               coverLetter,
+              address,
+              state,
+              zipcode,
+              country,
+              job,
+              completeApplication,
             };
             const result = onChange(modelFields);
             value = result?.lastName ?? value;
@@ -217,7 +267,7 @@ export default function ApplicationUpdateForm(props) {
       ></TextField>
       <TextField
         label="Email"
-        isRequired={true}
+        isRequired={false}
         isReadOnly={false}
         value={email}
         onChange={(e) => {
@@ -231,6 +281,12 @@ export default function ApplicationUpdateForm(props) {
               city,
               resume,
               coverLetter,
+              address,
+              state,
+              zipcode,
+              country,
+              job,
+              completeApplication,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
@@ -247,7 +303,7 @@ export default function ApplicationUpdateForm(props) {
       ></TextField>
       <TextField
         label="Phone"
-        isRequired={true}
+        isRequired={false}
         isReadOnly={false}
         type="tel"
         value={phone}
@@ -262,6 +318,12 @@ export default function ApplicationUpdateForm(props) {
               city,
               resume,
               coverLetter,
+              address,
+              state,
+              zipcode,
+              country,
+              job,
+              completeApplication,
             };
             const result = onChange(modelFields);
             value = result?.phone ?? value;
@@ -278,7 +340,7 @@ export default function ApplicationUpdateForm(props) {
       ></TextField>
       <TextField
         label="City"
-        isRequired={true}
+        isRequired={false}
         isReadOnly={false}
         value={city}
         onChange={(e) => {
@@ -292,6 +354,12 @@ export default function ApplicationUpdateForm(props) {
               city: value,
               resume,
               coverLetter,
+              address,
+              state,
+              zipcode,
+              country,
+              job,
+              completeApplication,
             };
             const result = onChange(modelFields);
             value = result?.city ?? value;
@@ -308,7 +376,7 @@ export default function ApplicationUpdateForm(props) {
       ></TextField>
       <TextField
         label="Resume"
-        isRequired={true}
+        isRequired={false}
         isReadOnly={false}
         value={resume}
         onChange={(e) => {
@@ -322,6 +390,12 @@ export default function ApplicationUpdateForm(props) {
               city,
               resume: value,
               coverLetter,
+              address,
+              state,
+              zipcode,
+              country,
+              job,
+              completeApplication,
             };
             const result = onChange(modelFields);
             value = result?.resume ?? value;
@@ -352,6 +426,12 @@ export default function ApplicationUpdateForm(props) {
               city,
               resume,
               coverLetter: value,
+              address,
+              state,
+              zipcode,
+              country,
+              job,
+              completeApplication,
             };
             const result = onChange(modelFields);
             value = result?.coverLetter ?? value;
@@ -366,6 +446,228 @@ export default function ApplicationUpdateForm(props) {
         hasError={errors.coverLetter?.hasError}
         {...getOverrideProps(overrides, "coverLetter")}
       ></TextField>
+      <TextField
+        label="Address"
+        isRequired={false}
+        isReadOnly={false}
+        value={address}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              lastName,
+              email,
+              phone,
+              city,
+              resume,
+              coverLetter,
+              address: value,
+              state,
+              zipcode,
+              country,
+              job,
+              completeApplication,
+            };
+            const result = onChange(modelFields);
+            value = result?.address ?? value;
+          }
+          if (errors.address?.hasError) {
+            runValidationTasks("address", value);
+          }
+          setAddress(value);
+        }}
+        onBlur={() => runValidationTasks("address", address)}
+        errorMessage={errors.address?.errorMessage}
+        hasError={errors.address?.hasError}
+        {...getOverrideProps(overrides, "address")}
+      ></TextField>
+      <TextField
+        label="State"
+        isRequired={false}
+        isReadOnly={false}
+        value={state}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              lastName,
+              email,
+              phone,
+              city,
+              resume,
+              coverLetter,
+              address,
+              state: value,
+              zipcode,
+              country,
+              job,
+              completeApplication,
+            };
+            const result = onChange(modelFields);
+            value = result?.state ?? value;
+          }
+          if (errors.state?.hasError) {
+            runValidationTasks("state", value);
+          }
+          setState(value);
+        }}
+        onBlur={() => runValidationTasks("state", state)}
+        errorMessage={errors.state?.errorMessage}
+        hasError={errors.state?.hasError}
+        {...getOverrideProps(overrides, "state")}
+      ></TextField>
+      <TextField
+        label="Zipcode"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={zipcode}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              lastName,
+              email,
+              phone,
+              city,
+              resume,
+              coverLetter,
+              address,
+              state,
+              zipcode: value,
+              country,
+              job,
+              completeApplication,
+            };
+            const result = onChange(modelFields);
+            value = result?.zipcode ?? value;
+          }
+          if (errors.zipcode?.hasError) {
+            runValidationTasks("zipcode", value);
+          }
+          setZipcode(value);
+        }}
+        onBlur={() => runValidationTasks("zipcode", zipcode)}
+        errorMessage={errors.zipcode?.errorMessage}
+        hasError={errors.zipcode?.hasError}
+        {...getOverrideProps(overrides, "zipcode")}
+      ></TextField>
+      <TextField
+        label="Country"
+        isRequired={false}
+        isReadOnly={false}
+        value={country}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              lastName,
+              email,
+              phone,
+              city,
+              resume,
+              coverLetter,
+              address,
+              state,
+              zipcode,
+              country: value,
+              job,
+              completeApplication,
+            };
+            const result = onChange(modelFields);
+            value = result?.country ?? value;
+          }
+          if (errors.country?.hasError) {
+            runValidationTasks("country", value);
+          }
+          setCountry(value);
+        }}
+        onBlur={() => runValidationTasks("country", country)}
+        errorMessage={errors.country?.errorMessage}
+        hasError={errors.country?.hasError}
+        {...getOverrideProps(overrides, "country")}
+      ></TextField>
+      <TextField
+        label="Job"
+        isRequired={false}
+        isReadOnly={false}
+        value={job}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              lastName,
+              email,
+              phone,
+              city,
+              resume,
+              coverLetter,
+              address,
+              state,
+              zipcode,
+              country,
+              job: value,
+              completeApplication,
+            };
+            const result = onChange(modelFields);
+            value = result?.job ?? value;
+          }
+          if (errors.job?.hasError) {
+            runValidationTasks("job", value);
+          }
+          setJob(value);
+        }}
+        onBlur={() => runValidationTasks("job", job)}
+        errorMessage={errors.job?.errorMessage}
+        hasError={errors.job?.hasError}
+        {...getOverrideProps(overrides, "job")}
+      ></TextField>
+      <SwitchField
+        label="Complete application"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={completeApplication}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              lastName,
+              email,
+              phone,
+              city,
+              resume,
+              coverLetter,
+              address,
+              state,
+              zipcode,
+              country,
+              job,
+              completeApplication: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.completeApplication ?? value;
+          }
+          if (errors.completeApplication?.hasError) {
+            runValidationTasks("completeApplication", value);
+          }
+          setCompleteApplication(value);
+        }}
+        onBlur={() =>
+          runValidationTasks("completeApplication", completeApplication)
+        }
+        errorMessage={errors.completeApplication?.errorMessage}
+        hasError={errors.completeApplication?.hasError}
+        {...getOverrideProps(overrides, "completeApplication")}
+      ></SwitchField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

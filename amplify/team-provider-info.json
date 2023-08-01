@@ -13,7 +13,8 @@
     },
     "categories": {
       "auth": {
-        "sparkinternshipweb6aceb457": {}
+        "sparkinternshipweb6aceb457": {},
+        "sparkinternshipweb": {}
       },
       "api": {
         "sparkinternshipweb": {}
