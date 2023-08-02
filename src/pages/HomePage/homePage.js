@@ -21,7 +21,7 @@ export default function HomePage() {
       </div>
       <div className="description" style={desStyle}>
         <p>
-        <span style={{fontFamily: 'Bungee', fontWeight: 'bold',fontSize: '32px',}}>Spark </span>
+        <span style={{fontFamily: 'Bungee, san-serif', fontWeight: 'bold',fontSize: '32px',}}>Spark </span>
         {`is a nonprofit that offers
         internship opportunities to undergraduate students. Our mission is to
         provide a nurturing environment where students can learn valuable skills form mentors already in the 
@@ -60,7 +60,7 @@ const desStyle = {
   justifyContent: 'center',
   alignItems: 'center',
   textAlign: 'left',
-  fontFamily: 'Nunito Sans',
+  fontFamily: 'Nunito, sans-serif',
   fontSize: '26px',
 };
 
