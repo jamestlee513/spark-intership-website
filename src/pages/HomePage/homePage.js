@@ -22,10 +22,10 @@ export default function HomePage() {
       <div className="description" style={desStyle}>
         <p>
         <span style={{fontFamily: 'Bungee, san-serif', fontWeight: 'bold',fontSize: '32px',}}>Spark </span>
-        {`is a nonprofit that offers
+        is a nonprofit that offers
         internship opportunities to undergraduate students. Our mission is to
-        provide a nurturing environment where students can learn valuable skills form mentors already in the 
-        field. Explore our intern tracks below!`}
+        provide a nurturing environment where students can learn valuable skills from mentors already in the 
+        field. Explore our intern tracks below!
         </p>
       </div>
 
@@ -71,7 +71,7 @@ const photoStyle = {
 /*
   TODO:
   1. fontFamily falls back, added a fall back to the font family. Also figure
-     out how to import the fonts.
-  2. Add the scale thing (forget exactly the term) that fits different size of screen
+     out how to import the fonts. (Done)
+  2. Add the scale thing (forgot exactly the term) that fits different size of screen
   3. inserting photo and adjust photo in the way it should show
 */
