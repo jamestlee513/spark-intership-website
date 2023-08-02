@@ -17,11 +17,11 @@ export default function HomePage() {
     */}
     <div className='main' style={mainStyle}>
       <div className="logo">
-        <img src={SparkLogo} alt="Spark Logo"></img>
+        <img src={SparkLogo} alt="Spark Logo" style={logoStyle}></img>
       </div>
       <div className="description" style={desStyle}>
         <p>
-        <span style={{fontWeight: 'bold',fontSize: '2rem',}}>Spark </span>
+        <span style={{fontFamily: 'Bungee', fontWeight: 'bold',fontSize: '32px',}}>Spark </span>
         {`is a nonprofit that offers
         internship opportunities to undergraduate students. Our mission is to
         provide a nurturing environment where students can learn valuable skills form mentors already in the 
@@ -42,18 +42,36 @@ export default function HomePage() {
 }
 
 const mainStyle = {
+  paddingTop: '10px',
   padding: '2px',
   display: 'flex',
+  flex: 1,
 }
 
+// try to figure out something here
+const logoStyle = {
+  height: '500px',
+  width: '500px',
+  margin: '20px',
+}
 
 const desStyle = {
-  flex: 1,
-  margin: '100px',
+  margin: '70px',
   justifyContent: 'center',
   alignItems: 'center',
+  textAlign: 'left',
+  fontFamily: 'Nunito Sans',
+  fontSize: '26px',
 };
 
 const photoStyle = {
   margin: '100px',
 }
+
+/*
+  TODO:
+  1. fontFamily falls back, added a fall back to the font family. Also figure
+     out how to import the fonts.
+  2. Add the scale thing (forget exactly the term) that fits different size of screen
+  3. inserting photo and adjust photo in the way it should show
+*/
