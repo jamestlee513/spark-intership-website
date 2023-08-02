@@ -41,18 +41,8 @@
     "usernameAttributes": [
       "email"
     ],
-    "useDefault": "manual",
-    "userPoolGroups": false,
-<<<<<<< HEAD:amplify/backend/auth/sparkinternshipweb/cli-inputs.json
-    "userPoolGroupList": [
-      "user"
-    ],
-=======
     "userPoolGroupList": [],
->>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f:amplify/backend/auth/sparkinternshipweb6aceb457/cli-inputs.json
-    "adminQueries": false,
-    "thirdPartyAuth": false,
-    "authProviders": [],
+    "serviceName": "Cognito",
     "usernameCaseSensitive": false,
     "useEnabledMfas": true,
     "authRoleArn": {
@@ -69,15 +59,10 @@
     },
     "breakCircularDependency": true,
     "dependsOn": [],
-<<<<<<< HEAD:amplify/backend/auth/sparkinternshipweb/cli-inputs.json
-    "hostedUI": false,
-    "triggers": {},
-    "parentStack": {
-      "Ref": "AWS::StackId"
-    },
-    "permissions": []
-=======
+    "userPoolGroups": false,
+    "adminQueries": false,
+    "thirdPartyAuth": false,
+    "authProviders": [],
     "hostedUI": false
->>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f:amplify/backend/auth/sparkinternshipweb6aceb457/cli-inputs.json
   }
 }
