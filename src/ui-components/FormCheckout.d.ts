@@ -5,10 +5,6 @@
  **************************************************************************/
 
 import * as React from "react";
-<<<<<<< HEAD
-=======
-import { Application } from "../models";
->>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 import { ButtonProps, FlexProps, PhoneNumberFieldProps, SelectFieldProps, TextFieldProps, TextProps, ViewProps } from "@aws-amplify/ui-react";
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
@@ -18,7 +14,6 @@ export declare type FormCheckoutOverridesProps = {
     "Frame 313"?: PrimitiveOverrideProps<FlexProps>;
     "Frame 406"?: PrimitiveOverrideProps<FlexProps>;
     "Personal Information"?: PrimitiveOverrideProps<TextProps>;
-<<<<<<< HEAD
     FirstName?: PrimitiveOverrideProps<TextFieldProps>;
     LastName?: PrimitiveOverrideProps<TextFieldProps>;
     Phone?: PrimitiveOverrideProps<PhoneNumberFieldProps>;
@@ -35,23 +30,6 @@ export declare type FormCheckoutOverridesProps = {
 export declare type FormCheckoutProps = React.PropsWithChildren<Partial<FlexProps> & {
     application?: React.ReactNode;
     phone?: Number;
-=======
-    TextField29767010?: PrimitiveOverrideProps<TextFieldProps>;
-    TextField40463402?: PrimitiveOverrideProps<TextFieldProps>;
-    PhoneNumberField?: PrimitiveOverrideProps<PhoneNumberFieldProps>;
-    TextField40462710?: PrimitiveOverrideProps<TextFieldProps>;
-    SelectField40522296?: PrimitiveOverrideProps<SelectFieldProps>;
-    SelectField40522313?: PrimitiveOverrideProps<SelectFieldProps>;
-    TextField40462731?: PrimitiveOverrideProps<TextFieldProps>;
-    TextField40463364?: PrimitiveOverrideProps<TextFieldProps>;
-    "Frame 412"?: PrimitiveOverrideProps<ViewProps>;
-    Button40512111?: PrimitiveOverrideProps<ButtonProps>;
-    Button40512122?: PrimitiveOverrideProps<ButtonProps>;
-    Button40512115?: PrimitiveOverrideProps<ButtonProps>;
-} & EscapeHatchProps;
-export declare type FormCheckoutProps = React.PropsWithChildren<Partial<FlexProps> & {
-    application?: Application;
->>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
 } & {
     overrides?: FormCheckoutOverridesProps | undefined | null;
 }>;

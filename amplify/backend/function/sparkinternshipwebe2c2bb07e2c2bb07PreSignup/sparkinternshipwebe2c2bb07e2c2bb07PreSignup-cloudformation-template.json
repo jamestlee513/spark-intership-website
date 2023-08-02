@@ -47,21 +47,6 @@
     },
     "s3Key": {
       "Type": "String"
-<<<<<<< HEAD
-    },
-    "apisparkinternshipwebGraphQLAPIIdOutput": {
-      "Type": "String",
-      "Default": "apisparkinternshipwebGraphQLAPIIdOutput"
-    },
-    "apisparkinternshipwebGraphQLAPIEndpointOutput": {
-      "Type": "String",
-      "Default": "apisparkinternshipwebGraphQLAPIEndpointOutput"
-    },
-    "apisparkinternshipwebGraphQLAPIKeyOutput": {
-      "Type": "String",
-      "Default": "apisparkinternshipwebGraphQLAPIKeyOutput"
-=======
->>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
     }
   },
   "Conditions": {
@@ -117,18 +102,6 @@
             },
             "DOMAINBLACKLIST": {
               "Ref": "DOMAINBLACKLIST"
-<<<<<<< HEAD
-            },
-            "API_SPARKINTERNSHIPWEB_GRAPHQLAPIIDOUTPUT": {
-              "Ref": "apisparkinternshipwebGraphQLAPIIdOutput"
-            },
-            "API_SPARKINTERNSHIPWEB_GRAPHQLAPIENDPOINTOUTPUT": {
-              "Ref": "apisparkinternshipwebGraphQLAPIEndpointOutput"
-            },
-            "API_SPARKINTERNSHIPWEB_GRAPHQLAPIKEYOUTPUT": {
-              "Ref": "apisparkinternshipwebGraphQLAPIKeyOutput"
-=======
->>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
             }
           }
         },
@@ -231,56 +204,6 @@
           ]
         }
       }
-<<<<<<< HEAD
-    },
-    "AmplifyResourcesPolicy": {
-      "DependsOn": [
-        "LambdaExecutionRole"
-      ],
-      "Type": "AWS::IAM::Policy",
-      "Properties": {
-        "PolicyName": "amplify-lambda-execution-policy",
-        "Roles": [
-          {
-            "Ref": "LambdaExecutionRole"
-          }
-        ],
-        "PolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": [
-                "appsync:GraphQL"
-              ],
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:appsync:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":apis/",
-                      {
-                        "Ref": "apisparkinternshipwebGraphQLAPIIdOutput"
-                      },
-                      "/types/Query/*"
-                    ]
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      }
-=======
->>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
     }
   },
   "Outputs": {

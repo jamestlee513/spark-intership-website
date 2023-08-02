@@ -12,16 +12,5 @@
   "triggerTemplate": "PreSignup.json.ejs",
   "triggerEventPath": "PreSignup.event.json",
   "roleName": "sparkinternshipwebe2c2bb07e2c2bb07PreSignup",
-<<<<<<< HEAD
-  "skipEdit": true,
-  "permissions": {
-    "api": {
-      "sparkinternshipweb": [
-        "Query"
-      ]
-    }
-  }
-=======
   "skipEdit": true
->>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
 }
