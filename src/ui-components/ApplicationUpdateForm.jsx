@@ -7,16 +7,181 @@
 /* eslint-disable */
 import * as React from "react";
 import {
+  Badge,
   Button,
+  Divider,
   Flex,
   Grid,
+  Icon,
+  ScrollView,
   SwitchField,
+  Text,
+  TextAreaField,
   TextField,
+  useTheme,
 } from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Application } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== "" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height="inherit" width="inherit" maxHeight={"7rem"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: "pointer",
+                  alignItems: "center",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? "#B8CEF9" : "",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: "pointer",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: "M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z",
+                      stroke: "black",
+                    },
+                  ]}
+                  ariaLabel="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation="horizontal" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent="flex-end">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children="Cancel"
+              type="button"
+              size="small"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size="small"
+            variation="link"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? "Save" : "Add"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
 export default function ApplicationUpdateForm(props) {
   const {
     id: idProp,
@@ -41,6 +206,8 @@ export default function ApplicationUpdateForm(props) {
     state: "",
     zipcode: "",
     country: "",
+    education: [],
+    project: [],
     job: "",
     completeApplication: false,
   };
@@ -57,6 +224,8 @@ export default function ApplicationUpdateForm(props) {
   const [state, setState] = React.useState(initialValues.state);
   const [zipcode, setZipcode] = React.useState(initialValues.zipcode);
   const [country, setCountry] = React.useState(initialValues.country);
+  const [education, setEducation] = React.useState(initialValues.education);
+  const [project, setProject] = React.useState(initialValues.project);
   const [job, setJob] = React.useState(initialValues.job);
   const [completeApplication, setCompleteApplication] = React.useState(
     initialValues.completeApplication
@@ -77,6 +246,18 @@ export default function ApplicationUpdateForm(props) {
     setState(cleanValues.state);
     setZipcode(cleanValues.zipcode);
     setCountry(cleanValues.country);
+    setEducation(
+      cleanValues.education?.map((item) =>
+        typeof item === "string" ? item : JSON.stringify(item)
+      ) ?? []
+    );
+    setCurrentEducationValue("");
+    setProject(
+      cleanValues.project?.map((item) =>
+        typeof item === "string" ? item : JSON.stringify(item)
+      ) ?? []
+    );
+    setCurrentProjectValue("");
     setJob(cleanValues.job);
     setCompleteApplication(cleanValues.completeApplication);
     setErrors({});
@@ -93,6 +274,10 @@ export default function ApplicationUpdateForm(props) {
     queryData();
   }, [idProp, applicationModelProp]);
   React.useEffect(resetStateValues, [applicationRecord]);
+  const [currentEducationValue, setCurrentEducationValue] = React.useState("");
+  const educationRef = React.createRef();
+  const [currentProjectValue, setCurrentProjectValue] = React.useState("");
+  const projectRef = React.createRef();
   const validations = {
     firstName: [],
     lastName: [],
@@ -105,6 +290,8 @@ export default function ApplicationUpdateForm(props) {
     state: [],
     zipcode: [],
     country: [],
+    education: [{ type: "JSON" }],
+    project: [{ type: "JSON" }],
     job: [],
     completeApplication: [],
   };
@@ -145,6 +332,8 @@ export default function ApplicationUpdateForm(props) {
           state,
           zipcode,
           country,
+          education,
+          project,
           job,
           completeApplication,
         };
@@ -176,9 +365,26 @@ export default function ApplicationUpdateForm(props) {
               modelFields[key] = undefined;
             }
           });
+          const modelFieldsToSave = {
+            firstName: modelFields.firstName,
+            lastName: modelFields.lastName,
+            email: modelFields.email,
+            phone: modelFields.phone,
+            city: modelFields.city,
+            resume: modelFields.resume,
+            coverLetter: modelFields.coverLetter,
+            address: modelFields.address,
+            state: modelFields.state,
+            zipcode: modelFields.zipcode,
+            country: modelFields.country,
+            job: modelFields.job,
+            completeApplication: modelFields.completeApplication,
+            education: modelFields.education.map((s) => JSON.parse(s)),
+            project: modelFields.project.map((s) => JSON.parse(s)),
+          };
           await DataStore.save(
             Application.copyOf(applicationRecord, (updated) => {
-              Object.assign(updated, modelFields);
+              Object.assign(updated, modelFieldsToSave);
             })
           );
           if (onSuccess) {
@@ -213,6 +419,8 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode,
               country,
+              education,
+              project,
               job,
               completeApplication,
             };
@@ -249,6 +457,8 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode,
               country,
+              education,
+              project,
               job,
               completeApplication,
             };
@@ -285,6 +495,8 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode,
               country,
+              education,
+              project,
               job,
               completeApplication,
             };
@@ -322,6 +534,8 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode,
               country,
+              education,
+              project,
               job,
               completeApplication,
             };
@@ -358,6 +572,8 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode,
               country,
+              education,
+              project,
               job,
               completeApplication,
             };
@@ -394,6 +610,8 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode,
               country,
+              education,
+              project,
               job,
               completeApplication,
             };
@@ -430,6 +648,8 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode,
               country,
+              education,
+              project,
               job,
               completeApplication,
             };
@@ -466,6 +686,8 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode,
               country,
+              education,
+              project,
               job,
               completeApplication,
             };
@@ -502,6 +724,8 @@ export default function ApplicationUpdateForm(props) {
               state: value,
               zipcode,
               country,
+              education,
+              project,
               job,
               completeApplication,
             };
@@ -542,6 +766,8 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode: value,
               country,
+              education,
+              project,
               job,
               completeApplication,
             };
@@ -578,6 +804,8 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode,
               country: value,
+              education,
+              project,
               job,
               completeApplication,
             };
@@ -594,6 +822,118 @@ export default function ApplicationUpdateForm(props) {
         hasError={errors.country?.hasError}
         {...getOverrideProps(overrides, "country")}
       ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              lastName,
+              email,
+              phone,
+              city,
+              resume,
+              coverLetter,
+              address,
+              state,
+              zipcode,
+              country,
+              education: values,
+              project,
+              job,
+              completeApplication,
+            };
+            const result = onChange(modelFields);
+            values = result?.education ?? values;
+          }
+          setEducation(values);
+          setCurrentEducationValue("");
+        }}
+        currentFieldValue={currentEducationValue}
+        label={"Education"}
+        items={education}
+        hasError={errors?.education?.hasError}
+        errorMessage={errors?.education?.errorMessage}
+        setFieldValue={setCurrentEducationValue}
+        inputFieldRef={educationRef}
+        defaultFieldValue={""}
+      >
+        <TextAreaField
+          label="Education"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentEducationValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.education?.hasError) {
+              runValidationTasks("education", value);
+            }
+            setCurrentEducationValue(value);
+          }}
+          onBlur={() => runValidationTasks("education", currentEducationValue)}
+          errorMessage={errors.education?.errorMessage}
+          hasError={errors.education?.hasError}
+          ref={educationRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "education")}
+        ></TextAreaField>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              lastName,
+              email,
+              phone,
+              city,
+              resume,
+              coverLetter,
+              address,
+              state,
+              zipcode,
+              country,
+              education,
+              project: values,
+              job,
+              completeApplication,
+            };
+            const result = onChange(modelFields);
+            values = result?.project ?? values;
+          }
+          setProject(values);
+          setCurrentProjectValue("");
+        }}
+        currentFieldValue={currentProjectValue}
+        label={"Project"}
+        items={project}
+        hasError={errors?.project?.hasError}
+        errorMessage={errors?.project?.errorMessage}
+        setFieldValue={setCurrentProjectValue}
+        inputFieldRef={projectRef}
+        defaultFieldValue={""}
+      >
+        <TextAreaField
+          label="Project"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentProjectValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.project?.hasError) {
+              runValidationTasks("project", value);
+            }
+            setCurrentProjectValue(value);
+          }}
+          onBlur={() => runValidationTasks("project", currentProjectValue)}
+          errorMessage={errors.project?.errorMessage}
+          hasError={errors.project?.hasError}
+          ref={projectRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "project")}
+        ></TextAreaField>
+      </ArrayField>
       <TextField
         label="Job"
         isRequired={false}
@@ -614,6 +954,8 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode,
               country,
+              education,
+              project,
               job: value,
               completeApplication,
             };
@@ -650,6 +992,8 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode,
               country,
+              education,
+              project,
               job,
               completeApplication: value,
             };

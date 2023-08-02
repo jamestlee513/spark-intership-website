@@ -62,5 +62,23 @@
       "service": "Lambda"
     }
   },
+  "parameters": {
+    "AMPLIFY_function_sparkinternshipwebe2c2bb07e2c2bb07PreSignup_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "sparkinternshipwebe2c2bb07e2c2bb07PreSignup"
+        }
+      ]
+    },
+    "AMPLIFY_function_sparkinternshipwebe2c2bb07e2c2bb07PreSignup_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "sparkinternshipwebe2c2bb07e2c2bb07PreSignup"
+        }
+      ]
+    }
+  },
   "storage": {}
 }

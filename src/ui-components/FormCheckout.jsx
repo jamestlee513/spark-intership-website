@@ -6,7 +6,6 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { Application } from "../models";
 import {
   getOverrideProps,
   useAuth,
@@ -14,6 +13,7 @@ import {
   useNavigateAction,
   useStateMutationAction,
 } from "@aws-amplify/ui-react/internal";
+import { Application } from "../models";
 import { schema } from "../models/schema";
 import {
   Button,
@@ -25,47 +25,27 @@ import {
   View,
 } from "@aws-amplify/ui-react";
 export default function FormCheckout(props) {
-  const { application, overrides, ...rest } = props;
+  const { application, phone, overrides, ...rest } = props;
   const authAttributes = useAuth().user?.attributes ?? {};
-  const [
-    textFieldTwoNineSevenSixSevenZeroOneZeroValue,
-    setTextFieldTwoNineSevenSixSevenZeroOneZeroValue,
-  ] = useStateMutationAction("");
-  const [
-    textFieldFourZeroFourSixThreeFourZeroTwoValue,
-    setTextFieldFourZeroFourSixThreeFourZeroTwoValue,
-  ] = useStateMutationAction("");
-  const [
-    textFieldFourZeroFourSixTwoSevenThreeOneValue,
-    setTextFieldFourZeroFourSixTwoSevenThreeOneValue,
-  ] = useStateMutationAction("");
-  const [
-    textFieldFourZeroFourSixTwoSevenOneZeroValue,
-    setTextFieldFourZeroFourSixTwoSevenOneZeroValue,
-  ] = useStateMutationAction("");
-  const [
-    textFieldFourZeroFourSixThreeThreeSixFourValue,
-    setTextFieldFourZeroFourSixThreeThreeSixFourValue,
-  ] = useStateMutationAction("");
-  const buttonFourZeroFiveOneTwoOneOneOneOnClick = useNavigateAction({
-    type: "reload",
-  });
-  const buttonFourZeroFiveOneTwoOneTwoTwoOnClick = useDataStoreCreateAction({
+  const [firstNameValue, setFirstNameValue] = useStateMutationAction("");
+  const [lastNameValue, setLastNameValue] = useStateMutationAction("");
+  const [cityValue, setCityValue] = useStateMutationAction("");
+  const [addressValue, setAddressValue] = useStateMutationAction("");
+  const [zipcodeValue, setZipcodeValue] = useStateMutationAction("");
+  const nextOnClick = useNavigateAction({ type: "reload" });
+  const saveOnClick = useDataStoreCreateAction({
     fields: {
-      firstName: textFieldTwoNineSevenSixSevenZeroOneZeroValue,
-      lastName: textFieldFourZeroFourSixThreeFourZeroTwoValue,
+      firstName: firstNameValue,
+      lastName: lastNameValue,
       email: authAttributes["email"],
-      phone: "phoneNumberField",
-      city: textFieldFourZeroFourSixTwoSevenThreeOneValue,
-      address: textFieldFourZeroFourSixTwoSevenOneZeroValue,
-      zipcode: textFieldFourZeroFourSixThreeThreeSixFourValue,
+      city: cityValue,
+      address: addressValue,
+      zipcode: zipcodeValue,
     },
     model: Application,
     schema: schema,
   });
-  const buttonFourZeroFiveOneTwoOneOneFiveOnClick = useNavigateAction({
-    type: "reload",
-  });
+  const previousOnClick = useNavigateAction({ type: "reload" });
   return (
     <Flex
       gap="24px"
@@ -152,13 +132,11 @@ export default function FormCheckout(props) {
               isDisabled={false}
               labelHidden={false}
               variation="default"
-              value={textFieldTwoNineSevenSixSevenZeroOneZeroValue}
+              value={firstNameValue}
               onChange={(event) => {
-                setTextFieldTwoNineSevenSixSevenZeroOneZeroValue(
-                  event.target.value
-                );
+                setFirstNameValue(event.target.value);
               }}
-              {...getOverrideProps(overrides, "TextField29767010")}
+              {...getOverrideProps(overrides, "FirstName")}
             ></TextField>
             <TextField
               width="unset"
@@ -171,13 +149,11 @@ export default function FormCheckout(props) {
               isDisabled={false}
               labelHidden={false}
               variation="default"
-              value={textFieldFourZeroFourSixThreeFourZeroTwoValue}
+              value={lastNameValue}
               onChange={(event) => {
-                setTextFieldFourZeroFourSixThreeFourZeroTwoValue(
-                  event.target.value
-                );
+                setLastNameValue(event.target.value);
               }}
-              {...getOverrideProps(overrides, "TextField40463402")}
+              {...getOverrideProps(overrides, "LastName")}
             ></TextField>
             <PhoneNumberField
               width="548px"
@@ -189,7 +165,7 @@ export default function FormCheckout(props) {
               isDisabled={false}
               labelHidden={false}
               variation="default"
-              {...getOverrideProps(overrides, "PhoneNumberField")}
+              {...getOverrideProps(overrides, "Phone")}
             ></PhoneNumberField>
             <TextField
               width="unset"
@@ -202,13 +178,11 @@ export default function FormCheckout(props) {
               isDisabled={false}
               labelHidden={false}
               variation="default"
-              value={textFieldFourZeroFourSixTwoSevenOneZeroValue}
+              value={addressValue}
               onChange={(event) => {
-                setTextFieldFourZeroFourSixTwoSevenOneZeroValue(
-                  event.target.value
-                );
+                setAddressValue(event.target.value);
               }}
-              {...getOverrideProps(overrides, "TextField40462710")}
+              {...getOverrideProps(overrides, "Address")}
             ></TextField>
             <SelectField
               width="300px"
@@ -220,7 +194,7 @@ export default function FormCheckout(props) {
               isDisabled={false}
               labelHidden={false}
               variation="default"
-              {...getOverrideProps(overrides, "SelectField40522296")}
+              {...getOverrideProps(overrides, "Country")}
             ></SelectField>
             <SelectField
               width="300px"
@@ -232,7 +206,7 @@ export default function FormCheckout(props) {
               isDisabled={false}
               labelHidden={false}
               variation="default"
-              {...getOverrideProps(overrides, "SelectField40522313")}
+              {...getOverrideProps(overrides, "State")}
             ></SelectField>
             <TextField
               width="unset"
@@ -245,13 +219,11 @@ export default function FormCheckout(props) {
               isDisabled={false}
               labelHidden={false}
               variation="default"
-              value={textFieldFourZeroFourSixTwoSevenThreeOneValue}
+              value={cityValue}
               onChange={(event) => {
-                setTextFieldFourZeroFourSixTwoSevenThreeOneValue(
-                  event.target.value
-                );
+                setCityValue(event.target.value);
               }}
-              {...getOverrideProps(overrides, "TextField40462731")}
+              {...getOverrideProps(overrides, "City")}
             ></TextField>
             <TextField
               width="unset"
@@ -264,13 +236,11 @@ export default function FormCheckout(props) {
               isDisabled={false}
               labelHidden={false}
               variation="default"
-              value={textFieldFourZeroFourSixThreeThreeSixFourValue}
+              value={zipcodeValue}
               onChange={(event) => {
-                setTextFieldFourZeroFourSixThreeThreeSixFourValue(
-                  event.target.value
-                );
+                setZipcodeValue(event.target.value);
               }}
-              {...getOverrideProps(overrides, "TextField40463364")}
+              {...getOverrideProps(overrides, "Zipcode")}
             ></TextField>
             <View
               width="unset"
@@ -297,9 +267,9 @@ export default function FormCheckout(props) {
                 variation="primary"
                 children="Next"
                 onClick={() => {
-                  buttonFourZeroFiveOneTwoOneOneOneOnClick();
+                  nextOnClick();
                 }}
-                {...getOverrideProps(overrides, "Button40512111")}
+                {...getOverrideProps(overrides, "Next")}
               ></Button>
               <Button
                 width="114px"
@@ -313,9 +283,9 @@ export default function FormCheckout(props) {
                 variation="primary"
                 children="Save"
                 onClick={() => {
-                  buttonFourZeroFiveOneTwoOneTwoTwoOnClick();
+                  saveOnClick();
                 }}
-                {...getOverrideProps(overrides, "Button40512122")}
+                {...getOverrideProps(overrides, "Save")}
               ></Button>
               <Button
                 width="unset"
@@ -328,9 +298,9 @@ export default function FormCheckout(props) {
                 variation="default"
                 children="Previous"
                 onClick={() => {
-                  buttonFourZeroFiveOneTwoOneOneFiveOnClick();
+                  previousOnClick();
                 }}
-                {...getOverrideProps(overrides, "Button40512115")}
+                {...getOverrideProps(overrides, "Previous")}
               ></Button>
             </View>
           </Flex>
