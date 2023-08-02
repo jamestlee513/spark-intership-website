@@ -7,6 +7,7 @@
 /* eslint-disable */
 import * as React from "react";
 import {
+<<<<<<< HEAD
   Badge,
   Button,
   Divider,
@@ -19,6 +20,13 @@ import {
   TextAreaField,
   TextField,
   useTheme,
+=======
+  Button,
+  Flex,
+  Grid,
+  SwitchField,
+  TextField,
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
 } from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Application } from "../models";
@@ -206,8 +214,11 @@ export default function ApplicationUpdateForm(props) {
     state: "",
     zipcode: "",
     country: "",
+<<<<<<< HEAD
     education: [],
     project: [],
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
     job: "",
     completeApplication: false,
   };
@@ -224,8 +235,11 @@ export default function ApplicationUpdateForm(props) {
   const [state, setState] = React.useState(initialValues.state);
   const [zipcode, setZipcode] = React.useState(initialValues.zipcode);
   const [country, setCountry] = React.useState(initialValues.country);
+<<<<<<< HEAD
   const [education, setEducation] = React.useState(initialValues.education);
   const [project, setProject] = React.useState(initialValues.project);
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
   const [job, setJob] = React.useState(initialValues.job);
   const [completeApplication, setCompleteApplication] = React.useState(
     initialValues.completeApplication
@@ -246,6 +260,7 @@ export default function ApplicationUpdateForm(props) {
     setState(cleanValues.state);
     setZipcode(cleanValues.zipcode);
     setCountry(cleanValues.country);
+<<<<<<< HEAD
     setEducation(
       cleanValues.education?.map((item) =>
         typeof item === "string" ? item : JSON.stringify(item)
@@ -258,6 +273,8 @@ export default function ApplicationUpdateForm(props) {
       ) ?? []
     );
     setCurrentProjectValue("");
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
     setJob(cleanValues.job);
     setCompleteApplication(cleanValues.completeApplication);
     setErrors({});
@@ -290,8 +307,11 @@ export default function ApplicationUpdateForm(props) {
     state: [],
     zipcode: [],
     country: [],
+<<<<<<< HEAD
     education: [{ type: "JSON" }],
     project: [{ type: "JSON" }],
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
     job: [],
     completeApplication: [],
   };
@@ -332,8 +352,11 @@ export default function ApplicationUpdateForm(props) {
           state,
           zipcode,
           country,
+<<<<<<< HEAD
           education,
           project,
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
           job,
           completeApplication,
         };
@@ -419,8 +442,11 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode,
               country,
+<<<<<<< HEAD
               education,
               project,
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
               job,
               completeApplication,
             };
@@ -457,8 +483,11 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode,
               country,
+<<<<<<< HEAD
               education,
               project,
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
               job,
               completeApplication,
             };
@@ -495,8 +524,11 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode,
               country,
+<<<<<<< HEAD
               education,
               project,
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
               job,
               completeApplication,
             };
@@ -534,8 +566,11 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode,
               country,
+<<<<<<< HEAD
               education,
               project,
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
               job,
               completeApplication,
             };
@@ -572,8 +607,11 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode,
               country,
+<<<<<<< HEAD
               education,
               project,
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
               job,
               completeApplication,
             };
@@ -610,8 +648,11 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode,
               country,
+<<<<<<< HEAD
               education,
               project,
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
               job,
               completeApplication,
             };
@@ -648,8 +689,11 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode,
               country,
+<<<<<<< HEAD
               education,
               project,
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
               job,
               completeApplication,
             };
@@ -686,8 +730,11 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode,
               country,
+<<<<<<< HEAD
               education,
               project,
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
               job,
               completeApplication,
             };
@@ -724,8 +771,11 @@ export default function ApplicationUpdateForm(props) {
               state: value,
               zipcode,
               country,
+<<<<<<< HEAD
               education,
               project,
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
               job,
               completeApplication,
             };
@@ -766,8 +816,11 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode: value,
               country,
+<<<<<<< HEAD
               education,
               project,
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
               job,
               completeApplication,
             };
@@ -804,8 +857,11 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode,
               country: value,
+<<<<<<< HEAD
               education,
               project,
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
               job,
               completeApplication,
             };
@@ -822,6 +878,7 @@ export default function ApplicationUpdateForm(props) {
         hasError={errors.country?.hasError}
         {...getOverrideProps(overrides, "country")}
       ></TextField>
+<<<<<<< HEAD
       <ArrayField
         onChange={async (items) => {
           let values = items;
@@ -934,6 +991,8 @@ export default function ApplicationUpdateForm(props) {
           {...getOverrideProps(overrides, "project")}
         ></TextAreaField>
       </ArrayField>
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
       <TextField
         label="Job"
         isRequired={false}
@@ -954,8 +1013,11 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode,
               country,
+<<<<<<< HEAD
               education,
               project,
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
               job: value,
               completeApplication,
             };
@@ -992,8 +1054,11 @@ export default function ApplicationUpdateForm(props) {
               state,
               zipcode,
               country,
+<<<<<<< HEAD
               education,
               project,
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
               job,
               completeApplication: value,
             };

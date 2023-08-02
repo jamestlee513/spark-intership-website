@@ -5,7 +5,11 @@
  **************************************************************************/
 
 import * as React from "react";
+<<<<<<< HEAD
 import { GridProps, SwitchFieldProps, TextAreaFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
+=======
+import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -24,8 +28,11 @@ export declare type ApplicationCreateFormInputValues = {
     state?: string;
     zipcode?: number;
     country?: string;
+<<<<<<< HEAD
     education?: string[];
     project?: string[];
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
     job?: string;
     completeApplication?: boolean;
 };
@@ -41,8 +48,11 @@ export declare type ApplicationCreateFormValidationValues = {
     state?: ValidationFunction<string>;
     zipcode?: ValidationFunction<number>;
     country?: ValidationFunction<string>;
+<<<<<<< HEAD
     education?: ValidationFunction<string>;
     project?: ValidationFunction<string>;
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
     job?: ValidationFunction<string>;
     completeApplication?: ValidationFunction<boolean>;
 };
@@ -60,8 +70,11 @@ export declare type ApplicationCreateFormOverridesProps = {
     state?: PrimitiveOverrideProps<TextFieldProps>;
     zipcode?: PrimitiveOverrideProps<TextFieldProps>;
     country?: PrimitiveOverrideProps<TextFieldProps>;
+<<<<<<< HEAD
     education?: PrimitiveOverrideProps<TextAreaFieldProps>;
     project?: PrimitiveOverrideProps<TextAreaFieldProps>;
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
     job?: PrimitiveOverrideProps<TextFieldProps>;
     completeApplication?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;

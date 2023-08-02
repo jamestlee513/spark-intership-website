@@ -6,6 +6,10 @@
 
 /* eslint-disable */
 import * as React from "react";
+<<<<<<< HEAD
+=======
+import { Application } from "../models";
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
 import {
   getOverrideProps,
   useAuth,
@@ -13,7 +17,10 @@ import {
   useNavigateAction,
   useStateMutationAction,
 } from "@aws-amplify/ui-react/internal";
+<<<<<<< HEAD
 import { Application } from "../models";
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
 import { schema } from "../models/schema";
 import {
   Button,
@@ -25,6 +32,7 @@ import {
   View,
 } from "@aws-amplify/ui-react";
 export default function FormCheckout(props) {
+<<<<<<< HEAD
   const { application, phone, overrides, ...rest } = props;
   const authAttributes = useAuth().user?.attributes ?? {};
   const [firstNameValue, setFirstNameValue] = useStateMutationAction("");
@@ -41,11 +49,53 @@ export default function FormCheckout(props) {
       city: cityValue,
       address: addressValue,
       zipcode: zipcodeValue,
+=======
+  const { application, overrides, ...rest } = props;
+  const authAttributes = useAuth().user?.attributes ?? {};
+  const [
+    textFieldTwoNineSevenSixSevenZeroOneZeroValue,
+    setTextFieldTwoNineSevenSixSevenZeroOneZeroValue,
+  ] = useStateMutationAction("");
+  const [
+    textFieldFourZeroFourSixThreeFourZeroTwoValue,
+    setTextFieldFourZeroFourSixThreeFourZeroTwoValue,
+  ] = useStateMutationAction("");
+  const [
+    textFieldFourZeroFourSixTwoSevenThreeOneValue,
+    setTextFieldFourZeroFourSixTwoSevenThreeOneValue,
+  ] = useStateMutationAction("");
+  const [
+    textFieldFourZeroFourSixTwoSevenOneZeroValue,
+    setTextFieldFourZeroFourSixTwoSevenOneZeroValue,
+  ] = useStateMutationAction("");
+  const [
+    textFieldFourZeroFourSixThreeThreeSixFourValue,
+    setTextFieldFourZeroFourSixThreeThreeSixFourValue,
+  ] = useStateMutationAction("");
+  const buttonFourZeroFiveOneTwoOneOneOneOnClick = useNavigateAction({
+    type: "reload",
+  });
+  const buttonFourZeroFiveOneTwoOneTwoTwoOnClick = useDataStoreCreateAction({
+    fields: {
+      firstName: textFieldTwoNineSevenSixSevenZeroOneZeroValue,
+      lastName: textFieldFourZeroFourSixThreeFourZeroTwoValue,
+      email: authAttributes["email"],
+      phone: "phoneNumberField",
+      city: textFieldFourZeroFourSixTwoSevenThreeOneValue,
+      address: textFieldFourZeroFourSixTwoSevenOneZeroValue,
+      zipcode: textFieldFourZeroFourSixThreeThreeSixFourValue,
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
     },
     model: Application,
     schema: schema,
   });
+<<<<<<< HEAD
   const previousOnClick = useNavigateAction({ type: "reload" });
+=======
+  const buttonFourZeroFiveOneTwoOneOneFiveOnClick = useNavigateAction({
+    type: "reload",
+  });
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
   return (
     <Flex
       gap="24px"
@@ -132,11 +182,21 @@ export default function FormCheckout(props) {
               isDisabled={false}
               labelHidden={false}
               variation="default"
+<<<<<<< HEAD
               value={firstNameValue}
               onChange={(event) => {
                 setFirstNameValue(event.target.value);
               }}
               {...getOverrideProps(overrides, "FirstName")}
+=======
+              value={textFieldTwoNineSevenSixSevenZeroOneZeroValue}
+              onChange={(event) => {
+                setTextFieldTwoNineSevenSixSevenZeroOneZeroValue(
+                  event.target.value
+                );
+              }}
+              {...getOverrideProps(overrides, "TextField29767010")}
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
             ></TextField>
             <TextField
               width="unset"
@@ -149,11 +209,21 @@ export default function FormCheckout(props) {
               isDisabled={false}
               labelHidden={false}
               variation="default"
+<<<<<<< HEAD
               value={lastNameValue}
               onChange={(event) => {
                 setLastNameValue(event.target.value);
               }}
               {...getOverrideProps(overrides, "LastName")}
+=======
+              value={textFieldFourZeroFourSixThreeFourZeroTwoValue}
+              onChange={(event) => {
+                setTextFieldFourZeroFourSixThreeFourZeroTwoValue(
+                  event.target.value
+                );
+              }}
+              {...getOverrideProps(overrides, "TextField40463402")}
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
             ></TextField>
             <PhoneNumberField
               width="548px"
@@ -165,7 +235,11 @@ export default function FormCheckout(props) {
               isDisabled={false}
               labelHidden={false}
               variation="default"
+<<<<<<< HEAD
               {...getOverrideProps(overrides, "Phone")}
+=======
+              {...getOverrideProps(overrides, "PhoneNumberField")}
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
             ></PhoneNumberField>
             <TextField
               width="unset"
@@ -178,11 +252,21 @@ export default function FormCheckout(props) {
               isDisabled={false}
               labelHidden={false}
               variation="default"
+<<<<<<< HEAD
               value={addressValue}
               onChange={(event) => {
                 setAddressValue(event.target.value);
               }}
               {...getOverrideProps(overrides, "Address")}
+=======
+              value={textFieldFourZeroFourSixTwoSevenOneZeroValue}
+              onChange={(event) => {
+                setTextFieldFourZeroFourSixTwoSevenOneZeroValue(
+                  event.target.value
+                );
+              }}
+              {...getOverrideProps(overrides, "TextField40462710")}
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
             ></TextField>
             <SelectField
               width="300px"
@@ -194,7 +278,11 @@ export default function FormCheckout(props) {
               isDisabled={false}
               labelHidden={false}
               variation="default"
+<<<<<<< HEAD
               {...getOverrideProps(overrides, "Country")}
+=======
+              {...getOverrideProps(overrides, "SelectField40522296")}
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
             ></SelectField>
             <SelectField
               width="300px"
@@ -206,7 +294,11 @@ export default function FormCheckout(props) {
               isDisabled={false}
               labelHidden={false}
               variation="default"
+<<<<<<< HEAD
               {...getOverrideProps(overrides, "State")}
+=======
+              {...getOverrideProps(overrides, "SelectField40522313")}
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
             ></SelectField>
             <TextField
               width="unset"
@@ -219,11 +311,21 @@ export default function FormCheckout(props) {
               isDisabled={false}
               labelHidden={false}
               variation="default"
+<<<<<<< HEAD
               value={cityValue}
               onChange={(event) => {
                 setCityValue(event.target.value);
               }}
               {...getOverrideProps(overrides, "City")}
+=======
+              value={textFieldFourZeroFourSixTwoSevenThreeOneValue}
+              onChange={(event) => {
+                setTextFieldFourZeroFourSixTwoSevenThreeOneValue(
+                  event.target.value
+                );
+              }}
+              {...getOverrideProps(overrides, "TextField40462731")}
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
             ></TextField>
             <TextField
               width="unset"
@@ -236,11 +338,21 @@ export default function FormCheckout(props) {
               isDisabled={false}
               labelHidden={false}
               variation="default"
+<<<<<<< HEAD
               value={zipcodeValue}
               onChange={(event) => {
                 setZipcodeValue(event.target.value);
               }}
               {...getOverrideProps(overrides, "Zipcode")}
+=======
+              value={textFieldFourZeroFourSixThreeThreeSixFourValue}
+              onChange={(event) => {
+                setTextFieldFourZeroFourSixThreeThreeSixFourValue(
+                  event.target.value
+                );
+              }}
+              {...getOverrideProps(overrides, "TextField40463364")}
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
             ></TextField>
             <View
               width="unset"
@@ -267,9 +379,15 @@ export default function FormCheckout(props) {
                 variation="primary"
                 children="Next"
                 onClick={() => {
+<<<<<<< HEAD
                   nextOnClick();
                 }}
                 {...getOverrideProps(overrides, "Next")}
+=======
+                  buttonFourZeroFiveOneTwoOneOneOneOnClick();
+                }}
+                {...getOverrideProps(overrides, "Button40512111")}
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
               ></Button>
               <Button
                 width="114px"
@@ -283,9 +401,15 @@ export default function FormCheckout(props) {
                 variation="primary"
                 children="Save"
                 onClick={() => {
+<<<<<<< HEAD
                   saveOnClick();
                 }}
                 {...getOverrideProps(overrides, "Save")}
+=======
+                  buttonFourZeroFiveOneTwoOneTwoTwoOnClick();
+                }}
+                {...getOverrideProps(overrides, "Button40512122")}
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
               ></Button>
               <Button
                 width="unset"
@@ -298,9 +422,15 @@ export default function FormCheckout(props) {
                 variation="default"
                 children="Previous"
                 onClick={() => {
+<<<<<<< HEAD
                   previousOnClick();
                 }}
                 {...getOverrideProps(overrides, "Previous")}
+=======
+                  buttonFourZeroFiveOneTwoOneOneFiveOnClick();
+                }}
+                {...getOverrideProps(overrides, "Button40512115")}
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
               ></Button>
             </View>
           </Flex>

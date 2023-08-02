@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Amplify Params - DO NOT EDIT
 	API_SPARKINTERNSHIPWEB_GRAPHQLAPIENDPOINTOUTPUT
 	API_SPARKINTERNSHIPWEB_GRAPHQLAPIIDOUTPUT
@@ -5,6 +6,9 @@
 	ENV
 	REGION
 Amplify Params - DO NOT EDIT *//**
+=======
+/**
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
  * @fileoverview
  *
  * This CloudFormation Trigger creates a handler which awaits the other handlers

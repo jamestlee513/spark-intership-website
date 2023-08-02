@@ -47,6 +47,7 @@
     },
     "s3Key": {
       "Type": "String"
+<<<<<<< HEAD
     },
     "apisparkinternshipwebGraphQLAPIIdOutput": {
       "Type": "String",
@@ -59,6 +60,8 @@
     "apisparkinternshipwebGraphQLAPIKeyOutput": {
       "Type": "String",
       "Default": "apisparkinternshipwebGraphQLAPIKeyOutput"
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
     }
   },
   "Conditions": {
@@ -114,6 +117,7 @@
             },
             "DOMAINBLACKLIST": {
               "Ref": "DOMAINBLACKLIST"
+<<<<<<< HEAD
             },
             "API_SPARKINTERNSHIPWEB_GRAPHQLAPIIDOUTPUT": {
               "Ref": "apisparkinternshipwebGraphQLAPIIdOutput"
@@ -123,6 +127,8 @@
             },
             "API_SPARKINTERNSHIPWEB_GRAPHQLAPIKEYOUTPUT": {
               "Ref": "apisparkinternshipwebGraphQLAPIKeyOutput"
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
             }
           }
         },
@@ -225,6 +231,7 @@
           ]
         }
       }
+<<<<<<< HEAD
     },
     "AmplifyResourcesPolicy": {
       "DependsOn": [
@@ -272,6 +279,8 @@
           ]
         }
       }
+=======
+>>>>>>> d07b7a635491ba4c181815e9920ac8c5405ab54f
     }
   },
   "Outputs": {
