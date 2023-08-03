@@ -19,45 +19,65 @@ const ReviewPage = () => {
     const coverLetter = stuff.coverLetter
     const [coverLetterURL, setCoverLetterURL] = useState('');
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-        setResumeURL(reader.result);
-    };
-    if (resume !== null) {
-        reader.readAsDataURL(resume);
-    }
-
-    const reader2 = new FileReader();
-    reader2.onloadend = () => {
-        setCoverLetterURL(reader2.result);
-    };
-    if (coverLetter !== null) {
-        reader2.readAsDataURL(coverLetter);
-    }
+    // const reader = new FileReader();
+    // reader.onloadend = () => {
+    //     setResumeURL(reader.result);
+    // };
+    // if (resume !== null) {
+    //     reader.readAsDataURL(resume);
+    // }
+    //
+    // const reader2 = new FileReader();
+    // reader2.onloadend = () => {
+    //     setCoverLetterURL(reader2.result);
+    // };
+    // if (coverLetter !== null) {
+    //     reader2.readAsDataURL(coverLetter);
+    // }
 
     async function submit() {
         const attributes = await Auth.currentUserInfo()
-        const apps = await DataStore.query(Application, (a) => a.and(a => [a.email.eq(attributes.attributes.email), a.job.eq(stuff.job)]))
-        for (const app of apps) {
-            await DataStore.delete(app)
+        console.log(attributes.attributes.email + " " + stuff.job)
+        let apps = await DataStore.query(Application, (a) => a.and(a => [a.email.eq(attributes.attributes.email), a.job.eq(stuff.job)]))
+        console.log(apps)
+        let app = apps[0]
+        if (app !== null) {
+            console.log(app)
+            /* Models in DataStore are immutable. To update a record you must use the copyOf function
+            to apply updates to the item’s fields rather than mutating the instance directly */
+            await DataStore.save(Application.copyOf(app, item => {
+                // Update the values on {item} variable to update DataStore entry
+                item.firstName= stuff.firstName
+                    item.lastName= stuff.lastName
+                    item.email= attributes.attributes.email
+                    item.phone= stuff.phoneNumber
+                    item.city= stuff.city
+                    item.resume= stuff.resume.name
+                    item.coverLetter= stuff.coverLetter.name
+                    item.zipcode= Number(stuff.zipCode)
+                    item.country= stuff.country
+                    item.state= stuff.state
+                    item.address= stuff.address
+                    item.job= stuff.job
+                    item.completeApplication= true
+            }));
+        } else {
+            await DataStore.save(
+                new Application({"firstName": stuff.firstName,
+                    "lastName": stuff.lastName,
+                    "email": attributes.attributes.email,
+                    "phone": stuff.phoneNumber,
+                    "city": stuff.city,
+                    "resume": stuff.resume.name,
+                    "coverLetter": stuff.coverLetter.name,
+                    "zipcode": Number(stuff.zipCode),
+                    "country": stuff.country,
+                    "state": stuff.state,
+                    "address": stuff.address,
+                    "job": stuff.job,
+                    "completeApplication": true})
+            );
         }
-        await DataStore.save(
-            new Application({
-                "firstName": stuff.firstName,
-                "lastName": stuff.lastName,
-                "email": attributes.attributes.email,
-                "phone": stuff.phoneNumber,
-                "city": stuff.city,
-                "resume": stuff.resume.name,
-                "coverLetter": stuff.coverLetter.name,
-                "zipcode": Number(stuff.zipCode),
-                "country": stuff.country,
-                "state": stuff.state,
-                "address": stuff.address,
-                "job": stuff.job,
-                "completeApplication": true
-            })
-        );
         navigate("/submit", {state: {job: stuff.job}})
     }
 
@@ -83,22 +103,22 @@ const ReviewPage = () => {
                     {resume && (
                         <div>
                             <h3>Preview:</h3>
-                            {resume.type === 'application/pdf' ? (
+                            {/*resume.type === 'application/pdf' ? (
                                 <embed src={resumeURL} width="300" height="200" type="application/pdf"/>
                             ) : (
                                 <img src={resumeURL} alt="Uploaded Resume"/>
-                            )}
+                            )*/}
                         </div>
                     )}
                     <h1>Cover Letter</h1>
                     {coverLetter && (
                         <div>
                             <h3>Preview:</h3>
-                            {resume.type === 'application/pdf' ? (
+                            {/*resume.type === 'application/pdf' ? (
                                 <embed src={coverLetterURL} width="300" height="200" type="application/pdf"/>
                             ) : (
                                 <img src={coverLetterURL} alt="Uploaded Cover Letter"/>
-                            )}
+                            )*/}
                         </div>
                     )}
                     <button onClick={() => {
