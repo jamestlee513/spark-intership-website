@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {Auth} from 'aws-amplify';
 import {DataStore} from '@aws-amplify/datastore';
+import {Storage} from '@aws-amplify/storage'
 import {Application} from '../../models';
 import {Fade} from '@mui/material'
 
@@ -19,31 +20,34 @@ const ReviewPage = () => {
     const coverLetter = stuff.coverLetter
     const [coverLetterURL, setCoverLetterURL] = useState('');
 
-    // const reader = new FileReader();
-    // reader.onloadend = () => {
-    //     setResumeURL(reader.result);
-    // };
-    // if (resume !== null) {
-    //     reader.readAsDataURL(resume);
-    // }
-    //
-    // const reader2 = new FileReader();
-    // reader2.onloadend = () => {
-    //     setCoverLetterURL(reader2.result);
-    // };
-    // if (coverLetter !== null) {
-    //     reader2.readAsDataURL(coverLetter);
-    // }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+        setResumeURL(reader.result);
+    };
+    if (resume !== null) {
+        reader.readAsDataURL(resume);
+    }
+
+    const reader2 = new FileReader();
+    reader2.onloadend = () => {
+        setCoverLetterURL(reader2.result);
+    };
+    if (coverLetter !== null) {
+        reader2.readAsDataURL(coverLetter);
+    }
 
     async function submit() {
         const attributes = await Auth.currentUserInfo()
-        console.log(attributes.attributes.email + " " + stuff.job)
         let apps = await DataStore.query(Application, (a) => a.and(a => [a.email.eq(attributes.attributes.email), a.job.eq(stuff.job)]))
-        console.log(apps)
         let app = apps[0]
-        if (app !== null) {
+        if (app) {
             /* Models in DataStore are immutable. To update a record you must use the copyOf function
             to apply updates to the item’s fields rather than mutating the instance directly */
+            console.log(stuff)
+            console.log(app)
+            if (stuff.resume) {
+                await Storage.remove(attributes.attributes.email + stuff.job + app.resume.name, {level: 'public'});
+            }
             await DataStore.save(Application.copyOf(app, item => {
                 // Update the values on {item} variable to update DataStore entry
                 item.firstName= stuff.firstName
@@ -60,6 +64,12 @@ const ReviewPage = () => {
                     item.job= stuff.job
                     item.completeApplication= true
             }));
+            if (stuff.resume) {
+                await Storage.put(attributes.attributes.email + stuff.job + stuff.resume.name, stuff.resume, {
+                    level: 'public',
+                    contentType: 'application/pdf'
+                });
+            }
         } else {
             await DataStore.save(
                 new Application({"firstName": stuff.firstName,
@@ -76,6 +86,12 @@ const ReviewPage = () => {
                     "job": stuff.job,
                     "completeApplication": true})
             );
+            if (stuff.resume) {
+                await Storage.put(attributes.attributes.email + stuff.job + stuff.resume.name, stuff.resume, {
+                    level: 'public',
+                    contentType: 'application/pdf'
+                });
+            }
         }
         navigate("/submit", {state: {job: stuff.job}})
     }
@@ -102,22 +118,22 @@ const ReviewPage = () => {
                     {resume && (
                         <div>
                             <h3>Preview:</h3>
-                            {/*resume.type === 'application/pdf' ? (
+                            {resume.type === 'application/pdf' ? (
                                 <embed src={resumeURL} width="300" height="200" type="application/pdf"/>
                             ) : (
                                 <img src={resumeURL} alt="Uploaded Resume"/>
-                            )*/}
+                            )}
                         </div>
                     )}
                     <h1>Cover Letter</h1>
                     {coverLetter && (
                         <div>
                             <h3>Preview:</h3>
-                            {/*resume.type === 'application/pdf' ? (
+                            {resume.type === 'application/pdf' ? (
                                 <embed src={coverLetterURL} width="300" height="200" type="application/pdf"/>
                             ) : (
                                 <img src={coverLetterURL} alt="Uploaded Cover Letter"/>
-                            )*/}
+                            )}
                         </div>
                     )}
                     <button onClick={() => {
