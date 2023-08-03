@@ -6,7 +6,7 @@
 
 export { default as ApplicationCreateForm } from "./ApplicationCreateForm";
 export { default as ApplicationUpdateForm } from "./ApplicationUpdateForm";
-export { default as FormCheckout } from "./FormCheckout";
 export { default as JobListingCreateForm } from "./JobListingCreateForm";
 export { default as JobListingUpdateForm } from "./JobListingUpdateForm";
 export { default as studioTheme } from "./studioTheme";
+export { default as FormCheckout2 } from "./FormCheckout2"
