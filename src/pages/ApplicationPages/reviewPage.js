@@ -41,9 +41,10 @@ const ReviewPage = () => {
         let apps = await DataStore.query(Application, (a) => a.and(a => [a.email.eq(attributes.attributes.email), a.job.eq(stuff.job)]))
         console.log(apps)
         let app = apps[0]
-        if (app !== null) {
+        if (app !== undefined) {
             /* Models in DataStore are immutable. To update a record you must use the copyOf function
             to apply updates to the item’s fields rather than mutating the instance directly */
+            console.log("HERE in the IF")
             await DataStore.save(Application.copyOf(app, item => {
                 // Update the values on {item} variable to update DataStore entry
                 item.firstName= stuff.firstName
@@ -61,6 +62,7 @@ const ReviewPage = () => {
                     item.completeApplication= true
             }));
         } else {
+            console.log("HERE")
             await DataStore.save(
                 new Application({"firstName": stuff.firstName,
                     "lastName": stuff.lastName,

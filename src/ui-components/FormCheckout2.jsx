@@ -280,6 +280,49 @@ export default function FormCheckout(props) {
 
   const previousOnClick = useNavigateAction({ type: "reload" });
 
+  async function save(e) {
+    e.preventDefault();
+    const attributes = await Auth.currentUserInfo()
+    let apps = await DataStore.query(Application, (a) => a.and(a => [a.email.eq(attributes.attributes.email), a.job.eq(job)]))
+    let app = apps[0]
+    console.log(app)
+    if (app !== undefined) {
+        /* Models in DataStore are immutable. To update a record you must use the copyOf function
+        to apply updates to the item’s fields rather than mutating the instance directly */
+        await DataStore.save(Application.copyOf(app, item => {
+            // Update the values on {item} variable to update DataStore entry
+            item.firstName= firstName
+                item.lastName= lastName
+                item.email= attributes.attributes.email
+                item.phone= phone
+                item.city= city
+                item.resume= resume.name
+                item.coverLetter= coverLetter.name
+                item.zipcode= Number(zipcode)
+                item.country= country
+                item.state= state
+                item.address= address
+                item.job= job
+        }));
+    } else {
+        await DataStore.save(
+            new Application({"firstName": firstName,
+                "lastName": lastName,
+                "email": email,
+                "phone": phone,
+                "city": city,
+                "resume": resume.name,
+                "coverLetter": coverLetter.name,
+                "zipcode": Number(zipcode),
+                "country": country,
+                "state": state,
+                "address": address,
+                "job": job,
+                "completeApplication": false})
+        );
+    }
+  }
+
 
 
 
@@ -287,103 +330,19 @@ export default function FormCheckout(props) {
   return (
     <Flex
     gap="24px"
-    direction="row"
-    width="1360px"
+    direction="column"
+    width="unset"
     height="unset"
     justifyContent="flex-start"
     alignItems="flex-start"
     position="relative"
-    padding="0px 0px 0px 200px"
+    padding="0px 0px 0px 0px"
+    display= "flex"
+    flex= "1 1 100%"
     as="form"
-       onSubmit={(e) => {e.preventDefault();}}
-        //async (event) => {
-               //   event.preventDefault();
-               //   let modelFields = {
-               //     firstName,
-               //     lastName,
-               //     email,
-               //     phone,
-               //     city,
-               //     resume,
-               //     coverLetter,
-               //     address,
-               //     state,
-               //     zipcode,
-               //     country,
-               //     job,
-               //     completeApplication,
-               //   };
-               //   const validationResponses = await Promise.all(
-               //     Object.keys(validations).reduce((promises, fieldName) => {
-               //       if (Array.isArray(modelFields[fieldName])) {
-               //         promises.push(
-               //           ...modelFields[fieldName].map((item) =>
-               //             runValidationTasks(fieldName, item)
-               //           )
-               //         );
-               //         return promises;
-               //       }
-               //       promises.push(
-               //         runValidationTasks(fieldName, modelFields[fieldName])
-               //       );
-               //       return promises;
-               //     }, [])
-               //   );
-               //   if (validationResponses.some((r) => r.hasError)) {
-               //     return;
-               //   }
-               //   if (onSubmit) {
-               //     modelFields = onSubmit(modelFields);
-               //   }
-               //   try {
-               //     Object.entries(modelFields).forEach(([key, value]) => {
-               //       if (typeof value === "string" && value.trim() === "") {
-               //         modelFields[key] = undefined;
-               //       }
-               //     });
-               //     console.log(modelFields)
-               //     await DataStore.save(new Application(modelFields));
-               //     if (onSuccess) {
-               //       onSuccess(modelFields);
-               //     }
-               //   } catch (err) {
-               //     if (onError) {
-               //       console.log("error")
-               //       onError(modelFields, err.message);
-               //     }
-               //   }
-               // }*/}
-               {...getOverrideProps(overrides, "FormCheckout")}
-               {...rest}
-           >
-           <Flex
-               gap="0"
-               direction="column"
-               width="unset"
-               height="unset"
-               justifyContent="flex-center"
-               alignItems="flex-start"
-               grow="1"
-               shrink="1"
-               basis="0"
-               position="relative"
-               padding="32px 0px 32px 0px"
-               backgroundColor="rgba(255,255,255,1)"
-               {...getOverrideProps(overrides, "Frame 411")}
-           >
-
-           <Flex
-               gap="32px"
-               direction="column"
-               width="unset"
-               height="1300px"
-               justifyContent="center"
-               alignItems="center"
-               shrink="0"
-               alignSelf="stretch"
-               position="relative"
-               padding="0px 0px 0px 0px"
-               {...getOverrideProps(overrides, "Frame 313")}
+    onSubmit={save}
+    {...getOverrideProps(overrides, "FormCheckout")}
+    {...rest}
            >
            <div style={{
                    display: "flex",
@@ -409,14 +368,46 @@ export default function FormCheckout(props) {
                    changePage(4)
                }}> 4 </p>
            </div>
-
+           <div
+            style={{display: "flex", justifyContent:"center", overflow: "hidden"}}
+            >
                <Slide direction={(pageNumber.prev === 1 && pageNumber.page < 1) ? "left" : "right"} in={pageNumber.page === 1} mountOnEnter unmountOnExit>
+               <Flex
+               gap="0"
+               direction="column"
+               width="95vw"
+               height="unset"
+               display="flex"
+              flex="1 1 100%"
+               justifyContent="flex-center"
+               alignItems="flex-start"
+               grow="1"
+               shrink="1"
+               basis="0"
+               position="relative"
+               padding="32px 0px 32px 0px"
+               backgroundColor="rgba(255,255,255,1)"
+               {...getOverrideProps(overrides, "Frame 411")}
+           >
 
+           <Flex
+               gap="32px"
+               direction="row"
+               width="unset"
+               height="unset"
+               justifyContent="space-around"
+               alignItems="space-around"
+               shrink="0"
+               alignSelf="stretch"
+               position="relative"
+               padding="0px 0px 0px 0px"
+               {...getOverrideProps(overrides, "Frame 313")}
+           >
                    <Flex
                        gap="24px"
                        direction="column"
-                       width="unset"
-                       height="1200px"
+                       width="50vw"
+                       height="unset"
                        justifyContent="flex-start"
                        alignItems="flex-start"
                        shrink="0"
@@ -446,8 +437,22 @@ export default function FormCheckout(props) {
                            children="Personal Information"
                            {...getOverrideProps(overrides, "Personal Information")}
                        ></Text>
+                       <Flex
+                      gap="0"
+                      direction="row"
+                      width="unset"
+                      height="unset"
+                      display="flex"
+                      alignSelf="stretch"
+                      justifyContent="flex-start"
+                      alignItems="center"
+                      basis="0"
+                      position="relative"
+                      padding="32px 10% 32px 0px"
+                      backgroundColor="rgba(255,255,255,1)"
+                      >
                        <TextField
-                           width="unset"
+                           width="20vw"
                            height="unset"
                            label="First Name"
                            placeholder="Enter first name"
@@ -490,13 +495,14 @@ export default function FormCheckout(props) {
                            {...getOverrideProps(overrides, "FirstName")}
                        ></TextField>
                        <TextField
-                           width="unset"
+                           width="20vw"
                            height="unset"
                            label="Last Name"
                            placeholder="Enter last name"
                            shrink="0"
                            alignSelf="stretch"
                            size="large"
+                           margin="0px 0px 0px 6.5vw"
                            isDisabled={false}
                            labelHidden={false}
                            variation="default"
@@ -532,8 +538,9 @@ export default function FormCheckout(props) {
                            hasError={errors.lastName?.hasError}
                            {...getOverrideProps(overrides, "LastName")}
                        ></TextField>
+                       </Flex>
                        <PhoneNumberField
-                           width="548px"
+                           width="unset"
                            height="88px"
                            label="Phone"
                            placeholder="Enter phone number"
@@ -618,7 +625,7 @@ export default function FormCheckout(props) {
                            {...getOverrideProps(overrides, "Address")}
                        ></TextField>
                        <SelectField
-                           width="300px"
+                           width="unset"
                            height="unset"
                            label="Country"
                            shrink="0"
@@ -910,7 +917,7 @@ export default function FormCheckout(props) {
                            <option value="ZW">Zimbabwe</option>
                        </SelectField>
                        <SelectField
-                           width="300px"
+                           width="unset"
                            height="unset"
                            label="State"
                            shrink="0"
@@ -1084,30 +1091,32 @@ export default function FormCheckout(props) {
                            hasError={errors.zipcode?.hasError}
                            {...getOverrideProps(overrides, "Zipcode")}
                        ></TextField>
-                       <View
+                       
+                   </Flex>
+                   <img src="https://www.freecatphotoapp.com/your-image.jpg" alt="freeCodeCamp logo"></img>
+                   </Flex>
+                   <View
                            width="unset"
+                           display="flex"
                            height="94px"
-                           display="block"
                            gap="unset"
-                           alignItems="unset"
-                           justifyContent="unset"
+                           alignItems="center"
+                           justifyContent="space-between"
                            overflow="hidden"
-                           shrink="0"
+                           shrink="1"
                            alignSelf="stretch"
                            position="relative"
-                           padding="0px 0px 0px 0px"
+                           padding="0px 0px 0px 45%"
                            {...getOverrideProps(overrides, "Frame 412")}
                        >
                            <Button
                                width="114px"
                                height="unset"
-                               position="absolute"
-                               top="27px"
-                               left="946px"
                                size="default"
                                isDisabled={false}
                                variation="primary"
                                children="Next"
+                               order="2"
                                onClick={() => {
                                    changePage(2);
                                }}
@@ -1116,9 +1125,6 @@ export default function FormCheckout(props) {
                            <Button
                                width="114px"
                                height="unset"
-                               position="absolute"
-                               top="27px"
-                               left="491px"
                                backgroundColor="rgba(64,170,191,1)"
                                size="default"
                                variation="primary"
@@ -1128,7 +1134,8 @@ export default function FormCheckout(props) {
                                {...getOverrideProps(overrides, "Save")}
                            ></Button>
                        </View>
-                   </Flex>
+              </Flex>
+                  
                </Slide>
                <Slide direction={pageNumber.prev < 2 || (pageNumber.prev === 2 && pageNumber.page < 2) ? "left" : "right"}
                       in={pageNumber.page === 2} mountOnEnter unmountOnExit>
@@ -1218,8 +1225,7 @@ export default function FormCheckout(props) {
                        </button>
                    </div>
                </Slide>
-           </Flex>
-           </Flex>
+               </div>
            </Flex>
 
            );
