@@ -42,7 +42,6 @@ const ReviewPage = () => {
         console.log(apps)
         let app = apps[0]
         if (app !== null) {
-            console.log(app)
             /* Models in DataStore are immutable. To update a record you must use the copyOf function
             to apply updates to the item’s fields rather than mutating the instance directly */
             await DataStore.save(Application.copyOf(app, item => {
