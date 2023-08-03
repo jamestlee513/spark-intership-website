@@ -1,9 +1,3 @@
-/***************************************************************************
- * The contents of this file were generated with Amplify Studio.           *
- * Please refrain from making any modifications to this file.              *
- * Any changes to this file will be overwritten when running amplify pull. *
- **************************************************************************/
-
 import * as React from "react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 import { ButtonProps, FlexProps, PhoneNumberFieldProps, SelectFieldProps, TextFieldProps, TextProps, ViewProps } from "@aws-amplify/ui-react";
@@ -61,4 +55,4 @@ export declare type FormCheckoutProps = React.PropsWithChildren<{
     onChange?: (fields: FormCheckoutInputValues) => FormCheckoutInputValues;
     onValidate?: FormCheckoutValidationValues;
 } & React.CSSProperties>;
-export default function FormCheckout(props: FormCheckoutProps): React.ReactElement;
+export default function FormCheckout2(props: FormCheckoutProps): React.ReactElement;
