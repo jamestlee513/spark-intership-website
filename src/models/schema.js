@@ -187,13 +187,6 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "companyInfo": {
-                    "name": "companyInfo",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
                 "location": {
                     "name": "location",
                     "isArray": false,
@@ -201,27 +194,40 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "remote": {
-                    "name": "remote",
-                    "isArray": false,
-                    "type": "Boolean",
-                    "isRequired": false,
-                    "attributes": []
-                },
                 "deadline": {
                     "name": "deadline",
                     "isArray": false,
                     "type": "AWSDate",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
-                "contactInfo": {
-                    "name": "contactInfo",
-                    "isArray": true,
+                "qualifications": {
+                    "name": "qualifications",
+                    "isArray": false,
                     "type": "String",
                     "isRequired": true,
-                    "attributes": [],
-                    "isArrayNullable": false
+                    "attributes": []
+                },
+                "applicants": {
+                    "name": "applicants",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "email": {
+                    "name": "email",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "status": {
+                    "name": "status",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -336,5 +342,5 @@ export const schema = {
         }
     },
     "codegenVersion": "3.4.4",
-    "version": "d544c2526cabbfa0d640daeac1eb247f"
+    "version": "56e92228ca3ef431dd4ce0db8c920f4d"
 };

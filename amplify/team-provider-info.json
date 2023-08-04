@@ -9,8 +9,7 @@
       "UnauthRoleName": "amplify-sparkinternshipweb-dev-130617-unauthRole",
       "StackName": "amplify-sparkinternshipweb-dev-130617",
       "StackId": "arn:aws:cloudformation:us-west-2:658838994814:stack/amplify-sparkinternshipweb-dev-130617/ebbf7e40-0fa5-11ee-a406-026e6b178b5f",
-      "AmplifyAppId": "d6c69cwzp02ot",
-      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-sparkinternshipweb-dev-130617-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
+      "AmplifyAppId": "d6c69cwzp02ot"
     },
     "categories": {
       "auth": {
@@ -24,8 +23,12 @@
       "function": {
         "sparkinternshipwebe2c2bb07e2c2bb07PreSignup": {
           "deploymentBucketName": "amplify-sparkinternshipweb-dev-130617-deployment",
-          "s3Key": "amplify-builds/sparkinternshipwebe2c2bb07e2c2bb07PreSignup-4e2f466b343057696e66-build.zip"
+          "s3Key": "amplify-builds/sparkinternshipwebe2c2bb07e2c2bb07PreSignup-652b6e676b59634a2b35-build.zip",
+          "DOMAINALLOWLIST": "university.edu"
         }
+      },
+      "storage": {
+        "s3resumes1": {}
       }
     }
   }

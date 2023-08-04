@@ -104,11 +104,12 @@ type EagerJobListing = {
   readonly id: string;
   readonly title: string;
   readonly description: string;
-  readonly companyInfo?: string | null;
   readonly location: string;
-  readonly remote?: boolean | null;
-  readonly deadline?: string | null;
-  readonly contactInfo: string[];
+  readonly deadline: string;
+  readonly qualifications: string;
+  readonly applicants: number;
+  readonly email: string;
+  readonly status: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -121,11 +122,12 @@ type LazyJobListing = {
   readonly id: string;
   readonly title: string;
   readonly description: string;
-  readonly companyInfo?: string | null;
   readonly location: string;
-  readonly remote?: boolean | null;
-  readonly deadline?: string | null;
-  readonly contactInfo: string[];
+  readonly deadline: string;
+  readonly qualifications: string;
+  readonly applicants: number;
+  readonly email: string;
+  readonly status: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

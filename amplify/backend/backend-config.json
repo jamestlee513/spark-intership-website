@@ -63,6 +63,14 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_sparkinternshipwebe2c2bb07e2c2bb07PreSignup_DOMAINALLOWLIST": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "sparkinternshipwebe2c2bb07e2c2bb07PreSignup"
+        }
+      ]
+    },
     "AMPLIFY_function_sparkinternshipwebe2c2bb07e2c2bb07PreSignup_deploymentBucketName": {
       "usedBy": [
         {
@@ -80,5 +88,11 @@
       ]
     }
   },
-  "storage": {}
+  "storage": {
+    "s3resumes1": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "S3"
+    }
+  }
 }

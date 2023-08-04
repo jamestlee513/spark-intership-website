@@ -35,10 +35,11 @@ type JobListing @model @auth(rules: [{allow: public}]) {
   id: ID!
   title: String!
   description: String!
-  companyInfo: String
   location: String!
-  remote: Boolean
-  deadline: AWSDate
-  contactInfo: [String!]!
+  deadline: AWSDate!
+  qualifications: String!
+  applicants: Int!
+  email: String!
+  status: String!
 }
-  
+ 
