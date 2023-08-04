@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {Auth} from 'aws-amplify';
 import {DataStore} from '@aws-amplify/datastore';
-import {Storage} from '@aws-amplify/storage'
+import {Storage} from '@aws-amplify/storage';
 import {Application} from '../../models';
 import {Fade} from '@mui/material'
 
@@ -44,13 +44,14 @@ const ReviewPage = () => {
     }
 
     async function submit() {
-        let apps = await DataStore.query(Application, (a) => a.and(a => [a.email.eq(email), a.job.eq(stuff.job)]))
+        const attributes = await Auth.currentUserInfo()
+        console.log(attributes.attributes.email + " " + stuff.job)
+        let apps = await DataStore.query(Application, (a) => a.and(a => [a.email.eq(attributes.attributes.email), a.job.eq(stuff.job)]))
+        console.log(apps)
         let app = apps[0]
-        if (app) {
+        if (app !== undefined) {
             /* Models in DataStore are immutable. To update a record you must use the copyOf function
             to apply updates to the item’s fields rather than mutating the instance directly */
-            console.log(stuff)
-            console.log(app)
             if (stuff.resume) {
                 await Storage.remove(email + stuff.job + "resume" + app.resume.name, {level: 'public'});
             }
@@ -76,7 +77,25 @@ const ReviewPage = () => {
                     contentType: 'application/pdf'
                 });
             }
+            console.log("HERE")
+            await DataStore.save(Application.copyOf(app, item => {
+                // Update the values on {item} variable to update DataStore entry
+                item.firstName= stuff.firstName
+                    item.lastName= stuff.lastName
+                    item.email= attributes.attributes.email
+                    item.phone= stuff.phoneNumber
+                    item.city= stuff.city
+                    item.resume= stuff.resume.name
+                    item.coverLetter= stuff.coverLetter.name
+                    item.zipcode= Number(stuff.zipCode)
+                    item.country= stuff.country
+                    item.state= stuff.state
+                    item.address= stuff.address
+                    item.job= stuff.job
+                    item.completeApplication= true
+            }));
         } else {
+            console.log("HERE")
             await DataStore.save(
                 new Application({
                     "firstName": stuff.firstName,
@@ -148,22 +167,22 @@ const ReviewPage = () => {
                     {resume && (
                         <div>
                             <h3>Preview:</h3>
-                            {resume.type === 'application/pdf' ? (
+                            {/*resume.type === 'application/pdf' ? (
                                 <embed src={resumeURL} width="300" height="200" type="application/pdf"/>
                             ) : (
                                 <img src={resumeURL} alt="Uploaded Resume"/>
-                            )}
+                            )*/}
                         </div>
                     )}
                     <h1>Cover Letter</h1>
                     {coverLetter && (
                         <div>
                             <h3>Preview:</h3>
-                            {resume.type === 'application/pdf' ? (
+                            {/*resume.type === 'application/pdf' ? (
                                 <embed src={coverLetterURL} width="300" height="200" type="application/pdf"/>
                             ) : (
                                 <img src={coverLetterURL} alt="Uploaded Cover Letter"/>
-                            )}
+                            )*/}
                         </div>
                     )}
                     <button onClick={() => {

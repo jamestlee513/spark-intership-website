@@ -1,6 +1,6 @@
 // Imports
 import * as React from "react";
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useRef} from 'react'
 import {Form} from 'react-bootstrap';
 import {
   getOverrideProps,
@@ -25,6 +25,7 @@ import {
 } from "@aws-amplify/ui-react";
 import {Auth} from 'aws-amplify';
 import {Slide, Box} from '@mui/material'
+import EducationList from "../pages/ApplicationPages/educationList"
 
 // Start
 export default function FormCheckout(props) {
@@ -82,19 +83,24 @@ export default function FormCheckout(props) {
 
   // Display Resume
   const displayResume = (file) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-        setResumeURL(reader.result);
-    };
-    reader.readAsDataURL(file);
+    if (file){
+      const reader = new FileReader();
+      reader.onloadend = () => {
+          setResumeURL(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+    
   };
 
   const displayCoverLetter = (file) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
         setCoverLetterURL(reader.result);
-    };
-    reader.readAsDataURL(file);
+      };
+      reader.readAsDataURL(file);
+    }
 } ;
 
     const changeDaState = (app) => {
@@ -110,6 +116,10 @@ export default function FormCheckout(props) {
                 setCountry(app.country)
                 setJob("SWE") // CHANGE THIS
                 setCompleteApplication(app.completeApplication)
+                if (app.education) {
+                  setEducations(app.education)
+                }
+                
     }
 
   // Start Effects
@@ -198,6 +208,12 @@ export default function FormCheckout(props) {
     }
   }
 
+  // Refs
+  const university = useRef(0)
+  const major = useRef(0)
+  const grad = useRef(0)
+  const gpa = useRef(0)
+
 
   // States
   const [firstName, setFirstName] = React.useState(initialValues.firstName);
@@ -222,6 +238,9 @@ export default function FormCheckout(props) {
     page: 1,
     prev: 0
   });
+  const [educations, setEducations] = React.useState([])
+  const [educationID, setEducationID] = React.useState({})
+
   const resetStateValues = () => {
     setFirstName(initialValues.firstName);
     setLastName(initialValues.lastName);
@@ -239,10 +258,30 @@ export default function FormCheckout(props) {
     setErrors({});
   };
 
-  function nextOnClick() {
-    changePage(1)
+
+  // Add Education
+  function addEducation() {
+    const univ = university.current.value
+    const maj = major.current.value
+    const gra = grad.current.value
+    const gp = gpa.current.value
+    if (univ === '' || major === '' || grad === '' || gpa === '') return
+    setEducations(prevEducation => {
+      setEducationID(educationID + 1)
+      return [...prevEducation, {id: educationID, university: univ, major: maj, expectedGrad: Number(gra), GPA: Number(gp)}]
+    })
+    university.current.value = null
+    major.current.value = null;
+    grad.current.value = null
+    gpa.current.value = null
   }
 
+  // Delete Education
+  function deleteEducation(edu) {
+    const newEducations = educations.filter(education => edu.id !== education.id)
+    setEducations(newEducations)
+  }
+  
   
   const validations = {
     firstName: [],
@@ -303,6 +342,7 @@ export default function FormCheckout(props) {
                 item.state= state
                 item.address= address
                 item.job= job
+                item.education = educations
         }));
     } else {
         await DataStore.save(
@@ -318,7 +358,9 @@ export default function FormCheckout(props) {
                 "state": state,
                 "address": address,
                 "job": job,
-                "completeApplication": false})
+                "completeApplication": false,
+                "education" : educations
+              })
         );
     }
   }
@@ -355,16 +397,20 @@ export default function FormCheckout(props) {
                        backgroundPosition: "50% 50%",
                        backgroundRepeat: "no-repeat"
                }}>
-           <p style={circle(1)} onClick={() => {
+           <p style={circle(1)} onClick={(e) => {
+                  e.preventDefault();
                    changePage(1)
                }}> 1 </p>
-               <p style={circle(2)} onClick={() => {
+               <p style={circle(2)} onClick={(e) => {
+                e.preventDefault();
                    changePage(2)
                }}> 2 </p>
-               <p style={circle(3)} onClick={() => {
+               <p style={circle(3)} onClick={(e) => {
+                e.preventDefault();
                    changePage(3)
                }}> 3 </p>
-               <p style={circle(4)} onClick={() => {
+               <p style={circle(4)} onClick={(e) => {
+                e.preventDefault();
                    changePage(4)
                }}> 4 </p>
            </div>
@@ -1117,7 +1163,8 @@ export default function FormCheckout(props) {
                                variation="primary"
                                children="Next"
                                order="2"
-                               onClick={() => {
+                               onClick={(e) => {
+                                  e.preventDefault();
                                    changePage(2);
                                }}
                                {...getOverrideProps(overrides, "Next")}
@@ -1135,31 +1182,214 @@ export default function FormCheckout(props) {
                            ></Button>
                        </View>
               </Flex>
-                  
                </Slide>
                <Slide direction={pageNumber.prev < 2 || (pageNumber.prev === 2 && pageNumber.page < 2) ? "left" : "right"}
                       in={pageNumber.page === 2} mountOnEnter unmountOnExit>
-                   <div>
-                       <h1> page 2</h1>
-                       <p> yo yo yo </p>
-                       <button onClick={() => {
-                           changePage(1)
-                       }}> Previous
-                       </button>
-                       <button onClick={() => {
-                           changePage(3)
-                       }}> Next </button>
-                   </div>
+                   <Flex
+                    gap="0"
+                    direction="column"
+                    width="95vw"
+                    height="unset"
+                    display="flex"
+                    flex="1 1 100%"
+                    justifyContent="flex-center"
+                    alignItems="flex-start"
+                    grow="1"
+                    shrink="1"
+                    basis="0"
+                    position="relative"
+                    padding="32px 0px 32px 0px"
+                    backgroundColor="rgba(255,255,255,1)"
+                    {...getOverrideProps(overrides, "Frame 411")}
+                >
+                <Flex
+                  gap="32px"
+                  direction="row"
+                  width="unset"
+                  height="unset"
+                  justifyContent="space-around"
+                  alignItems="space-around"
+                  shrink="0"
+                  alignSelf="stretch"
+                  position="relative"
+                  padding="0px 0px 0px 0px"
+                  {...getOverrideProps(overrides, "Frame 313")}
+                >
+                   <Flex
+                       gap="24px"
+                       direction="column"
+                       width="50vw"
+                       height="unset"
+                       justifyContent="flex-start"
+                       alignItems="flex-start"
+                       shrink="0"
+                       alignSelf="stretch"
+                       position="relative"
+                       padding="0px 32px 0px 32px"
+                       {...getOverrideProps(overrides, "Frame 406")}
+                   >
+                       <Text
+                           fontFamily="Inter"
+                           fontSize="36px"
+                           fontWeight="800"
+                           color="rgba(13,26,38,1)"
+                           lineHeight="20px"
+                           textAlign="left"
+                           display="block"
+                           direction="column"
+                           justifyContent="unset"
+                           width="unset"
+                           height="unset"
+                           gap="unset"
+                           alignItems="unset"
+                           shrink="0"
+                           position="relative"
+                           padding="0px 0px 0px 0px"
+                           whiteSpace="pre-wrap"
+                           children="Education"
+                       ></Text>
+                       <Flex
+                         gap="24px"
+                         direction="row"
+                         width="unset"
+                         height="unset"
+                         justifyContent="flex-start"
+                         alignItems="flex-start"
+                         shrink="0"
+                         alignSelf="stretch"
+                         position="relative"
+                         padding="0px 32px 0px 32px"
+                       > 
+                        <EducationList educations={educations} deleteEducation={deleteEducation}/>
+                      </Flex>
+                      <div>
+                        <TextField
+                           width="40vw"
+                           height="unset"
+                           label="Universtiy"
+                           placeholder="Enter Universtiy"
+                           shrink="0"
+                           ref={university}
+                           alignSelf="stretch"
+                           size="large"
+                           isDisabled={false}
+                           labelHidden={false}
+                           variation="default"
+                       ></TextField>
+                       <TextField
+                           width="40vw"
+                           height="unset"
+                           label="Major"
+                           ref={major}
+                           placeholder="Enter first name"
+                           shrink="0"
+                           alignSelf="stretch"
+                           size="large"
+                           isDisabled={false}
+                           labelHidden={false}
+                           variation="default"
+                       ></TextField>
+                       <TextField
+                           width="40vw"
+                           height="unset"
+                           ref={grad}
+                           label="Graduation/Expected Graduation"
+                           placeholder="Enter Graduation/Expected graduation"
+                           shrink="0"
+                           alignSelf="stretch"
+                           size="large"
+                           isDisabled={false}
+                           labelHidden={false}
+                           variation="default"
+                       ></TextField>
+                       <TextField
+                           width="40vw"
+                           height="unset"
+                           label="GPA"
+                           placeholder="Enter GPA"
+                           ref={gpa}
+                           shrink="0"
+                           alignSelf="stretch"
+                           size="large"
+                           isDisabled={false}
+                           labelHidden={false}
+                           variation="default"
+                       ></TextField>
+                        <button onClick={(e) => {
+                          e.preventDefault();
+                          addEducation()}
+                          }>add</button>
+                      </div>
+                   </Flex>
+                   <img src="https://www.freecatphotoapp.com/your-image.jpg" alt="freeCodeCamp logo"></img>
+                  </Flex>
+                       <View
+                           width="unset"
+                           display="flex"
+                           height="94px"
+                           gap="unset"
+                           alignItems="center"
+                           justifyContent="space-between"
+                           overflow="hidden"
+                           shrink="1"
+                           alignSelf="stretch"
+                           position="relative"
+                           padding="0px 0px 0px 0%"
+                           {...getOverrideProps(overrides, "Frame 412")}
+                       >
+                        <Button
+                               width="114px"
+                               height="unset"
+                               size="default"
+                               isDisabled={false}
+                               variation="primary"
+                               children="previous"
+                               order="0"
+                               onClick={(e) => {
+                                e.preventDefault();
+                                   changePage(1);
+                               }}
+                               {...getOverrideProps(overrides, "Previous")}
+                           ></Button>
+                           <Button
+                               width="114px"
+                               height="unset"
+                               size="default"
+                               isDisabled={false}
+                               variation="primary"
+                               children="Next"
+                               order="2"
+                               onClick={(e) => {
+                                e.preventDefault();
+                                   changePage(3);
+                               }}
+                               {...getOverrideProps(overrides, "Next")}
+                           ></Button>
+                           <Button
+                               width="114px"
+                               height="unset"
+                               backgroundColor="rgba(64,170,191,1)"
+                               size="default"
+                               variation="primary"
+                               children="Save"
+                               type="submit"
+                               isDisabled={Object.values(errors).some((e) => e?.hasError)}
+                               {...getOverrideProps(overrides, "Save")}
+                           ></Button>
+                       </View>
+              </Flex>
                </Slide>
                <Slide direction={pageNumber.prev < 3 || (pageNumber.prev === 3 && pageNumber.page < 3) ? "left" : "right"}
                       in={pageNumber.page === 3} mountOnEnter unmountOnExit>
                    <div>
                        <h1> page 3 </h1>
-                       <button onClick={() => {
+                       <button onClick={(e) => {
+                        e.preventDefault();
                            changePage(2)
                        }}> Previous
                        </button>
-                       <button onClick={() => {
+                       <button onClick={(e) => {
+                        e.preventDefault();
                            changePage(4)
                        }}> Next
                        </button>
@@ -1199,11 +1429,13 @@ export default function FormCheckout(props) {
                                )}
                            </div>
                        )}
-                       <button onClick={() => {
+                       <button onClick={(e) => {
+                        e.preventDefault();
                            changePage(3)
                        }}> Previous
                        </button>
-                       <button onClick={() => {
+                       <button onClick={(e) => {
+                        e.preventDefault();
                            navigate("/review", {
                                state: {
                                    stuff: {
@@ -1217,7 +1449,8 @@ export default function FormCheckout(props) {
                                        country: country,
                                        state: state,
                                        address: address,
-                                       job: job
+                                       job: job,
+                                       education: educations
                                    }
                                }
                            })
