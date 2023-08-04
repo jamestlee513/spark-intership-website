@@ -102,13 +102,14 @@ type EagerJobListing = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly title: string;
-  readonly description: string;
-  readonly companyInfo?: string | null;
-  readonly location: string;
-  readonly remote?: boolean | null;
+  readonly title?: string | null;
+  readonly description?: string | null;
+  readonly location?: string | null;
   readonly deadline?: string | null;
-  readonly contactInfo: string[];
+  readonly qualifications?: string | null;
+  readonly applicants?: number | null;
+  readonly email?: string | null;
+  readonly status?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -119,13 +120,14 @@ type LazyJobListing = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly title: string;
-  readonly description: string;
-  readonly companyInfo?: string | null;
-  readonly location: string;
-  readonly remote?: boolean | null;
+  readonly title?: string | null;
+  readonly description?: string | null;
+  readonly location?: string | null;
   readonly deadline?: string | null;
-  readonly contactInfo: string[];
+  readonly qualifications?: string | null;
+  readonly applicants?: number | null;
+  readonly email?: string | null;
+  readonly status?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

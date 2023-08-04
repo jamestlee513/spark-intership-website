@@ -9,6 +9,10 @@ import theme from './theme';
 import { ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 
 export default function UpdateListing(jobListing){
     // if(jobListing === undefined || typeof jobListing !== JobListing){
@@ -23,7 +27,11 @@ export default function UpdateListing(jobListing){
     const listingDs = {
       id: id
     }
-    //getListing();
+    getListing().then(response =>{
+      console.log(response);
+    }).catch(e => {
+      console.log(e);
+    });
     async function getListing(){
       const listing = await API.graphql({
         query: queries.getJobListing,
@@ -88,7 +96,9 @@ export default function UpdateListing(jobListing){
             <div>
               Application Deadline
               <br></br>
-              <input ref={deadline} type="date" /><br></br><br></br>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker inputRef={deadline}/>
+              </LocalizationProvider><br></br><br></br>
             </div>
           </Stack>
 

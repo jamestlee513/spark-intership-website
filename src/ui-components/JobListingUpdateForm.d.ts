@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 import { JobListing } from "../models";
 export declare type ValidationResponse = {
@@ -16,31 +16,34 @@ export declare type ValidationFunction<T> = (value: T, validationResponse: Valid
 export declare type JobListingUpdateFormInputValues = {
     title?: string;
     description?: string;
-    companyInfo?: string;
     location?: string;
-    remote?: boolean;
     deadline?: string;
-    contactInfo?: string[];
+    qualifications?: string;
+    applicants?: number;
+    email?: string;
+    status?: string;
 };
 export declare type JobListingUpdateFormValidationValues = {
     title?: ValidationFunction<string>;
     description?: ValidationFunction<string>;
-    companyInfo?: ValidationFunction<string>;
     location?: ValidationFunction<string>;
-    remote?: ValidationFunction<boolean>;
     deadline?: ValidationFunction<string>;
-    contactInfo?: ValidationFunction<string>;
+    qualifications?: ValidationFunction<string>;
+    applicants?: ValidationFunction<number>;
+    email?: ValidationFunction<string>;
+    status?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type JobListingUpdateFormOverridesProps = {
     JobListingUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
     title?: PrimitiveOverrideProps<TextFieldProps>;
     description?: PrimitiveOverrideProps<TextFieldProps>;
-    companyInfo?: PrimitiveOverrideProps<TextFieldProps>;
     location?: PrimitiveOverrideProps<TextFieldProps>;
-    remote?: PrimitiveOverrideProps<SwitchFieldProps>;
     deadline?: PrimitiveOverrideProps<TextFieldProps>;
-    contactInfo?: PrimitiveOverrideProps<TextFieldProps>;
+    qualifications?: PrimitiveOverrideProps<TextFieldProps>;
+    applicants?: PrimitiveOverrideProps<TextFieldProps>;
+    email?: PrimitiveOverrideProps<TextFieldProps>;
+    status?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type JobListingUpdateFormProps = React.PropsWithChildren<{
     overrides?: JobListingUpdateFormOverridesProps | undefined | null;
