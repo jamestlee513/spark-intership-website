@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {Auth} from 'aws-amplify';
 import {DataStore} from '@aws-amplify/datastore';
@@ -19,12 +19,19 @@ const ReviewPage = () => {
     const [resumeURL, setResumeURL] = useState('');
     const coverLetter = stuff.coverLetter
     const [coverLetterURL, setCoverLetterURL] = useState('');
+    const [email, setEmail] = useState('');
+
+    useEffect(() => {
+        (async () => {
+            const attributes = await Auth.currentUserInfo()
+            setEmail(attributes.attributes.email)
+            })()},[])
 
     const reader = new FileReader();
     reader.onloadend = () => {
         setResumeURL(reader.result);
     };
-    if (resume !== null) {
+    if (resume) {
         reader.readAsDataURL(resume);
     }
 
@@ -32,13 +39,12 @@ const ReviewPage = () => {
     reader2.onloadend = () => {
         setCoverLetterURL(reader2.result);
     };
-    if (coverLetter !== null) {
+    if (coverLetter) {
         reader2.readAsDataURL(coverLetter);
     }
 
     async function submit() {
-        const attributes = await Auth.currentUserInfo()
-        let apps = await DataStore.query(Application, (a) => a.and(a => [a.email.eq(attributes.attributes.email), a.job.eq(stuff.job)]))
+        let apps = await DataStore.query(Application, (a) => a.and(a => [a.email.eq(email), a.job.eq(stuff.job)]))
         let app = apps[0]
         if (app) {
             /* Models in DataStore are immutable. To update a record you must use the copyOf function
@@ -46,35 +52,36 @@ const ReviewPage = () => {
             console.log(stuff)
             console.log(app)
             if (stuff.resume) {
-                await Storage.remove(attributes.attributes.email + stuff.job + app.resume.name, {level: 'public'});
+                await Storage.remove(email + stuff.job + "resume" + app.resume.name, {level: 'public'});
             }
             await DataStore.save(Application.copyOf(app, item => {
                 // Update the values on {item} variable to update DataStore entry
-                item.firstName= stuff.firstName
-                item.lastName= stuff.lastName
-                item.email= attributes.attributes.email
-                item.phone= stuff.phoneNumber
-                item.city= stuff.city
-                item.resume= stuff.resume.name
-                item.coverLetter= stuff.coverLetter.name
-                item.zipcode= Number(stuff.zipCode)
-                item.country= stuff.country
-                item.state= stuff.state
-                item.address= stuff.address
-                item.job= stuff.job
-                item.completeApplication= true
+                item.firstName = stuff.firstName
+                item.lastName = stuff.lastName
+                item.email = email
+                item.phone = stuff.phoneNumber
+                item.city = stuff.city
+                item.resume = stuff.resume.name
+                item.coverLetter = stuff.coverLetter.name
+                item.zipcode = Number(stuff.zipCode)
+                item.country = stuff.country
+                item.state = stuff.state
+                item.address = stuff.address
+                item.job = stuff.job
+                item.completeApplication = true
             }));
             if (stuff.resume) {
-                await Storage.put(attributes.attributes.email + stuff.job + stuff.resume.name, stuff.resume, {
+                await Storage.put(email + stuff.job + "resume" + stuff.resume.name, stuff.resume, {
                     level: 'public',
                     contentType: 'application/pdf'
                 });
             }
         } else {
             await DataStore.save(
-                new Application({"firstName": stuff.firstName,
+                new Application({
+                    "firstName": stuff.firstName,
                     "lastName": stuff.lastName,
-                    "email": attributes.attributes.email,
+                    "email": email,
                     "phone": stuff.phoneNumber,
                     "city": stuff.city,
                     "resume": stuff.resume.name,
@@ -84,10 +91,11 @@ const ReviewPage = () => {
                     "state": stuff.state,
                     "address": stuff.address,
                     "job": stuff.job,
-                    "completeApplication": true})
+                    "completeApplication": true
+                })
             );
             if (stuff.resume) {
-                await Storage.put(attributes.attributes.email + stuff.job + stuff.resume.name, stuff.resume, {
+                await Storage.put(email + stuff.job + stuff.resume.name, stuff.resume, {
                     level: 'public',
                     contentType: 'application/pdf'
                 });
@@ -96,24 +104,46 @@ const ReviewPage = () => {
         navigate("/submit", {state: {job: stuff.job}})
     }
 
+    const box = {border: "2px solid black",
+        borderRadius: "5px",
+        width: "30vw", height: "4vh", fontSize: "2vmin"}
+
+    const title = {width: "10vw", height: "4vh", fontSize: "2vmin"}
+
     return (
         <div>
             <Fade in={true}>
                 <div>
-                    <h1>First Name</h1>
-                    <p>{stuff.firstName}</p>
-                    <h1>Last Name</h1>
-                    <p>{stuff.lastName}</p>
-                    <h1>Phone Number</h1>
-                    <p>{stuff.phoneNumber}</p>
-                    <h1>Address</h1>
-                    <p>{stuff.address}</p>
-                    <h1>City</h1>
-                    <p>{stuff.city}</p>
-                    <h1>Country</h1>
-                    <p>{stuff.country}</p>
-                    <h1>Zip Code</h1>
-                    <p>{stuff.zipCode}</p>
+                <div style={{display: "flex", justifyItems: "Center", justifyContent: "space-around", width: "80vw", margin: "auto"}}>
+                    <div >
+                        <h3 style={title}>First Name</h3>
+                        <h3 style={title}>Email</h3>
+                        <h3 style={title}>Address</h3>
+                        <h3 style={title}>State</h3>
+                        <h3 style={title}>Country</h3>
+                    </div>
+                    <div>
+                        <p style={box}>{stuff.firstName}</p>
+                        <p style={box}>{email}</p>
+                        <p style={box}>{stuff.address}</p>
+                        <p style={box}>{stuff.state}</p>
+                        <p style={box}>{stuff.country}</p>
+                    </div>
+                    <div>
+                        <h3 style={title}>Last Name</h3>
+                        <h3 style={title}>Phone Number</h3>
+                        <h3 style={title}>City</h3>
+                        <h3 style={title}>Zip Code</h3>
+                    </div>
+                    <div>
+                        <p style={box}>{stuff.lastName}</p>
+                        <p style={box}>{stuff.phoneNumber}</p>
+                        <p style={box}>{stuff.city}</p>
+                        <p style={box}>{stuff.zipCode}</p>
+                    </div>
+
+                </div>
+
                     <h1>Resume</h1>
                     {resume && (
                         <div>
