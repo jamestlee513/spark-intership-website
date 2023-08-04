@@ -1,0 +1,12 @@
+{
+  "resourceName": "s3resumes1",
+  "bucketName": "resumes1",
+  "policyUUID": "cc44e9b5",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "READ",
+    "CREATE_AND_UPDATE",
+    "DELETE"
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "request": {
     "userAttributes": {
-      "email": "testEmail@domain.com"
+      "email": "testEmail@domain.edu"
     }
   },
   "response": {}
