@@ -18,6 +18,9 @@ export const getApplication = /* GraphQL */ `
     }
   }
 `;
+
+  
+
 export const listApplications = /* GraphQL */ `
   query ListApplications(
     $filter: ModelApplicationFilterInput

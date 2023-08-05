@@ -1,13 +1,13 @@
 import React from 'react'
 import {
-  FormCheckout2 
+  FormCheckout 
  } from '../../ui-components';
 
 
  const ApplicationPage = (props) => {
     
   return (
-    <FormCheckout2 />
+    <FormCheckout />
     )
 }
 
