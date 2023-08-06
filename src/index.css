@@ -37,3 +37,14 @@ body {
 .form-details > div {
   margin: 10px;
 }
+
+img {
+  max-width: 27vmax;
+  max-height: 27vmax;
+}
+
+@media screen and (max-width: 1200px) {
+  img {
+    display: none;
+  }
+}

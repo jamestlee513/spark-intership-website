@@ -33,12 +33,13 @@ type Application @model @auth(rules: [{allow: public}]) {
 
 type JobListing @model @auth(rules: [{allow: public}]) {
   id: ID!
-  title: String!
-  description: String!
-  companyInfo: String
-  location: String!
-  remote: Boolean
+  title: String
+  description: String
+  location: String
   deadline: AWSDate
-  contactInfo: [String!]!
+  qualifications: String
+  applicants: Int
+  email: String
+  status: String
 }
-  
+ 

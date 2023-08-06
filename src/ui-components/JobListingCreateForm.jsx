@@ -6,181 +6,11 @@
 
 /* eslint-disable */
 import * as React from "react";
-import {
-  Badge,
-  Button,
-  Divider,
-  Flex,
-  Grid,
-  Icon,
-  ScrollView,
-  SwitchField,
-  Text,
-  TextField,
-  useTheme,
-} from "@aws-amplify/ui-react";
+import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { JobListing } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
-function ArrayField({
-  items = [],
-  onChange,
-  label,
-  inputFieldRef,
-  children,
-  hasError,
-  setFieldValue,
-  currentFieldValue,
-  defaultFieldValue,
-  lengthLimit,
-  getBadgeText,
-  errorMessage,
-}) {
-  const labelElement = <Text>{label}</Text>;
-  const {
-    tokens: {
-      components: {
-        fieldmessages: { error: errorStyles },
-      },
-    },
-  } = useTheme();
-  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
-  const [isEditing, setIsEditing] = React.useState();
-  React.useEffect(() => {
-    if (isEditing) {
-      inputFieldRef?.current?.focus();
-    }
-  }, [isEditing]);
-  const removeItem = async (removeIndex) => {
-    const newItems = items.filter((value, index) => index !== removeIndex);
-    await onChange(newItems);
-    setSelectedBadgeIndex(undefined);
-  };
-  const addItem = async () => {
-    if (
-      currentFieldValue !== undefined &&
-      currentFieldValue !== null &&
-      currentFieldValue !== "" &&
-      !hasError
-    ) {
-      const newItems = [...items];
-      if (selectedBadgeIndex !== undefined) {
-        newItems[selectedBadgeIndex] = currentFieldValue;
-        setSelectedBadgeIndex(undefined);
-      } else {
-        newItems.push(currentFieldValue);
-      }
-      await onChange(newItems);
-      setIsEditing(false);
-    }
-  };
-  const arraySection = (
-    <React.Fragment>
-      {!!items?.length && (
-        <ScrollView height="inherit" width="inherit" maxHeight={"7rem"}>
-          {items.map((value, index) => {
-            return (
-              <Badge
-                key={index}
-                style={{
-                  cursor: "pointer",
-                  alignItems: "center",
-                  marginRight: 3,
-                  marginTop: 3,
-                  backgroundColor:
-                    index === selectedBadgeIndex ? "#B8CEF9" : "",
-                }}
-                onClick={() => {
-                  setSelectedBadgeIndex(index);
-                  setFieldValue(items[index]);
-                  setIsEditing(true);
-                }}
-              >
-                {getBadgeText ? getBadgeText(value) : value.toString()}
-                <Icon
-                  style={{
-                    cursor: "pointer",
-                    paddingLeft: 3,
-                    width: 20,
-                    height: 20,
-                  }}
-                  viewBox={{ width: 20, height: 20 }}
-                  paths={[
-                    {
-                      d: "M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z",
-                      stroke: "black",
-                    },
-                  ]}
-                  ariaLabel="button"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    removeItem(index);
-                  }}
-                />
-              </Badge>
-            );
-          })}
-        </ScrollView>
-      )}
-      <Divider orientation="horizontal" marginTop={5} />
-    </React.Fragment>
-  );
-  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-    return (
-      <React.Fragment>
-        {labelElement}
-        {arraySection}
-      </React.Fragment>
-    );
-  }
-  return (
-    <React.Fragment>
-      {labelElement}
-      {isEditing && children}
-      {!isEditing ? (
-        <>
-          <Button
-            onClick={() => {
-              setIsEditing(true);
-            }}
-          >
-            Add item
-          </Button>
-          {errorMessage && hasError && (
-            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
-              {errorMessage}
-            </Text>
-          )}
-        </>
-      ) : (
-        <Flex justifyContent="flex-end">
-          {(currentFieldValue || isEditing) && (
-            <Button
-              children="Cancel"
-              type="button"
-              size="small"
-              onClick={() => {
-                setFieldValue(defaultFieldValue);
-                setIsEditing(false);
-                setSelectedBadgeIndex(undefined);
-              }}
-            ></Button>
-          )}
-          <Button
-            size="small"
-            variation="link"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
-            {selectedBadgeIndex !== undefined ? "Save" : "Add"}
-          </Button>
-        </Flex>
-      )}
-      {arraySection}
-    </React.Fragment>
-  );
-}
 export default function JobListingCreateForm(props) {
   const {
     clearOnSuccess = true,
@@ -195,48 +25,46 @@ export default function JobListingCreateForm(props) {
   const initialValues = {
     title: "",
     description: "",
-    companyInfo: "",
     location: "",
-    remote: false,
     deadline: "",
-    contactInfo: [],
+    qualifications: "",
+    applicants: "",
+    email: "",
+    status: "",
   };
   const [title, setTitle] = React.useState(initialValues.title);
   const [description, setDescription] = React.useState(
     initialValues.description
   );
-  const [companyInfo, setCompanyInfo] = React.useState(
-    initialValues.companyInfo
-  );
   const [location, setLocation] = React.useState(initialValues.location);
-  const [remote, setRemote] = React.useState(initialValues.remote);
   const [deadline, setDeadline] = React.useState(initialValues.deadline);
-  const [contactInfo, setContactInfo] = React.useState(
-    initialValues.contactInfo
+  const [qualifications, setQualifications] = React.useState(
+    initialValues.qualifications
   );
+  const [applicants, setApplicants] = React.useState(initialValues.applicants);
+  const [email, setEmail] = React.useState(initialValues.email);
+  const [status, setStatus] = React.useState(initialValues.status);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setTitle(initialValues.title);
     setDescription(initialValues.description);
-    setCompanyInfo(initialValues.companyInfo);
     setLocation(initialValues.location);
-    setRemote(initialValues.remote);
     setDeadline(initialValues.deadline);
-    setContactInfo(initialValues.contactInfo);
-    setCurrentContactInfoValue("");
+    setQualifications(initialValues.qualifications);
+    setApplicants(initialValues.applicants);
+    setEmail(initialValues.email);
+    setStatus(initialValues.status);
     setErrors({});
   };
-  const [currentContactInfoValue, setCurrentContactInfoValue] =
-    React.useState("");
-  const contactInfoRef = React.createRef();
   const validations = {
-    title: [{ type: "Required" }],
-    description: [{ type: "Required" }],
-    companyInfo: [],
-    location: [{ type: "Required" }],
-    remote: [],
+    title: [],
+    description: [],
+    location: [],
     deadline: [],
-    contactInfo: [{ type: "Required" }],
+    qualifications: [],
+    applicants: [],
+    email: [],
+    status: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -266,11 +94,12 @@ export default function JobListingCreateForm(props) {
         let modelFields = {
           title,
           description,
-          companyInfo,
           location,
-          remote,
           deadline,
-          contactInfo,
+          qualifications,
+          applicants,
+          email,
+          status,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -318,7 +147,7 @@ export default function JobListingCreateForm(props) {
     >
       <TextField
         label="Title"
-        isRequired={true}
+        isRequired={false}
         isReadOnly={false}
         value={title}
         onChange={(e) => {
@@ -327,11 +156,12 @@ export default function JobListingCreateForm(props) {
             const modelFields = {
               title: value,
               description,
-              companyInfo,
               location,
-              remote,
               deadline,
-              contactInfo,
+              qualifications,
+              applicants,
+              email,
+              status,
             };
             const result = onChange(modelFields);
             value = result?.title ?? value;
@@ -348,7 +178,7 @@ export default function JobListingCreateForm(props) {
       ></TextField>
       <TextField
         label="Description"
-        isRequired={true}
+        isRequired={false}
         isReadOnly={false}
         value={description}
         onChange={(e) => {
@@ -357,11 +187,12 @@ export default function JobListingCreateForm(props) {
             const modelFields = {
               title,
               description: value,
-              companyInfo,
               location,
-              remote,
               deadline,
-              contactInfo,
+              qualifications,
+              applicants,
+              email,
+              status,
             };
             const result = onChange(modelFields);
             value = result?.description ?? value;
@@ -377,38 +208,8 @@ export default function JobListingCreateForm(props) {
         {...getOverrideProps(overrides, "description")}
       ></TextField>
       <TextField
-        label="Company info"
-        isRequired={false}
-        isReadOnly={false}
-        value={companyInfo}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              title,
-              description,
-              companyInfo: value,
-              location,
-              remote,
-              deadline,
-              contactInfo,
-            };
-            const result = onChange(modelFields);
-            value = result?.companyInfo ?? value;
-          }
-          if (errors.companyInfo?.hasError) {
-            runValidationTasks("companyInfo", value);
-          }
-          setCompanyInfo(value);
-        }}
-        onBlur={() => runValidationTasks("companyInfo", companyInfo)}
-        errorMessage={errors.companyInfo?.errorMessage}
-        hasError={errors.companyInfo?.hasError}
-        {...getOverrideProps(overrides, "companyInfo")}
-      ></TextField>
-      <TextField
         label="Location"
-        isRequired={true}
+        isRequired={false}
         isReadOnly={false}
         value={location}
         onChange={(e) => {
@@ -417,11 +218,12 @@ export default function JobListingCreateForm(props) {
             const modelFields = {
               title,
               description,
-              companyInfo,
               location: value,
-              remote,
               deadline,
-              contactInfo,
+              qualifications,
+              applicants,
+              email,
+              status,
             };
             const result = onChange(modelFields);
             value = result?.location ?? value;
@@ -436,36 +238,6 @@ export default function JobListingCreateForm(props) {
         hasError={errors.location?.hasError}
         {...getOverrideProps(overrides, "location")}
       ></TextField>
-      <SwitchField
-        label="Remote"
-        defaultChecked={false}
-        isDisabled={false}
-        isChecked={remote}
-        onChange={(e) => {
-          let value = e.target.checked;
-          if (onChange) {
-            const modelFields = {
-              title,
-              description,
-              companyInfo,
-              location,
-              remote: value,
-              deadline,
-              contactInfo,
-            };
-            const result = onChange(modelFields);
-            value = result?.remote ?? value;
-          }
-          if (errors.remote?.hasError) {
-            runValidationTasks("remote", value);
-          }
-          setRemote(value);
-        }}
-        onBlur={() => runValidationTasks("remote", remote)}
-        errorMessage={errors.remote?.errorMessage}
-        hasError={errors.remote?.hasError}
-        {...getOverrideProps(overrides, "remote")}
-      ></SwitchField>
       <TextField
         label="Deadline"
         isRequired={false}
@@ -478,11 +250,12 @@ export default function JobListingCreateForm(props) {
             const modelFields = {
               title,
               description,
-              companyInfo,
               location,
-              remote,
               deadline: value,
-              contactInfo,
+              qualifications,
+              applicants,
+              email,
+              status,
             };
             const result = onChange(modelFields);
             value = result?.deadline ?? value;
@@ -497,56 +270,134 @@ export default function JobListingCreateForm(props) {
         hasError={errors.deadline?.hasError}
         {...getOverrideProps(overrides, "deadline")}
       ></TextField>
-      <ArrayField
-        onChange={async (items) => {
-          let values = items;
+      <TextField
+        label="Qualifications"
+        isRequired={false}
+        isReadOnly={false}
+        value={qualifications}
+        onChange={(e) => {
+          let { value } = e.target;
           if (onChange) {
             const modelFields = {
               title,
               description,
-              companyInfo,
               location,
-              remote,
               deadline,
-              contactInfo: values,
+              qualifications: value,
+              applicants,
+              email,
+              status,
             };
             const result = onChange(modelFields);
-            values = result?.contactInfo ?? values;
+            value = result?.qualifications ?? value;
           }
-          setContactInfo(values);
-          setCurrentContactInfoValue("");
+          if (errors.qualifications?.hasError) {
+            runValidationTasks("qualifications", value);
+          }
+          setQualifications(value);
         }}
-        currentFieldValue={currentContactInfoValue}
-        label={"Contact info"}
-        items={contactInfo}
-        hasError={errors?.contactInfo?.hasError}
-        errorMessage={errors?.contactInfo?.errorMessage}
-        setFieldValue={setCurrentContactInfoValue}
-        inputFieldRef={contactInfoRef}
-        defaultFieldValue={""}
-      >
-        <TextField
-          label="Contact info"
-          isRequired={true}
-          isReadOnly={false}
-          value={currentContactInfoValue}
-          onChange={(e) => {
-            let { value } = e.target;
-            if (errors.contactInfo?.hasError) {
-              runValidationTasks("contactInfo", value);
-            }
-            setCurrentContactInfoValue(value);
-          }}
-          onBlur={() =>
-            runValidationTasks("contactInfo", currentContactInfoValue)
+        onBlur={() => runValidationTasks("qualifications", qualifications)}
+        errorMessage={errors.qualifications?.errorMessage}
+        hasError={errors.qualifications?.hasError}
+        {...getOverrideProps(overrides, "qualifications")}
+      ></TextField>
+      <TextField
+        label="Applicants"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={applicants}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              title,
+              description,
+              location,
+              deadline,
+              qualifications,
+              applicants: value,
+              email,
+              status,
+            };
+            const result = onChange(modelFields);
+            value = result?.applicants ?? value;
           }
-          errorMessage={errors.contactInfo?.errorMessage}
-          hasError={errors.contactInfo?.hasError}
-          ref={contactInfoRef}
-          labelHidden={true}
-          {...getOverrideProps(overrides, "contactInfo")}
-        ></TextField>
-      </ArrayField>
+          if (errors.applicants?.hasError) {
+            runValidationTasks("applicants", value);
+          }
+          setApplicants(value);
+        }}
+        onBlur={() => runValidationTasks("applicants", applicants)}
+        errorMessage={errors.applicants?.errorMessage}
+        hasError={errors.applicants?.hasError}
+        {...getOverrideProps(overrides, "applicants")}
+      ></TextField>
+      <TextField
+        label="Email"
+        isRequired={false}
+        isReadOnly={false}
+        value={email}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              title,
+              description,
+              location,
+              deadline,
+              qualifications,
+              applicants,
+              email: value,
+              status,
+            };
+            const result = onChange(modelFields);
+            value = result?.email ?? value;
+          }
+          if (errors.email?.hasError) {
+            runValidationTasks("email", value);
+          }
+          setEmail(value);
+        }}
+        onBlur={() => runValidationTasks("email", email)}
+        errorMessage={errors.email?.errorMessage}
+        hasError={errors.email?.hasError}
+        {...getOverrideProps(overrides, "email")}
+      ></TextField>
+      <TextField
+        label="Status"
+        isRequired={false}
+        isReadOnly={false}
+        value={status}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              title,
+              description,
+              location,
+              deadline,
+              qualifications,
+              applicants,
+              email,
+              status: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.status ?? value;
+          }
+          if (errors.status?.hasError) {
+            runValidationTasks("status", value);
+          }
+          setStatus(value);
+        }}
+        onBlur={() => runValidationTasks("status", status)}
+        errorMessage={errors.status?.errorMessage}
+        hasError={errors.status?.hasError}
+        {...getOverrideProps(overrides, "status")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
