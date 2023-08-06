@@ -5,6 +5,8 @@ import {DataStore} from '@aws-amplify/datastore';
 import {Storage} from '@aws-amplify/storage';
 import {Application} from '../../models';
 import {Fade} from '@mui/material'
+import ReviewList from "./reviewList";
+import ListList from "./ListList"
 
 
 const ReviewPage = () => {
@@ -20,12 +22,15 @@ const ReviewPage = () => {
     const coverLetter = stuff.coverLetter
     const [coverLetterURL, setCoverLetterURL] = useState('');
     const [email, setEmail] = useState('');
+    let eduGroups = []
+    let projGroups = []
 
     useEffect(() => {
         (async () => {
             const attributes = await Auth.currentUserInfo()
             setEmail(attributes.attributes.email)
-            })()},[])
+        })()
+    }, [])
 
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -69,6 +74,8 @@ const ReviewPage = () => {
                 item.state = stuff.state
                 item.address = stuff.address
                 item.job = stuff.job
+                item.education = stuff.education
+                item.project = stuff.project
                 item.completeApplication = true
             }));
             if (stuff.resume) {
@@ -80,19 +87,19 @@ const ReviewPage = () => {
             console.log("HERE")
             await DataStore.save(Application.copyOf(app, item => {
                 // Update the values on {item} variable to update DataStore entry
-                item.firstName= stuff.firstName
-                    item.lastName= stuff.lastName
-                    item.email= attributes.attributes.email
-                    item.phone= stuff.phoneNumber
-                    item.city= stuff.city
-                    item.resume= stuff.resume.name
-                    item.coverLetter= stuff.coverLetter.name
-                    item.zipcode= Number(stuff.zipCode)
-                    item.country= stuff.country
-                    item.state= stuff.state
-                    item.address= stuff.address
-                    item.job= stuff.job
-                    item.completeApplication= true
+                item.firstName = stuff.firstName
+                item.lastName = stuff.lastName
+                item.email = attributes.attributes.email
+                item.phone = stuff.phoneNumber
+                item.city = stuff.city
+                item.resume = stuff.resume.name
+                item.coverLetter = stuff.coverLetter.name
+                item.zipcode = Number(stuff.zipCode)
+                item.country = stuff.country
+                item.state = stuff.state
+                item.address = stuff.address
+                item.job = stuff.job
+                item.completeApplication = true
             }));
         } else {
             console.log("HERE")
@@ -123,68 +130,55 @@ const ReviewPage = () => {
         navigate("/submit", {state: {job: stuff.job}})
     }
 
-    const box = {border: "2px solid black",
-        borderRadius: "5px",
-        width: "30vw", height: "4vh", fontSize: "2vmin"}
+    function eduAdd(edu) {
+        eduGroups.push([["Major", edu.major], ["University", edu.university], ["GPA", edu.GPA], ["Expected Graduation", edu.expectedGrad]])
+    }
 
-    const title = {width: "10vw", height: "4vh", fontSize: "2vmin"}
+    function projAdd(proj) {
+        projGroups.push(["Project Name", proj.projectName], ["Role", proj.projectRole], [], [])
+    }
+
+    // Styles
+
+    const t1 = {textAlign: "left", fontSize: "4vmin"}
+
+    const t2 = {textAlign: "left", fontSize: "3.5vmin"}
+
+    stuff.education.forEach(eduAdd)
 
     return (
         <div>
             <Fade in={true}>
                 <div>
-                <div style={{display: "flex", justifyItems: "Center", justifyContent: "space-around", width: "80vw", margin: "auto"}}>
-                    <div >
-                        <h3 style={title}>First Name</h3>
-                        <h3 style={title}>Email</h3>
-                        <h3 style={title}>Address</h3>
-                        <h3 style={title}>State</h3>
-                        <h3 style={title}>Country</h3>
+                    <h1 style={{fontSize: "10vmin"}}> {stuff.job + " Application"}</h1>
+                    <h1 style={t1}>Application Preview</h1>
+                    <div>
+                        <h2 style={t2}>Personal Information</h2>
+                        <div style={{
+                            display: "flex",
+                            justifyItems: "Center",
+                            width: "80vw",
+                            margin: "auto",
+                            flexWrap: "wrap",
+                            justifyContent: "flex-start"
+                        }}>
+                            <ReviewList
+                                pairs={[["First Name", stuff.firstName], ["Last Name", stuff.lastName], ["Email", email], ["Phone", stuff.phoneNumber], ["Address", stuff.address], ["City", stuff.city], ["State", stuff.state], ["Zipcode", stuff.zipcode], ["Country", stuff.country]]}/>
+                        </div>
                     </div>
                     <div>
-                        <p style={box}>{stuff.firstName}</p>
-                        <p style={box}>{email}</p>
-                        <p style={box}>{stuff.address}</p>
-                        <p style={box}>{stuff.state}</p>
-                        <p style={box}>{stuff.country}</p>
+                        <h2 style={t2}>Education</h2>
+                        <ListList name={"University"} groups={eduGroups}/>
                     </div>
                     <div>
-                        <h3 style={title}>Last Name</h3>
-                        <h3 style={title}>Phone Number</h3>
-                        <h3 style={title}>City</h3>
-                        <h3 style={title}>Zip Code</h3>
+                        <h2 style={t2}>Projects</h2>
+                        <ListList name={"Project"} groups={projGroups}/>
                     </div>
                     <div>
-                        <p style={box}>{stuff.lastName}</p>
-                        <p style={box}>{stuff.phoneNumber}</p>
-                        <p style={box}>{stuff.city}</p>
-                        <p style={box}>{stuff.zipCode}</p>
+                        <h2 style={t2}>Resume and Cover Letter</h2>
                     </div>
 
-                </div>
 
-                    <h1>Resume</h1>
-                    {resume && (
-                        <div>
-                            <h3>Preview:</h3>
-                            {/*resume.type === 'application/pdf' ? (
-                                <embed src={resumeURL} width="300" height="200" type="application/pdf"/>
-                            ) : (
-                                <img src={resumeURL} alt="Uploaded Resume"/>
-                            )*/}
-                        </div>
-                    )}
-                    <h1>Cover Letter</h1>
-                    {coverLetter && (
-                        <div>
-                            <h3>Preview:</h3>
-                            {/*resume.type === 'application/pdf' ? (
-                                <embed src={coverLetterURL} width="300" height="200" type="application/pdf"/>
-                            ) : (
-                                <img src={coverLetterURL} alt="Uploaded Cover Letter"/>
-                            )*/}
-                        </div>
-                    )}
                     <button onClick={() => {
                         navigate("/application", {
                             state: {
