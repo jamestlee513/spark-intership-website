@@ -4,9 +4,9 @@ import {
   TextField,
 } from "@aws-amplify/ui-react";
 
-export default function education({ education, deleteEducation }) {
-  function handleEducationClick() {
-    deleteEducation(education)
+export default function project({ project, deleteProject }) {
+  function handleProjectClick() {
+    deleteProject(project)
   }
 
   const border = {
@@ -21,54 +21,50 @@ export default function education({ education, deleteEducation }) {
       <TextField
           width="40vw"
           height="unset"
-          label="Universtiy"
-          placeholder="Enter Universtiy"
+          label="Project Name"
           shrink="0"
           alignSelf="stretch"
           size="large"
           isDisabled={true}
           labelHidden={false}
           variation="default"
-          value={education.university}
+          value={project.projectName}
       ></TextField>
       <TextField
           width="40vw"
           height="unset"
-          label="Major"
-          placeholder="Enter first name"
+          label="Project Description"
           shrink="0"
           alignSelf="stretch"
           size="large"
           isDisabled={true}
           labelHidden={false}
           variation="default"
-          value={education.major}
+          value={project.projectDesc}
       ></TextField>
       <TextField
           width="40vw"
           height="unset"
-          label="Graduation/Expected Graduation"
-          placeholder="Enter Graduation/Expected graduation"
+          label="Role"
           shrink="0"
           alignSelf="stretch"
           size="large"
           isDisabled={true}
           labelHidden={false}
           variation="default"
-          value={education.expectedGrad}
+          value={project.role}
       ></TextField>
       <TextField
           width="40vw"
           height="unset"
-          label="GPA"
-          placeholder="Enter GPA"
+          label="Link"
           shrink="0"
           alignSelf="stretch"
           size="large"
           isDisabled={true}
           labelHidden={false}
           variation="default"
-          value={education.GPA}
+          value={project.link}
       ></TextField>
       <Button
               width="114px"
@@ -79,7 +75,7 @@ export default function education({ education, deleteEducation }) {
               children="Delete"
               order="0"
               margin="20px 0px 0px 0px"
-              onClick={handleEducationClick}
+              onClick={handleProjectClick}
           ></Button>
     </div>
   )
