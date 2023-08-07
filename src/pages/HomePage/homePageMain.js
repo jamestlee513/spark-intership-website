@@ -61,9 +61,9 @@ const learnMoreStyle = {
     size: 'medium',
     // round corner
     borderRadius: '60px',
-    padding: '1px 60px',
-    display: 'inline-block',
-    minWidth: '150px',
+    align: 'center',
+    height: '47px',
+    width: '300px',
 }
 
 export default HomePageMain;
