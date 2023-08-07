@@ -1,5 +1,6 @@
 import React from 'react';
 import SparkLogo from "../../images/Spark Logo.png"
+import { hover } from '@testing-library/user-event/dist/hover';
 
 const HomePageMain = () => {
   return (
@@ -64,6 +65,8 @@ const learnMoreStyle = {
     align: 'center',
     height: '47px',
     width: '300px',
+    // pointer hover over
+    cursor: 'pointer',
 }
 
 export default HomePageMain;
