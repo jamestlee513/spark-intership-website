@@ -9,10 +9,12 @@ export default function education({ education, deleteEducation }) {
     deleteEducation(education)
   }
 
+  const titleColor = 'rgb(83 111 180)'
+
   const border = {
     border: "2px",
     borderStyle: "dashed",
-    borderColor: "rgb(231, 182, 255)",
+    borderColor: titleColor,
     padding: "4px 16px 4px 16px",
     borderRadius: "10px"
   }

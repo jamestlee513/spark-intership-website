@@ -48,11 +48,10 @@ const ReviewPage = () => {
         reader2.readAsDataURL(coverLetter);
     }
 
+
     async function submit() {
         const attributes = await Auth.currentUserInfo()
-        console.log(attributes.attributes.email + " " + stuff.job)
         let apps = await DataStore.query(Application, (a) => a.and(a => [a.email.eq(attributes.attributes.email), a.job.eq(stuff.job)]))
-        console.log(apps)
         let app = apps[0]
         if (app !== undefined) {
             /* Models in DataStore are immutable. To update a record you must use the copyOf function
@@ -75,7 +74,7 @@ const ReviewPage = () => {
                 item.address = stuff.address
                 item.job = stuff.job
                 item.education = stuff.education
-                item.project = stuff.project
+                item.project = stuff.projects
                 item.completeApplication = true
             }));
             if (stuff.resume) {
@@ -84,7 +83,6 @@ const ReviewPage = () => {
                     contentType: 'application/pdf'
                 });
             }
-            console.log("HERE")
             await DataStore.save(Application.copyOf(app, item => {
                 // Update the values on {item} variable to update DataStore entry
                 item.firstName = stuff.firstName
@@ -99,10 +97,11 @@ const ReviewPage = () => {
                 item.state = stuff.state
                 item.address = stuff.address
                 item.job = stuff.job
+                item.education = stuff.education
+                item.project = stuff.projects
                 item.completeApplication = true
             }));
         } else {
-            console.log("HERE")
             await DataStore.save(
                 new Application({
                     "firstName": stuff.firstName,
@@ -117,6 +116,8 @@ const ReviewPage = () => {
                     "state": stuff.state,
                     "address": stuff.address,
                     "job": stuff.job,
+                    "education": stuff.education,
+                    "project": stuff.projects,
                     "completeApplication": true
                 })
             );
@@ -135,10 +136,12 @@ const ReviewPage = () => {
     }
 
     function projAdd(proj) {
-        projGroups.push(["Project Name", proj.projectName], ["Role", proj.projectRole], [], [])
+        projGroups.push([["Project Name", proj.projectName], ["Project Description", proj.projectDesc], ["Link", proj.link]])
     }
 
     // Styles
+
+    const titleColor = 'rgb(83 111 180)'
 
     const t1 = {textAlign: "left", fontSize: "4vmin"}
 
@@ -146,11 +149,14 @@ const ReviewPage = () => {
 
     stuff.education.forEach(eduAdd)
 
+    stuff.projects.forEach(projAdd)
+
+
     return (
         <div>
             <Fade in={true}>
                 <div>
-                    <h1 style={{fontSize: "10vmin"}}> {stuff.job + " Application"}</h1>
+                    <h1 style={{fontSize: "10vmin", color: titleColor}}> {stuff.job + " Application"}</h1>
                     <h1 style={t1}>Application Preview</h1>
                     <div>
                         <h2 style={t2}>Personal Information</h2>
@@ -163,7 +169,7 @@ const ReviewPage = () => {
                             justifyContent: "flex-start"
                         }}>
                             <ReviewList
-                                pairs={[["First Name", stuff.firstName], ["Last Name", stuff.lastName], ["Email", email], ["Phone", stuff.phoneNumber], ["Address", stuff.address], ["City", stuff.city], ["State", stuff.state], ["Zipcode", stuff.zipcode], ["Country", stuff.country]]}/>
+                                pairs={[["First Name", stuff.firstName], ["Last Name", stuff.lastName], ["Email", email], ["Phone", stuff.phoneNumber], ["Address", stuff.address], ["City", stuff.city], ["State", stuff.state], ["Zipcode", stuff.zipCode], ["Country", stuff.country]]}/>
                         </div>
                     </div>
                     <div>
@@ -180,24 +186,7 @@ const ReviewPage = () => {
 
 
                     <button onClick={() => {
-                        navigate("/application", {
-                            state: {
-                                stuff: {
-                                    firstName: stuff.firstName,
-                                    lastName: stuff.lastName,
-                                    email: stuff.email,
-                                    phone: stuff.phoneNumber,
-                                    city: stuff.city,
-                                    resume: stuff.resume,
-                                    coverLetter: stuff.coverLetter,
-                                    zipCode: stuff.zipCode,
-                                    country: stuff.country,
-                                    state: stuff.state,
-                                    address: stuff.address,
-                                    job: stuff.job
-                                }
-                            }
-                        })
+                        navigate("/application")
                     }}> No no no no wait wait wait
                     </button>
                     <button onClick={submit}> Submit</button>

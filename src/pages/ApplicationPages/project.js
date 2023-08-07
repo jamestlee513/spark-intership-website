@@ -9,10 +9,12 @@ export default function project({ project, deleteProject }) {
     deleteProject(project)
   }
 
+  const titleColor = 'rgb(83 111 180)'
+
   const border = {
     border: "2px",
     borderStyle: "dashed",
-    borderColor: "rgb(231, 182, 255)",
+    borderColor: titleColor,
     padding: "4px 16px 4px 16px",
     borderRadius: "10px"
   }
@@ -41,18 +43,6 @@ export default function project({ project, deleteProject }) {
           labelHidden={false}
           variation="default"
           value={project.projectDesc}
-      ></TextField>
-      <TextField
-          width="40vw"
-          height="unset"
-          label="Role"
-          shrink="0"
-          alignSelf="stretch"
-          size="large"
-          isDisabled={true}
-          labelHidden={false}
-          variation="default"
-          value={project.role}
       ></TextField>
       <TextField
           width="40vw"
