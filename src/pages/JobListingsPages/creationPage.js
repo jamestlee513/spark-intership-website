@@ -1,7 +1,7 @@
 import React, {useState, useRef, useEffect} from 'react'
 import { DataStore } from '@aws-amplify/datastore';
 import { JobListing } from '../../models';
-import ContactList from './contactList';
+import ContactList from './jobListings';
 import { Route } from 'react-router-dom';
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import { TextField } from '@mui/material';
@@ -14,6 +14,7 @@ import Button from '@mui/material/Button';
 import theme from './theme';
 import { ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import {Auth} from 'aws-amplify';
 
 export default function CreateListing() {
   const jobName = useRef()
@@ -21,20 +22,12 @@ export default function CreateListing() {
   const qualifications = useRef()
   const location = useRef()
   const deadline = useRef()
-  const contact = useRef()
-  const [contacts, setContacts] = useState([])
-  const [contactID, setContactID] = useState(0)
   const navigate = useNavigate()
-  //Contact Info:
-  //<input ref={contact} type ="text" />
-  //<button onClick={addContact}>add</button>
-  //<ContactList contacts={contacts} deleteContact={deleteContact}/>
-  //     if (contacts.length === 0) return
-  // const remoteValue = document.getElementById("remote").checked
-  //const contactArray = contacts.map(con => {
-  //return con.name
-  //})
 
+  const [locationError, setLocationError] = useState('')
+  const [nameError, setNameError] = useState('')
+  const [descriptionError, setDescriptionError] = useState('')
+  const [qualificationsError, setQualificationsError] = useState('')
 
 
   async function makeListing(e) {
@@ -43,13 +36,46 @@ export default function CreateListing() {
     const qual = qualifications.current.value
     const loc = location.current.value
     const date = deadline.current.value 
-    const fixedDate = DateFixer(date)
-    console.log(name)
-    if (name === '') return
-    if (description === '') return
-    if (qual === '') return
-    if (loc === '') return
+    const fixedDate = dateFixer(date)
+    if (name === '') {
+      setNameError('Field Missing')
+      return
+    } else if (wordCounter(name) > 20) {
+      setNameError('Word limit is 20')
+      return
+    } else {
+      setNameError('')
+    }
+    if (description === '') {
+      setDescriptionError('Field Missing')
+      return
+    } else if (wordCounter(description) > 100) {
+      setDescriptionError('Word limit is 100')
+      return
+    } else {
+      setDescriptionError('')
+    }
+    if (loc === '') {
+      setLocationError('Field Missing')
+      return
+    } else if (wordCounter(loc) > 20) {
+      setLocationError('Word limit is 20')
+      return
+    } else {
+      setLocationError('')
+    }
+    if (qual === '') {
+      setQualificationsError('Field Missing')
+      return
+    } else if (wordCounter(qual) > 150) {
+      setQualificationsError('Word limit is 150')
+      return
+    } else {
+      setQualificationsError('')
+    }
     if (date === '') return
+    const attributes = await Auth.currentUserInfo()
+    const email = attributes.attributes.email
     await DataStore.save(new JobListing({
       "title": name,
       "description": description,
@@ -57,7 +83,7 @@ export default function CreateListing() {
       "deadline": fixedDate,
       "qualifications": qual,
       "applicants": 0,
-      "email": "test@gmail.com",
+      "email": email,
       "status": "receiving"
     }))
     jobName.current.value = null
@@ -68,22 +94,27 @@ export default function CreateListing() {
     navigate('/listings')
   }
 
-  function addContact() {
-    const con = contact.current.value
-    if (con === '') return
-    setContacts(prevContacts => {
-      setContactID(contactID + 1)
-      return [...prevContacts, {id: contactID, name: con}]
-    })
-    contact.current.value = null
+  function wordCounter(string) {
+    if (string === undefined) {
+      return 0;
+    }
+    return removeItemAll(string?.split(' '), "").length
   }
 
-  function deleteContact(con) {
-    const newContacts = contacts.filter(contact => con.id !== contact.id)
-    setContacts(newContacts)
+  function removeItemAll(arr, value) {
+    var i = 0;
+    while (i < arr.length) {
+      if (arr[i] === value) {
+        arr.splice(i, 1);
+      } else {
+        ++i;
+      }
+    }
+    return arr;
   }
 
-  function DateFixer(date) {
+
+  function dateFixer(date) {
     let year = date.substring(6)
     let day = date.substring(0, 2)
     let month = date.substring(3, 5)
@@ -93,8 +124,6 @@ export default function CreateListing() {
   function goToJobListings() {
     navigate('/listings')
   }
-
-
   /*return (
     <>
       <div>
@@ -131,7 +160,7 @@ export default function CreateListing() {
         <div>
           Job Title<br></br>
           <Box sx={{'& > :not(style)': { m: 1, width: 519, height: 89 }}}>
-            <TextField id="outlined-basic" variant="outlined" ref={jobName}/>
+            <TextField id="outlined-basic" error={nameError !== ''} variant="outlined" inputRef={jobName} helperText={nameError}/>
           </Box>
         </div>
         <div>
@@ -148,7 +177,7 @@ export default function CreateListing() {
           Job Description
           <br></br>
           <Box sx={{'& > :not(style)': { m: 1, width: 519, height: 200 }}}>
-            <TextField id="outlined-basic" variant="outlined" ref={jobDescription}/>
+            <TextField id="outlined-basic" error={descriptionError !== ''} variant="outlined" inputRef={jobDescription} helperText={descriptionError}/>
           </Box>
         </div>
         <Stack direction="column">
@@ -156,14 +185,14 @@ export default function CreateListing() {
             Location
             <br></br>
             <Box sx={{'& > :not(style)': { m: 1, width: 519, height: 89 }}}>
-              <TextField id="outlined-basic" variant="outlined" ref={location}/>
+              <TextField id="outlined-basic" error={locationError !== ''} variant="outlined" inputRef={location} helperText={locationError}/>
             </Box>
           </div>
           <div>
             Qualifications
             <br></br>
             <Box sx={{'& > :not(style)': { m: 1, width: 519, height: 89 }}}>
-              <TextField id="outlined-basic" variant="outlined" ref={qualifications}/>
+              <TextField id="outlined-basic" error={qualificationsError !== ''} variant="outlined" inputRef={qualifications} helperText={qualificationsError}/>
             </Box>
           </div>
         </Stack>
