@@ -7,14 +7,14 @@ import { LazyLoading, LazyLoadingDisabled } from "@aws-amplify/datastore";
 type EagerProject = {
   readonly projectName?: string | null;
   readonly projectDesc?: string | null;
-  readonly Role?: string | null;
+  readonly link?: string | null;
   readonly fileURL?: string | null;
 }
 
 type LazyProject = {
   readonly projectName?: string | null;
   readonly projectDesc?: string | null;
-  readonly Role?: string | null;
+  readonly link?: string | null;
   readonly fileURL?: string | null;
 }
 

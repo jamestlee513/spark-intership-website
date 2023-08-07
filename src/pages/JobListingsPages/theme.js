@@ -27,7 +27,7 @@ const theme = createTheme({
         autoComplete: 'off'
       }
     }
-  },
+  }
 });
 
 export default theme;
