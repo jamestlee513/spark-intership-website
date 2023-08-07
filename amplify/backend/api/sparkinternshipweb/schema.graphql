@@ -1,7 +1,7 @@
 type Project {
   projectName: String
   projectDesc: String
-  Role: String
+  link: String
   fileURL: String
 }
 

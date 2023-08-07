@@ -9,7 +9,7 @@ export default function AdminJobListing({ listing }) {
   const navigate = useNavigate()
 
   function handleListingClick() {
-    navigate('/update', listing)
+    navigate('/update', {state: {listing}})
   }
 
   function handleChange() {

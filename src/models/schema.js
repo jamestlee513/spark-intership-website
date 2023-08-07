@@ -291,8 +291,8 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "Role": {
-                    "name": "Role",
+                "link": {
+                    "name": "link",
                     "isArray": false,
                     "type": "String",
                     "isRequired": false,
@@ -342,5 +342,5 @@ export const schema = {
         }
     },
     "codegenVersion": "3.4.4",
-    "version": "4a261206d76b21f5621117109353fcdb"
+    "version": "88d87d49b1533c38197b783a57c3d57d"
 };
