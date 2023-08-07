@@ -106,27 +106,6 @@ const ApplicationPage = (props) => {
     };
 
 
-// Styles
-    const titleColor = 'rgb(83 111 180)'
-
-    const entry = {
-        border: "2px",
-        borderStyle: "dashed",
-        borderColor: titleColor,
-        padding: "16px 16px 16px 16px",
-        borderRadius: "10px"
-    }
-
-    const imageContainer = {
-        width: "500px",
-        margin: "0 auto"
-    }
-
-    const errorStyle = {
-        border: "2px solid red",
-    }
-
-
     const changeDaState = (app) => {
         setFirstName(app.firstName)
         setLastName(app.lastName)
@@ -204,24 +183,6 @@ const ApplicationPage = (props) => {
         }));
     }
 
-    // Draw Circle
-    const numSize = 50
-    const circle = (pg) => {
-        return {
-            borderRadius: "50%",
-            border: "2px solid " + titleColor,
-            width: `${numSize * 52 / 32}px`,
-            height: `${numSize * 52 / 32}px`,
-            padding: `${numSize * 8 / 32}px`,
-
-            background: pageNumber.page === pg ? titleColor : "white",
-            color: pageNumber.page === pg ? "white" : titleColor,
-            textAlign: "center",
-
-            font: `${numSize}px Arial, sans-serif`
-        }
-    }
-
     // Refs
     const university = useRef(0)
     const major = useRef(0)
@@ -231,7 +192,7 @@ const ApplicationPage = (props) => {
     const projName = useRef(0)
     const projDesc = useRef(0)
     const projLink = useRef(0)
-    const projFile = useRef(0)
+    const [projFile, setProjFile] = React.useState(null);
 
     const dialCodeRef = React.useRef(null)
 
@@ -429,6 +390,44 @@ const ApplicationPage = (props) => {
     }
     if (errorState.submit) {
         
+    }
+    // Styles
+    const titleColor = 'rgb(83 111 180)'
+
+    const entry = {
+        border: "2px",
+        borderStyle: "dashed",
+        borderColor: titleColor,
+        padding: "16px 16px 16px 16px",
+        borderRadius: "10px"
+    }
+
+    const imageContainer = {
+        width: "500px",
+        margin: "0 auto"
+    }
+
+    const errorStyle = {
+        border: "2px solid red",
+    }
+
+    // Draw Circle
+    const pagereqs = [!firstName || !lastName || !phone || !city || !zipcode || !country || (!state && country === "US"), false, false, !resume]
+    const numSize = 50
+    const circle = (pg) => {
+        return {
+            borderRadius: "50%",
+            border: "2px solid " + titleColor,
+            width: `${numSize * 52 / 32}px`,
+            height: `${numSize * 52 / 32}px`,
+            padding: `${numSize * 8 / 32}px`,
+
+            background: pageNumber.page === pg ? titleColor : ((errorState.submit&&pagereqs[pg-1]) ? "rgb(225,50,50)" : "white") ,
+            color: pageNumber.page === pg ? ((errorState.submit&&pagereqs[pg-1]) ? "rgb(225,50,50)" : "white") : titleColor,
+            textAlign: "center",
+
+            font: `${numSize}px Arial, sans-serif`
+        }
     }
 
     // HTML code
@@ -1542,8 +1541,9 @@ const ApplicationPage = (props) => {
                                     <ProjectList projects={projects} deleteProject={deleteProject}/>
                                     <div style={entry}>
                                         <MuiFileInput 
-                                            label="Choose your project to upload (.rtf, .doc, .docx, .txt, .pdf)"
-                                            ref={projFile}
+                                            label="Choose your project to upload (.pdf)"
+                                            value={projFile}
+                                            onChange={(file) => {setProjFile(file)}}
                                         />
                                         <TextField
                                             width="40vw"
