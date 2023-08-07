@@ -10,6 +10,7 @@ import CreateListingsPage from "./pages/JobListingsPages/creationPage"
 import ProfilePage from "./pages/ProfilePage/profilePage"
 import  JobListingsPage from "./pages/JobListingsPages/jobListingsPage";
 import UpdateListingPage from "./pages/JobListingsPages/updateListingPage";
+import AdminJobListingPage from "./pages/JobListingsPages/adminJobListingsPage"
 import { JobListing } from "./models";
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
         <Route path='/profile' element={<ProfilePage/>}/>
         <Route path='/listings' element={<JobListingsPage/>}/>
         <Route path='/update' element={<UpdateListingPage/>}/>
+        <Route path='/admin' element={<AdminJobListingPage/>}/>
     </Routes>
     </div>  
     </BrowserRouter>   

@@ -1,7 +1,7 @@
 import React, {useState, useRef, useEffect} from 'react'
 import { DataStore } from '@aws-amplify/datastore';
 import { JobListing } from '../../models';
-import Listings from './jobListings';
+import AdminJobListings from './adminJobListings';
 import {Link, useLocation, useNavigate} from "react-router-dom";
 
 export default function ListJobs() {
@@ -19,7 +19,7 @@ export default function ListJobs() {
 
   return(
     <>
-    <Listings listings={listings} />
+    <AdminJobListings listings={listings} />
     </>
   )
 }
