@@ -39,7 +39,7 @@ const ProfilePage = () => {
       console.error("Error fetching application data:", error);
     }
   };
-
+console.log(applicationData);
   const handleBoxToggle = () => {
     setIsBoxCollapsed(!isBoxCollapsed);
   };
@@ -58,18 +58,18 @@ const ProfilePage = () => {
             </div>
           </div>
         </a>
-        <div style={{ display: 'flex', alignItems: 'center', padding: '20px', background: '#f0f0f0', color: 'black' }}>
+        <div style={{ margin: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', padding: '20px', background: '#f0f0f0', color: 'black', border: '1px solid black' }}>
           <div style={{ flex: 1, flexDirection: 'column' }}>
             {/* Add any other profile information you want to display here */}
           </div>
-          <div style={{ cursor: 'pointer' }} onClick={handleBoxToggle}>
-            <img
-              src={isBoxCollapsed ? 'https://example.com/path/to/collapsed-icon.png' : 'https://example.com/path/to/expanded-icon.png'}
-              alt={isBoxCollapsed ? 'collapsed' : 'expanded'}
-              style={{ width: '30px', height: '30px', margin: '10px', border: 'none' }}
-            />
+          <div style={{ cursor: 'pointer', margin: '0 10px' , alignItems: '-moz-initial'}} onClick={handleBoxToggle}>
+            <p style = {{alignItems: 'center'}}>
+              {isBoxCollapsed ? 'Application +' : 'Application -'}
+            </p>
           </div>
         </div>
+      </div>
         {isBoxCollapsed && (
           <div style={{ padding: '20px', border: '1px solid black' }}>
             <img
