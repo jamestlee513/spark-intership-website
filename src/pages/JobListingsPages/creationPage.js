@@ -9,12 +9,12 @@ import { NavItem } from 'react-bootstrap';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import theme from './theme';
 import { ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import {Auth} from 'aws-amplify';
+import {Stack, Button, Grid} from '@mui/material';
+import dayjs from 'dayjs';
 
 export default function CreateListing() {
   const jobName = useRef()
@@ -124,85 +124,47 @@ export default function CreateListing() {
   function goToJobListings() {
     navigate('/listings')
   }
-  /*return (
-    <>
-      <div>
-        Job Title:
-        <TextField inputRef={jobName}/>
-      </div>
-      <div>
-        Job Description:
-        <TextField inputRef={jobDescription} multiline/>
-      </div>
-      <div>
-        Location:
-        <TextField inputRef={location} />
-      </div>
-      <div>
-        Application Deadline:
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker inputRef={deadline}/>
-        </LocalizationProvider>
-      </div>
-      <div>
-        Qualifications:
-        <TextField inputRef={qualifications} multiline/>
-      </div>
-      <button onClick={makeListing}>create</button>
-      <button onClick={goToJobListings}>back</button>
-    </>
-  )*/
-
-  return (
-    <>
-    <ThemeProvider theme={theme}>
-      <Stack>
-        <div>
-          Job Title<br></br>
-          <Box sx={{'& > :not(style)': { m: 1, width: 519, height: 89 }}}>
-            <TextField id="outlined-basic" error={nameError !== ''} variant="outlined" inputRef={jobName} helperText={nameError}/>
-          </Box>
-        </div>
-        <div>
-          Application Deadline
+return (
+  <>
+  <ThemeProvider theme={theme}>
+    <Box sx={{width: '100%', height: 189, mb: 4, backgroundColor: 'grey'}}></Box>
+    <Stack sx={{justifyContent: 'center'}}>
+      <Box sx={{width: 1290, height: 726, border: '1px solid', borderColor: 'secondary.main', borderRadius: 5}}>
+      <Box sx={{width: 1290, height: 83, backgroundColor: 'secondary.main', textAlign: 'left', fontWeight: 500, fontSize: 25}}>
+        Job Listing
+      </Box>
+      <Grid container spacing={2} sx={{m: 2, justifyContent: 'space-between', width: 1290}}>
+      <Grid item xs={5.5}>
+        <Stack sx={{textAlign: 'left', justifyContent: 'space-between', fontSize: 20, fontWeight: 700, flexDirection: 'column', alignContent: 'flex-start'}}>
+          Job Title
+          <TextField id="title" error={nameError !== ''} variant="outlined" inputRef={jobName} helperText={nameError} sx={{'& > :not(style)': {width: 519, height: 89}}}/>
           <br></br>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker inputRef={deadline}/>
-          </LocalizationProvider><br></br><br></br>
-        </div>
-      </Stack>
-
-      <Stack>
-        <div>
           Job Description
-          <br></br>
-          <Box sx={{'& > :not(style)': { m: 1, width: 519, height: 200 }}}>
-            <TextField id="outlined-basic" error={descriptionError !== ''} variant="outlined" inputRef={jobDescription} helperText={descriptionError}/>
-          </Box>
-        </div>
-        <Stack direction="column">
-          <div>
-            Location
-            <br></br>
-            <Box sx={{'& > :not(style)': { m: 1, width: 519, height: 89 }}}>
-              <TextField id="outlined-basic" error={locationError !== ''} variant="outlined" inputRef={location} helperText={locationError}/>
-            </Box>
-          </div>
-          <div>
-            Qualifications
-            <br></br>
-            <Box sx={{'& > :not(style)': { m: 1, width: 519, height: 89 }}}>
-              <TextField id="outlined-basic" error={qualificationsError !== ''} variant="outlined" inputRef={qualifications} helperText={qualificationsError}/>
-            </Box>
-          </div>
+          <TextField id="description" multiline minRows={14} error={descriptionError !== ''} variant="outlined" inputRef={jobDescription} helperText={descriptionError} sx={{'& > :not(style)': {width: 519, height: 355, textAlign: 'left' }}}/>
         </Stack>
-      </Stack>
-
+      </Grid>
+      <Grid item xs={5.5}>
+        <Stack sx={{textAlign: 'left', justifyContent: 'space-between', fontSize: 20, fontWeight: 700, flexDirection: 'column', alignContent: 'flex-end'}}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            Application Deadline
+            <DatePicker inputRef={deadline} sx={{'& > :not(style)': {width: 519, height: 89}}} />
+          </LocalizationProvider>
+          <br></br>
+          Location
+          <TextField id="location" error={locationError !== ''} variant="outlined" inputRef={location} helperText={locationError}sx={{'& > :not(style)': { width: 519, height: 89 }}}/>
+          <br></br>
+          Qualifications
+          <TextField id="qualifications" error={qualificationsError !== ''} variant="outlined" inputRef={qualifications} helperText={qualificationsError} sx={{'& > :not(style)': { width: 519, height: 209 }}} multiline minRows={8}/>
+        </Stack>
+      </Grid>
+      </Grid>
       <Stack sx={{justifyContent: "center"}} spacing={2}>
-          <Button variant="contained" size="large" onClick={makeListing}>Create</Button>
-          <Button variant="contained" size ="large" onClick={goToJobListings}>Back</Button>
-      </Stack>
-      </ThemeProvider>
-    </>
+        <Button variant="contained" size="large" sx={{width: 144, height: 35}} onClick={makeListing}>Create</Button>
+        <Button variant="contained" size ="large" sx={{width: 144, height: 35}} onClick={goToJobListings}>Back</Button>
+      </Stack>  
+      </Box>
+    </Stack>
+    </ThemeProvider>
+  </>
 )
 }
