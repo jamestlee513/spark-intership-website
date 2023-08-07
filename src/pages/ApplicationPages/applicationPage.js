@@ -29,6 +29,7 @@ import PersonalIcon from "../../images/personal icon.svg"
 import EducationIcon from "../../images/Education icon.svg"
 import ProjectIcon from "../../images/Project Icon.svg"
 import ResumeIcon from "../../images/Resume icon.svg"
+import { MuiFileInput } from 'mui-file-input'
 
 const ApplicationPage = (props) => {
 
@@ -122,7 +123,7 @@ const ApplicationPage = (props) => {
     }
 
     const errorStyle = {
-        border: "2px solid red"
+        border: "2px solid red",
     }
 
 
@@ -147,9 +148,11 @@ const ApplicationPage = (props) => {
         }
 
     }
+    
 
     // Start Effects
     useEffect(() => {
+        
         if (location.state != null) {
             const {stuff} = location.state
             if (stuff != null) {
@@ -228,6 +231,9 @@ const ApplicationPage = (props) => {
     const projName = useRef(0)
     const projDesc = useRef(0)
     const projLink = useRef(0)
+    const projFile = useRef(0)
+
+    const dialCodeRef = React.useRef(null)
 
 
     // States
@@ -315,14 +321,16 @@ const ApplicationPage = (props) => {
         const name = projName.current.value
         const desc = projDesc.current.value
         const link = projLink.current ? (projLink.current.value) : ''
+        const file = projFile.current ? (projFile.current.value) : ''
         if (name === '' || desc === '') return
         setProjects(prevProject => {
             setProjectID(projectID + 1)
-            return [...prevProject, {id: projectID, projectName: name, projectDesc: desc, link: link}]
+            return [...prevProject, {id: projectID, projectName: name, projectDesc: desc, link: link, file: file}]
         })
         projName.current.value = null
         projDesc.current.value = null;
         projLink.current.value = null
+        projFile.current.value = null
     }
 
 
@@ -334,17 +342,17 @@ const ApplicationPage = (props) => {
 
 
     const validations = {
-        firstName: [],
-        lastName: [],
+        firstName: [{type: "Required"}],
+        lastName: [{type: "Required"}],
         email: [],
-        phone: [{type: "Phone"}],
-        city: [],
-        resume: [],
+        phone: [{type: "Required"}, {type: "Phone"}],
+        city: [{type: "Required"}],
+        resume: [{type: "Required"}],
         coverLetter: [],
-        address: [],
+        address: [{type: "Required"}],
         state: [],
-        zipcode: [],
-        country: [],
+        zipcode: [{type: "Required"}],
+        country: [{type: "Required"}],
         job: [],
         completeApplication: [],
     };
@@ -353,21 +361,22 @@ const ApplicationPage = (props) => {
         currentValue,
         getDisplayValue
     ) => {
-        const value =
-            currentValue && getDisplayValue
-                ? getDisplayValue(currentValue)
-                : currentValue;
-        let validationResponse = validateField(value, validations[fieldName]);
-        const customValidator = fetchByPath(onValidate, fieldName);
-        if (customValidator) {
-            validationResponse = await customValidator(value, validationResponse);
+        if (errorState.submit) {
+                const value =
+                currentValue && getDisplayValue
+                    ? getDisplayValue(currentValue)
+                    : currentValue;
+            let validationResponse = validateField(value, validations[fieldName]);
+            const customValidator = fetchByPath(onValidate, fieldName);
+            if (customValidator) {
+                validationResponse = await customValidator(value, validationResponse);
+            }
+            setErrors((errors) => ({...errors, [fieldName]: validationResponse}));
+            return validationResponse;
         }
-        setErrors((errors) => ({...errors, [fieldName]: validationResponse}));
-        return validationResponse;
+        return true
+        
     };
-
-
-    const previousOnClick = useNavigateAction({type: "reload"});
 
     async function save(e) {
         e.preventDefault();
@@ -418,7 +427,9 @@ const ApplicationPage = (props) => {
             );
         }
     }
-
+    if (errorState.submit) {
+        
+    }
 
     // HTML code
     return (
@@ -563,7 +574,6 @@ const ApplicationPage = (props) => {
                                             isDisabled={false}
                                             labelHidden={false}
                                             variation="default"
-                                            style={errorState.submit && !firstName ? errorStyle : null}
                                             value={firstName}
                                             onChange={(e) => {
                                                 let {value} = e.target;
@@ -608,7 +618,6 @@ const ApplicationPage = (props) => {
                                             isDisabled={false}
                                             labelHidden={false}
                                             variation="default"
-                                            style={errorState.submit && !lastName ? errorStyle : null}
                                             value={lastName}
                                             onChange={(e) => {
                                                 let {value} = e.target;
@@ -644,15 +653,14 @@ const ApplicationPage = (props) => {
                                     </Flex>
                                     <PhoneNumberField
                                         width="unset"
-                                        height="88px"
+                                        height="unset"
                                         label="Phone"
                                         placeholder="Enter phone number"
-                                        shrink="0"
+                                        shrink="1"
                                         size="large"
                                         isDisabled={false}
                                         labelHidden={false}
                                         variation="default"
-                                        style={errorState.submit && !phone ? errorStyle : null}
                                         value={phone}
                                         onChange={(e) => {
                                             let {value} = e.target;
@@ -696,7 +704,6 @@ const ApplicationPage = (props) => {
                                         isDisabled={false}
                                         labelHidden={false}
                                         variation="default"
-                                        style={errorState.submit && !address ? errorStyle : null}
                                         value={address}
                                         onChange={(e) => {
                                             let {value} = e.target;
@@ -726,7 +733,7 @@ const ApplicationPage = (props) => {
                                         }}
                                         onBlur={() => runValidationTasks("address", address)}
                                         errorMessage={errors.address?.errorMessage}
-                                        hasError={errors.address?.hasError}
+                                        hasError={(errors.address?.hasError)}
                                         {...getOverrideProps(overrides, "Address")}
                                     ></TextField>
                                     <SelectField
@@ -738,7 +745,6 @@ const ApplicationPage = (props) => {
                                         isDisabled={false}
                                         labelHidden={false}
                                         variation="default"
-                                        style={errorState.submit && !country ? errorStyle : null}
                                         value={country}
                                         onChange={(e) => {
                                             let {value} = e.target;
@@ -1121,7 +1127,6 @@ const ApplicationPage = (props) => {
                                         isDisabled={false}
                                         labelHidden={false}
                                         variation="default"
-                                        style={errorState.submit && !city ? errorStyle : null}
                                         value={city}
                                         onChange={(e) => {
                                             let {value} = e.target;
@@ -1164,7 +1169,6 @@ const ApplicationPage = (props) => {
                                         size="large"
                                         isDisabled={false}
                                         labelHidden={false}
-                                        style={errorState.submit && !zipcode ? errorStyle : null}
                                         variation="default"
                                         value={zipcode}
                                         onChange={(e) => {
@@ -1537,6 +1541,10 @@ const ApplicationPage = (props) => {
                                 >
                                     <ProjectList projects={projects} deleteProject={deleteProject}/>
                                     <div style={entry}>
+                                        <MuiFileInput 
+                                            label="Choose your project to upload (.rtf, .doc, .docx, .txt, .pdf)"
+                                            ref={projFile}
+                                        />
                                         <TextField
                                             width="40vw"
                                             height="unset"
@@ -1701,6 +1709,16 @@ const ApplicationPage = (props) => {
                                 setErrorState({
                                     submit: true
                                 })
+                                console.log(firstName)
+                                runValidationTasks("firstName", firstName)
+                                runValidationTasks("lastName", lastName)
+                                runValidationTasks("phone", phone)
+                                runValidationTasks("address", address)
+                                runValidationTasks("country", country)
+                                runValidationTasks("state", state)
+                                runValidationTasks("city", city)
+                                runValidationTasks("zipcode", zipcode)
+                                console.log(errors.firstName?.hasError)
                             } else {
                                 save(e)
                                 navigate("/review", {
