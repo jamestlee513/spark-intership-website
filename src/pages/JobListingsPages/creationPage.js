@@ -84,7 +84,7 @@ export default function CreateListing() {
       "qualifications": qual,
       "applicants": 0,
       "email": email,
-      "status": "receiving"
+      "status": "Receiving"
     }))
     jobName.current.value = null
     jobDescription.current.value = null
