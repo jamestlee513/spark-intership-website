@@ -7,6 +7,8 @@ import {Application} from '../../models';
 import {Fade} from '@mui/material'
 import ReviewList from "./reviewList";
 import ListList from "./ListList"
+import {MuiFileInput} from "mui-file-input";
+import ReviewProjectList from "./reviewProjectList";
 
 
 const ReviewPage = () => {
@@ -136,7 +138,7 @@ const ReviewPage = () => {
     }
 
     function projAdd(proj) {
-        projGroups.push([["Project Name", proj.projectName], ["Project Description", proj.projectDesc], ["Link", proj.link]])
+        projGroups.push([["Project Name", proj.projectName], ["Project Description", proj.projectDesc], ["Link", proj.link], proj.file])
     }
 
     // Styles
@@ -147,6 +149,8 @@ const ReviewPage = () => {
 
     const t2 = {textAlign: "left", fontSize: "3.5vmin"}
 
+    const fileUpload = {margin: "2vh 10vw 2vh 0px"}
+
     stuff.education.forEach(eduAdd)
 
     stuff.projects.forEach(projAdd)
@@ -155,7 +159,7 @@ const ReviewPage = () => {
     return (
         <div>
             <Fade in={true}>
-                <div>
+                <div style={{padding: "0px 2vw 0px 2vw"}}>
                     <h1 style={{fontSize: "10vmin", color: titleColor}}> {stuff.job + " Application"}</h1>
                     <h1 style={t1}>Application Preview</h1>
                     <div>
@@ -178,13 +182,23 @@ const ReviewPage = () => {
                     </div>
                     <div>
                         <h2 style={t2}>Projects</h2>
-                        <ListList name={"Project"} groups={projGroups}/>
+                        <ReviewProjectList groups={projGroups}/>
                     </div>
-                    <div>
                         <h2 style={t2}>Resume and Cover Letter</h2>
+                    <div style={{display: "flex"}}>
+                        <MuiFileInput
+                            label="Resume"
+                            value={stuff.resume}
+                            disabled
+                            style={fileUpload}
+                        />
+                        <MuiFileInput
+                            label="Cover Letter"
+                            value={stuff.coverLetter}
+                            disabled
+                            style={fileUpload}
+                        />
                     </div>
-
-
                     <button onClick={() => {
                         navigate("/application")
                     }}> No no no no wait wait wait
