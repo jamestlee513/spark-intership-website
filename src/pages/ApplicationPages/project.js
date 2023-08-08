@@ -24,6 +24,7 @@ export default function project({ project, deleteProject }) {
         <MuiFileInput
         label="Choose your project to upload (.pdf)"
         value={project.file}
+        disabled
         />
       <TextField
           width="40vw"

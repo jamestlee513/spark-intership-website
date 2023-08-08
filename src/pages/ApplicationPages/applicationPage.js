@@ -1673,7 +1673,7 @@ const ApplicationPage = (props) => {
                         gap="0"
                         direction="column"
                         width="95vw"
-                        height="unset"
+                        height="60vh"
                         display="flex"
                         flex="1 1 100%"
                         justifyContent="flex-center"
@@ -1682,7 +1682,7 @@ const ApplicationPage = (props) => {
                         shrink="1"
                         basis="0"
                         position="relative"
-                        padding="32px 0px 32px 0px"
+                        padding="32px 0px 32px 5%"
                         backgroundColor="rgba(255,0,255,1)"
                         {...getOverrideProps(overrides, "Frame 411")}
                     >
@@ -1703,7 +1703,7 @@ const ApplicationPage = (props) => {
                             <Flex
                                 gap="24px"
                                 direction="column"
-                                width="50vw"
+                                width="40vw"
                                 height="unset"
                                 justifyContent="flex-start"
                                 alignItems="flex-start"
@@ -1781,7 +1781,7 @@ const ApplicationPage = (props) => {
                             shrink="1"
                             alignSelf="stretch"
                             position="relative"
-                            padding="0px 0px 0px 45%"
+                            padding="0px 0px 0px 0px"
                             {...getOverrideProps(overrides, "Frame 412")}
                         >
                             <Button
