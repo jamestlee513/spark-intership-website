@@ -29,6 +29,7 @@ export default function UpdateListing(){
   const [locationError, setLocationError] = useState('') 
   const [qualificationsError, setQualificationsError] = useState('')
   const [deadlineError, setDeadlineError] = useState('')
+
   
   async function getListing(jobListing){
     const title = document.getElementById("title");
@@ -102,6 +103,9 @@ export default function UpdateListing(){
     if(deadline.current.value == null){
       setDeadlineError('Field missing')
       return
+    } else if (!dateError(deadline.current.value)) {
+      setDeadlineError('Date is in the past')
+      return
     } else {
       setDeadlineError('')
     }
@@ -136,6 +140,27 @@ export default function UpdateListing(){
     return arr;
   }
 
+  function dateError(date) {
+    console.log(date)
+    let year = date.substring(6)
+    let day = date.substring(0, 2)
+    let month = date.substring(3, 5)
+    let isFuture = true
+    const toDay = new Date()
+    if (parseInt(year) < toDay.getFullYear() ) {
+      isFuture = false
+    } else if (parseInt(year) === toDay.getFullYear()) {
+      if (parseInt(month) < (toDay.getMonth() + 1)) {
+        isFuture = false
+      } else if (parseInt(month) === (toDay.getMonth() + 1)) {
+        if (parseInt(day) <= toDay.getDate()) {
+          isFuture = false
+        }
+      }
+    }
+    return isFuture
+  }
+
   useEffect(() => {getListing(listing.state.listing)})
 
   return (
@@ -151,24 +176,30 @@ export default function UpdateListing(){
         <Grid item xs={6}>
           <Stack sx={{textAlign: 'left', justifyContent: 'space-between', fontSize: 20, fontWeight: 700, flexDirection: 'column', alignContent: 'flex-start'}}>
             Job Title
-            <TextField id="title" variant="outlined" inputRef={title} error={titleError !== ''} sx={{'& > :not(style)': {width: 519, height: 89}}} helperText={titleError} />
+            <TextField id="title" variant="outlined" inputRef={title} error={titleError !== ''} sx={ {width: 519, height: 89}} helperText={titleError} />
             <br></br>
             Job Description
-            <TextField id="description" multiline minRows={14}  error={descriptionError !== ''} sx={{'& > :not(style)': {width: 519, height: 355, textAlign: 'left' }}} variant="outlined" inputRef={description} helperText={descriptionError} />
+            <TextField id="description" multiline minRows={14}  error={descriptionError !== ''} sx={ {width: 519, height: 355, textAlign: 'left' }} variant="outlined" inputRef={description} helperText={descriptionError} />
           </Stack>
         </Grid>
         <Grid item xs={6}>
           <Stack sx={{textAlign: 'left', justifyContent: 'space-between', fontSize: 20, fontWeight: 700, flexDirection: 'column', alignContent: 'flex-end'}}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               Application Deadline
-              <DatePicker value={dayjs(listing.state.listing.deadline, "YYYY-MM-DD")} error={deadlineError !== ''} inputRef={deadline} sx={{'& > :not(style)': {width: 519, height: 89}}} helperText={deadlineError}/>
+              <DatePicker value={dayjs(listing.state.listing.deadline, "YYYY-MM-DD")} inputRef={deadline} sx={ {width: 519, height: 89}}  slotProps={{
+          textField: {
+            variant: 'outlined',
+            error: deadlineError !== '',
+            helperText: deadlineError
+          },
+        }}/>
             </LocalizationProvider>
             <br></br>
             Location
-            <TextField id="location" variant="outlined" inputRef={location} error={locationError !== ''} sx={{'& > :not(style)': { width: 519, height: 89 }}} helperText={locationError}/>
+            <TextField id="location" variant="outlined" inputRef={location} error={locationError !== ''} sx={ { width: 519, height: 89 }} helperText={locationError}/>
             <br></br>
             Qualifications
-            <TextField id="qualifications" variant="outlined" error={qualificationsError !== ''} inputRef={qualifications} sx={{'& > :not(style)': { width: 519, height: 209 }}} multiline minRows={8} helperText={qualificationsError}/>
+            <TextField id="qualifications" variant="outlined" error={qualificationsError !== ''} inputRef={qualifications} sx={{ width: 519, height: 209 }} multiline minRows={8} helperText={qualificationsError}/>
           </Stack>
         </Grid>
         </Grid>

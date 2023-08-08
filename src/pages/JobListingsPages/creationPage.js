@@ -14,6 +14,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import {Auth} from 'aws-amplify';
 import {Stack, Button, Grid} from '@mui/material';
+import AdminHeader from '../../ui-components/AdminHeader';
 import dayjs from 'dayjs';
 
 export default function CreateListing() {
@@ -28,6 +29,7 @@ export default function CreateListing() {
   const [nameError, setNameError] = useState('')
   const [descriptionError, setDescriptionError] = useState('')
   const [qualificationsError, setQualificationsError] = useState('')
+  const [dateError, setDateError] = useState('')
 
 
   async function makeListing(e) {
@@ -36,7 +38,6 @@ export default function CreateListing() {
     const qual = qualifications.current.value
     const loc = location.current.value
     const date = deadline.current.value 
-    const fixedDate = dateFixer(date)
     if (name === '') {
       setNameError('Field Missing')
       return
@@ -73,14 +74,24 @@ export default function CreateListing() {
     } else {
       setQualificationsError('')
     }
-    if (date === '') return
+    if (date === '')  {
+      setDateError('Field Missing')
+      return
+    }
+    const fixedDate = dateFixer(date)
+    if (!fixedDate.future) {
+      setDateError('Date is in the past')
+      return
+    } else {
+      setDateError('')
+    }
     const attributes = await Auth.currentUserInfo()
     const email = attributes.attributes.email
     await DataStore.save(new JobListing({
       "title": name,
       "description": description,
       "location": loc,
-      "deadline": fixedDate,
+      "deadline": fixedDate.date,
       "qualifications": qual,
       "applicants": 0,
       "email": email,
@@ -118,7 +129,20 @@ export default function CreateListing() {
     let year = date.substring(6)
     let day = date.substring(0, 2)
     let month = date.substring(3, 5)
-    return year + "-" + day + "-" + month
+    let isFuture = true
+    const toDay = new Date()
+    if (parseInt(year) < toDay.getFullYear() ) {
+      isFuture = false
+    } else if (parseInt(year) === toDay.getFullYear()) {
+      if (parseInt(month) < (toDay.getMonth() + 1)) {
+        isFuture = false
+      } else if (parseInt(month) === (toDay.getMonth() + 1)) {
+        if (parseInt(day) <= toDay.getDate()) {
+          isFuture = false
+        }
+      }
+    }
+    return {date: year + "-" + day + "-" + month, future: isFuture}
   }
 
   function goToJobListings() {
@@ -126,8 +150,8 @@ export default function CreateListing() {
   }
 return (
   <>
+  <AdminHeader/>
   <ThemeProvider theme={theme}>
-    <Box sx={{width: '100%', height: 189, mb: 4, backgroundColor: 'grey'}}></Box>
     <Stack sx={{justifyContent: 'center'}}>
       <Box sx={{width: 1290, height: 726, border: '1px solid', borderColor: 'secondary.main', borderRadius: 5}}>
       <Box sx={{width: 1290, height: 83, backgroundColor: 'secondary.main', textAlign: 'left', fontWeight: 500, fontSize: 25}}>
@@ -137,27 +161,34 @@ return (
       <Grid item xs={5.5}>
         <Stack sx={{textAlign: 'left', justifyContent: 'space-between', fontSize: 20, fontWeight: 700, flexDirection: 'column', alignContent: 'flex-start'}}>
           Job Title
-          <TextField id="title" error={nameError !== ''} variant="outlined" inputRef={jobName} helperText={nameError} sx={{'& > :not(style)': {width: 519, height: 89}}}/>
+          <TextField id="title" error={nameError !== ''} variant="outlined" inputRef={jobName} helperText={nameError}  sx={{width: 519, height: 89}}/>
           <br></br>
           Job Description
-          <TextField id="description" multiline minRows={14} error={descriptionError !== ''} variant="outlined" inputRef={jobDescription} helperText={descriptionError} sx={{'& > :not(style)': {width: 519, height: 355, textAlign: 'left' }}}/>
+          <TextField id="description" multiline minRows={14} error={descriptionError !== ''} variant="outlined" inputRef={jobDescription} helperText={descriptionError} sx={{width: 519, height: 355, textAlign: 'left' }}/>
         </Stack>
       </Grid>
       <Grid item xs={5.5}>
         <Stack sx={{textAlign: 'left', justifyContent: 'space-between', fontSize: 20, fontWeight: 700, flexDirection: 'column', alignContent: 'flex-end'}}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             Application Deadline
-            <DatePicker inputRef={deadline} sx={{'& > :not(style)': {width: 519, height: 89}}} />
+            <DatePicker inputRef={deadline} sx={{width: 519, height: 89}} slotProps={{
+          textField: {
+            variant: 'outlined',
+            error: dateError !== '',
+            helperText: dateError,
+          },
+        }} />
           </LocalizationProvider>
           <br></br>
           Location
-          <TextField id="location" error={locationError !== ''} variant="outlined" inputRef={location} helperText={locationError}sx={{'& > :not(style)': { width: 519, height: 89 }}}/>
+          <TextField id="location" error={locationError !== ''} variant="outlined" inputRef={location} helperText={locationError}sx={{ width: 519, height: 89 }}/>
           <br></br>
           Qualifications
-          <TextField id="qualifications" error={qualificationsError !== ''} variant="outlined" inputRef={qualifications} helperText={qualificationsError} sx={{'& > :not(style)': { width: 519, height: 209 }}} multiline minRows={8}/>
+          <TextField id="qualifications" error={qualificationsError !== ''} variant="outlined" inputRef={qualifications} helperText={qualificationsError} sx={ { width: 519, height: 209 }} multiline minRows={8}/>
         </Stack>
       </Grid>
       </Grid>
+      <br></br>
       <Stack sx={{justifyContent: "center"}} spacing={2}>
         <Button variant="contained" size="large" sx={{width: 144, height: 35}} onClick={makeListing}>Create</Button>
         <Button variant="contained" size ="large" sx={{width: 144, height: 35}} onClick={goToJobListings}>Back</Button>
