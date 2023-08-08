@@ -1,6 +1,8 @@
 import React from 'react';
-import SparkLogo from "../../images/Spark Logo.png"
-import { hover } from '@testing-library/user-event/dist/hover';
+import SparkLogo from "../../images/Spark Logo.png";
+import InternPhoto1 from "../../images/Rectangle 33.png";
+import InternPhoto2 from "../../images/Rectangle 34.png";
+import { Button, Typography } from '@mui/material';
 
 const HomePageMain = () => {
   return (
@@ -17,13 +19,18 @@ const HomePageMain = () => {
         field. Explore our intern tracks below!
         </p>
 
-        <button className='learn-more' style={learnMoreStyle}>
+        {/* <button className='learn-more' style={learnMoreStyle}>
             <p>Learn more about Spark</p>
-        </button>
+        </button> */}
+
+        <Button variant='contained' size="large" sx={{borderRadius:20, textTransform: 'none'}}>
+          Learn more about Spark
+        </Button>
       </div>
 
       <div className='intern-photo' style={photoStyle}>
-        <p>Photo here!</p>
+        <img style={photo1} src={InternPhoto1} />
+        <img style={photo2} src={InternPhoto2}/>
       </div>
     </div>
   );
@@ -38,9 +45,9 @@ const mainStyle = {
 
 // try to figure out something here
 const logoStyle = {
-    width: '329px',
-    height: '505px',
-    margin: '20px',
+    width: '250px',
+    height: '400px',
+    margin: '30px',
 }
 
 const desStyle = {
@@ -53,20 +60,21 @@ const desStyle = {
 };
 
 const photoStyle = {
-    margin: '100px',
+    margin: '30px 50px',
+    position: 'relative',
 }
 
-const learnMoreStyle = {
-    backgroundColor: '#536FB4',
-    color: 'white',
-    size: 'medium',
-    // round corner
-    borderRadius: '60px',
-    align: 'center',
-    height: '47px',
-    width: '300px',
-    // pointer hover over
-    cursor: 'pointer',
+const photo1 = {
+    position: 'relative',
+}
+
+const photo2 = {
+    margin: '0px 30px',
+    position: 'absolute',
+    bottom: '0',
+    left: '0',
+    width: '100%',
+    zIndex: '1',
 }
 
 export default HomePageMain;

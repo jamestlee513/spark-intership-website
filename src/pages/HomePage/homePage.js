@@ -4,13 +4,15 @@ import Header from '../../ui-components/Header';
 import Footer from '../../ui-components/Footer';
 import SparkLogo from '../../images/SparkLogo-Temp.png';
 import HomePageMain from './homePageMain';
+import InternshipTracks from './internshipTracks';
 
 export default function HomePage() {
     return (
-     <>
+    <>
     <Header />
     <HomePageMain />
 
+    <InternshipTracks />
     <div className="Footer">
         <Footer />
     </div></>
