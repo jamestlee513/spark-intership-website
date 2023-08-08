@@ -10,18 +10,14 @@ const HomePageMain = () => {
       <div className="logo">
         <img src={SparkLogo} alt="Spark Logo" style={logoStyle}></img>
       </div>
-      <div className="description" style={desStyle}>
-        <p>
+      <div className="description" >
+        <Typography variant='body1'>
         <span style={{fontFamily: 'Bungee, san-serif', fontWeight: 'bold',fontSize: '32px', color: '#536FB4'}}>Spark </span>
         is a nonprofit that offers
         internship opportunities to undergraduate students. Our mission is to
         provide a nurturing environment where students can learn valuable skills from mentors already in the 
         field. Explore our intern tracks below!
-        </p>
-
-        {/* <button className='learn-more' style={learnMoreStyle}>
-            <p>Learn more about Spark</p>
-        </button> */}
+        </Typography>
 
         <Button variant='contained' size="large" sx={{borderRadius:20, textTransform: 'none'}}>
           Learn more about Spark
@@ -36,6 +32,8 @@ const HomePageMain = () => {
   );
 };
 
+
+// trying to use Material UI
 const mainStyle = {
     paddingTop: '10px',
     padding: '2px',

@@ -1,3 +1,4 @@
+import { Avatar } from '@mui/material';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -6,9 +7,10 @@ export default function Header() {
     <header style={headerStyle}>
       <div style={rightCornerStyle}>
         <Link to="/about" style={linkStyle}>About Spark</Link>
-        <Link to="/application-process" style={linkStyle}>Application Process</Link>
         <Link to="/application" style={applyStyle}>Apply</Link>
-        <Link to="/profile" style={linkStyle}>Profile</Link>
+        <Link to="/profile" style={linkStyle}>
+          <Avatar src="/broken-image.jpg"/>
+        </Link>
       </div>
     </header>
   );
