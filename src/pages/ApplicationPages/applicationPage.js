@@ -8,7 +8,7 @@ import {
     useNavigateAction,
     useStateMutationAction,
 } from "@aws-amplify/ui-react/internal";
-import {Application} from "../../models";
+import {Application, Project, Education} from "../../models";
 import {DataStore} from '@aws-amplify/datastore';
 import {fetchByPath, validateField} from "../../ui-components/utils";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -222,8 +222,6 @@ const ApplicationPage = (props) => {
     });
     const [educations, setEducations] = React.useState([])
     const [projects, setProjects] = React.useState([])
-    const [educationID, setEducationID] = React.useState({})
-    const [projectID, setProjectID] = React.useState({})
     const [errorState, setErrorState] = React.useState({
         submit: false
     })
@@ -254,14 +252,12 @@ const ApplicationPage = (props) => {
         const gra = grad.current.value
         const gp = gpa.current.value
         setEducations(prevEducation => {
-            setEducationID(educationID + 1)
-            return [...prevEducation, {
-                id: educationID,
-                university: univ,
-                major: maj,
-                expectedGrad: Number(gra),
-                GPA: Number(gp)
-            }]
+            return [...prevEducation, new Education({
+                "unversity": univ,
+                "major": maj,
+                "expectedGrad": Number(gra),
+                "GPA": Number(gp)
+            })]
         })
         university.current.value = null
         major.current.value = null;
@@ -285,8 +281,7 @@ const ApplicationPage = (props) => {
         const file = projFile
         if (name === '' || desc === '') return
         setProjects(prevProject => {
-            setProjectID(projectID + 1)
-            return [...prevProject, {id: projectID, projectName: name, projectDesc: desc, link: link, file: file}]
+            return [...prevProject, new Project({"projectName": name, "projectDesc": desc, "link": link, "fileURL": file})]
         })
         projName.current.value = null
         projDesc.current.value = null;
@@ -395,6 +390,8 @@ const ApplicationPage = (props) => {
     // Styles
     const titleColor = 'rgb(83 111 180)'
 
+    const fileInput = {margin: "2vh 10vw 2vh 0"};
+
     const entry = {
         border: "2px",
         borderStyle: "dashed",
@@ -409,7 +406,7 @@ const ApplicationPage = (props) => {
     }
 
     const errorStyle = {
-        border: "2px solid red",
+        border: "2px solid rgb(225,50,50)",
     }
 
     // Draw Circle
@@ -498,6 +495,7 @@ const ApplicationPage = (props) => {
                         position="relative"
                         padding="32px 0px 32px 0px"
                         backgroundColor="rgba(255,255,255,1)"
+                        margin="auto"
                         {...getOverrideProps(overrides, "Frame 411")}
                     >
 
@@ -1268,6 +1266,7 @@ const ApplicationPage = (props) => {
                         position="relative"
                         padding="32px 0px 32px 0px"
                         backgroundColor="rgba(255,255,255,1)"
+                        margin="auto"
                         {...getOverrideProps(overrides, "Frame 411")}
                     >
                         <Flex
@@ -1427,6 +1426,7 @@ const ApplicationPage = (props) => {
                                 variation="primary"
                                 children="Previous"
                                 order="0"
+                                margin="0 0 0 2vw"
                                 onClick={(e) => {
                                     e.preventDefault();
                                     changePage(1);
@@ -1479,6 +1479,7 @@ const ApplicationPage = (props) => {
                         position="relative"
                         padding="32px 0px 32px 0px"
                         backgroundColor="rgba(255,255,255,1)"
+                        margin="auto"
                         {...getOverrideProps(overrides, "Frame 411")}
                     >
                         <Flex
@@ -1547,6 +1548,8 @@ const ApplicationPage = (props) => {
                                             onChange={(file) => {
                                                 setProjFile(file)
                                             }}
+                                            inputProps={{accept:"application/pdf"}}
+                                            style={fileInput}
                                         />
                                         <TextField
                                             width="40vw"
@@ -1632,6 +1635,7 @@ const ApplicationPage = (props) => {
                                 variation="primary"
                                 children="Previous"
                                 order="0"
+                                margin="0 0 0 2vw"
                                 onClick={(e) => {
                                     e.preventDefault();
                                     changePage(2);
@@ -1683,7 +1687,8 @@ const ApplicationPage = (props) => {
                         basis="0"
                         position="relative"
                         padding="32px 0px 32px 5%"
-                        backgroundColor="rgba(255,0,255,1)"
+                        backgroundColor="rgba(255,255,255,1)"
+                        margin="auto"
                         {...getOverrideProps(overrides, "Frame 411")}
                     >
 
@@ -1717,7 +1722,7 @@ const ApplicationPage = (props) => {
                                     fontFamily="Inter"
                                     fontSize="36px"
                                     fontWeight="800"
-                                    color="rgba(13,26,38,1)"
+                                    color= {(resume || !errorState.submit) ? "rgba(13,26,38,1)" : "rgb(225,50,50)"}
                                     lineHeight="20px"
                                     textAlign="left"
                                     display="block"
@@ -1734,11 +1739,13 @@ const ApplicationPage = (props) => {
                                     children="Resume"
                                 ></Text>
                                 <MuiFileInput
-                                    label="Choose your project to upload (.pdf)"
+                                    label="Upload your resume (.pdf)"
                                     value={resume}
                                     onChange={(file) => {
                                         setResume(file)
                                     }}
+                                    inputProps={{accept:"application/pdf"}}
+                                    style={fileInput}
                                 />
                                 <Text
                                     fontFamily="Inter"
@@ -1758,14 +1765,16 @@ const ApplicationPage = (props) => {
                                     position="relative"
                                     padding="0px 0px 0px 0px"
                                     whiteSpace="pre-wrap"
-                                    children="Cover Letter"
+                                    children="Cover Letter (Optional)"
                                 ></Text>
                                 <MuiFileInput
-                                    label="Choose your project to upload (.pdf)"
+                                    label="Upload your cover letter (.pdf)"
                                     value={coverLetter}
                                     onChange={(file) => {
                                         setCoverLetter(file)
                                     }}
+                                    inputProps={{accept:"application/pdf"}}
+                                    style={fileInput}
                                 />
                             </Flex>
                             <img src={ResumeIcon} alt="Resume Icon"></img>
@@ -1792,6 +1801,7 @@ const ApplicationPage = (props) => {
                                 variation="primary"
                                 children="Previous"
                                 order="0"
+                                margin="0 0 0 2vw"
                                 onClick={(e) => {
                                     e.preventDefault();
                                     changePage(3);

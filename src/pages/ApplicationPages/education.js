@@ -31,7 +31,7 @@ export default function education({ education, deleteEducation }) {
           isDisabled={true}
           labelHidden={false}
           variation="default"
-          value={education.university}
+          value={education.unversity}
       ></TextField>
       <TextField
           width="40vw"

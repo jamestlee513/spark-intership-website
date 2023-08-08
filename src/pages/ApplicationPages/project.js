@@ -25,6 +25,7 @@ export default function project({ project, deleteProject }) {
         label="Choose your project to upload (.pdf)"
         value={project.file}
         disabled
+        style={{margin: "2vh 10vw 2vh 0"}}
         />
       <TextField
           width="40vw"
