@@ -60,6 +60,29 @@ const ApplicationPage = (props) => {
         completeApplication: false,
     };
 
+    const jimothy = () => ( <div style={{margin: "auto"}}>
+        <p>
+        ⠀⠀⠀⠀⠀ ⠀⠀⠀⠀⠀ ⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀<br/>⠀⠀⠀
+        ⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⡿⠛⠉⠙⠛⠛⠛⠛⠻⢿⣿⣷⣤⡀⠀⠀⠀⠀<br/>⠀⠀⠀⠀
+        ⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⠋⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⠈⢻⣿⣿⡄⠀⠀⠀⠀ <br/>⠀⠀⠀
+        ⠀⠀⠀⠀⠀⠀⠀⣸⣿⡏⠀⠀⠀⣠⣶⣾⣿⣿⣿⠿⠿⠿⢿⣿⣿⣿⣄⠀⠀⠀ <br/>⠀⠀⠀
+        ⠀⠀⠀⠀⠀⠀⠀⣿⣿⠁⠀⠀⢰⣿⣿⣯⠁⠀⠀⠀⠀⠀⠀⠀⠈⠙⢿⣷⡄⠀ <br/>⠀⠀⠀
+        ⠀⠀⣀⣤⣴⣶⣶⣿⡟⠀⠀⠀⢸⣿⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣷⠀ <br/>⠀⠀⠀
+        ⠀⢰⣿⡟⠋⠉⣹⣿⡇⠀⠀⠀⠘⣿⣿⣿⣿⣷⣦⣤⣤⣤⣶⣶⣶⣶⣿⣿⣿⠀ <br/>⠀⠀⠀
+        ⠀⢸⣿⡇⠀⠀⣿⣿⡇⠀⠀⠀⠀⠹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠃⠀ <br/>⠀⠀⠀
+        ⠀⣸⣿⡇⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠉⠻⠿⣿⣿⣿⣿⡿⠿⠿⠛⢻⣿⡇⠀⠀ <br/>⠀⠀⠀
+        ⠀⣿⣿⠁⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣧⠀⠀ <br/>⠀⠀⠀
+        ⠀⣿⣿⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀ <br/>⠀⠀⠀
+        ⠀⣿⣿⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀ <br/>⠀⠀⠀
+        ⠀⢿⣿⡆⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡇⠀⠀ <br/>⠀⠀⠀
+        ⠀⠸⣿⣧⡀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠃⠀⠀ <br/>⠀⠀⠀
+        ⠀⠀⠛⢿⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⣰⣿⣿⣷⣶⣶⣶⣶⠶⠀⢠⣿⣿⠀⠀⠀ <br/>⠀⠀⠀
+        ⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⣽⣿⡏⠁⠀⠀⢸⣿⡇⠀⠀⠀ <br/>⠀⠀⠀
+        ⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⢹⣿⡆⠀⠀⠀⣸⣿⠇⠀⠀⠀ <br/>⠀⠀⠀
+        ⠀⠀⠀⠀⠀⠀⠀⢿⣿⣦⣄⣀⣠⣴⣿⣿⠁⠀⠈⠻⣿⣿⣿⣿⡿⠏⠀⠀⠀⠀ <br/>⠀⠀⠀
+        ⠀⠀⠀⠀⠈⠛⠻⠿⠿⠿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀<br/>⠀⠀⠀⠀⠀⠀⠀</p>
+    <p>This is Jimothy. You have uncovered his hiding spot. :)</p>
+    </div>)
 
     const changeDaState = async (app) => {
         const attributes = await Auth.currentUserInfo()
@@ -263,8 +286,8 @@ const ApplicationPage = (props) => {
 // Delete Project
     function deleteProject(pro) {
         let index = projects.findIndex(project => !_.isEqual(pro, project))
-        const newProjects = projects.filter((p, i) => i==index)
-        const newFiles = projFiles.filter((p, i)=>i==index)
+        const newProjects = projects.filter((p, i) => i == index)
+        const newFiles = projFiles.filter((p, i) => i == index)
         setProjects(newProjects)
         setProjFiles(newFiles)
     }
@@ -356,8 +379,12 @@ const ApplicationPage = (props) => {
             );
         }
         let filesToDelete;
-        await Storage.list(attributes.attributes.email).then(({results}) => {filesToDelete=results})
-        filesToDelete.forEach(async (fil) => {await Storage.remove(fil.key)})
+        await Storage.list(attributes.attributes.email).then(({results}) => {
+            filesToDelete = results
+        })
+        filesToDelete.forEach(async (fil) => {
+            await Storage.remove(fil.key)
+        })
         if (resume) {
             await Storage.put(attributes.attributes.email + job + "Resume" + resume.name, resume, {
                 level: 'public',
@@ -402,7 +429,7 @@ const ApplicationPage = (props) => {
 
     // Draw Circle
     const pagereqs = [!firstName || !lastName || !phone || !city || !zipcode || !country || (!state && country === "US"), false, false, !resume]
-    const numSize = 50
+    const numSize = 32
     const circle = (pg) => {
         return {
             borderRadius: "50%",
@@ -1217,6 +1244,7 @@ const ApplicationPage = (props) => {
                                 size="default"
                                 isDisabled={false}
                                 variation="primary"
+                                backgroundColor={titleColor}
                                 children="Next"
                                 order="2"
                                 onClick={(e) => {
@@ -1228,7 +1256,7 @@ const ApplicationPage = (props) => {
                             <Button
                                 width="114px"
                                 height="unset"
-                                backgroundColor="rgba(64,170,191,1)"
+                                backgroundColor={titleColor}
                                 size="default"
                                 variation="primary"
                                 children="Save"
@@ -1237,6 +1265,7 @@ const ApplicationPage = (props) => {
                                 {...getOverrideProps(overrides, "Save")}
                             ></Button>
                         </View>
+                        {(firstName.toLowerCase() === "among" && lastName.toLowerCase() === "us") ? jimothy() : <br/>}
                     </Flex>
                 </Slide>
                 <Slide
@@ -1380,6 +1409,7 @@ const ApplicationPage = (props) => {
                                             borderRadius="20px"
                                             variation="primary"
                                             children="Add university"
+                                            backgroundColor={titleColor}
                                             order="0"
                                             fontSize="15px"
                                             marginLeft="auto"
@@ -1416,6 +1446,7 @@ const ApplicationPage = (props) => {
                                 isDisabled={false}
                                 variation="primary"
                                 children="Previous"
+                                backgroundColor={titleColor}
                                 order="0"
                                 margin="0 0 0 2vw"
                                 onClick={(e) => {
@@ -1430,6 +1461,7 @@ const ApplicationPage = (props) => {
                                 size="default"
                                 isDisabled={false}
                                 variation="primary"
+                                backgroundColor={titleColor}
                                 children="Next"
                                 order="2"
                                 onClick={(e) => {
@@ -1441,7 +1473,7 @@ const ApplicationPage = (props) => {
                             <Button
                                 width="114px"
                                 height="unset"
-                                backgroundColor="rgba(64,170,191,1)"
+                                backgroundColor={titleColor}
                                 size="default"
                                 variation="primary"
                                 children="Save"
@@ -1589,6 +1621,7 @@ const ApplicationPage = (props) => {
                                             borderRadius="20px"
                                             variation="primary"
                                             children="Add project"
+                                            backgroundColor={titleColor}
                                             order="0"
                                             fontSize="15px"
                                             marginLeft="auto"
@@ -1625,6 +1658,7 @@ const ApplicationPage = (props) => {
                                 isDisabled={false}
                                 variation="primary"
                                 children="Previous"
+                                backgroundColor={titleColor}
                                 order="0"
                                 margin="0 0 0 2vw"
                                 onClick={(e) => {
@@ -1640,6 +1674,7 @@ const ApplicationPage = (props) => {
                                 isDisabled={false}
                                 variation="primary"
                                 children="Next"
+                                backgroundColor={titleColor}
                                 order="2"
                                 onClick={(e) => {
                                     e.preventDefault();
@@ -1650,7 +1685,7 @@ const ApplicationPage = (props) => {
                             <Button
                                 width="114px"
                                 height="unset"
-                                backgroundColor="rgba(64,170,191,1)"
+                                backgroundColor={titleColor}
                                 size="default"
                                 variation="primary"
                                 children="Save"
@@ -1791,6 +1826,7 @@ const ApplicationPage = (props) => {
                                 isDisabled={false}
                                 variation="primary"
                                 children="Previous"
+                                backgroundColor={titleColor}
                                 order="0"
                                 margin="0 0 0 2vw"
                                 onClick={(e) => {
@@ -1805,6 +1841,7 @@ const ApplicationPage = (props) => {
                                 size="default"
                                 isDisabled={false}
                                 variation="primary"
+                                backgroundColor={titleColor}
                                 children="Submit"
                                 order="2"
                                 onClick={(e) => {
@@ -1851,7 +1888,7 @@ const ApplicationPage = (props) => {
                             <Button
                                 width="114px"
                                 height="unset"
-                                backgroundColor="rgba(64,170,191,1)"
+                                backgroundColor={titleColor}
                                 size="default"
                                 variation="primary"
                                 children="Save"
