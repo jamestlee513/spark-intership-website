@@ -16,8 +16,8 @@ import { JobListing } from "./models";
 function App() {
   return (
     <BrowserRouter>
-    <div className="App">  
-    <Routes> 
+    <div className="App">
+    <Routes>
         { /* Put your page(s) here */}
         <Route path='/' element ={<HomePage/>}/>
         <Route path='/application' element={<ApplicationPage />}/>
@@ -29,8 +29,8 @@ function App() {
         <Route path='/update' element={<UpdateListingPage/>}/>
         <Route path='/admin' element={<AdminJobListingPage/>}/>
     </Routes>
-    </div>  
-    </BrowserRouter>   
+    </div>
+    </BrowserRouter>
   );
 }
 

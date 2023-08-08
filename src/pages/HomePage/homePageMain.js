@@ -1,15 +1,21 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import SparkLogo from "../../images/Spark Logo.png";
 import InternPhoto1 from "../../images/Rectangle 33.png";
 import InternPhoto2 from "../../images/Rectangle 34.png";
-import { Button, Typography } from '@mui/material';
+import { 
+  Button,
+  Typography,
+  Container,
+  ImageList
+} from '@mui/material';
 
 const HomePageMain = () => {
   return (
     <div className='main' style={mainStyle}>
-      <div className="logo">
-        <img src={SparkLogo} alt="Spark Logo" style={logoStyle}></img>
-      </div>
+      <Container maxwidth="sm" className="logo">
+        <img src={SparkLogo} alt="Spark Logo" />
+      </Container>
       <div className="description" >
         <Typography variant='body1'>
         <span style={{fontFamily: 'Bungee, san-serif', fontWeight: 'bold',fontSize: '32px', color: '#536FB4'}}>Spark </span>
@@ -18,10 +24,11 @@ const HomePageMain = () => {
         provide a nurturing environment where students can learn valuable skills from mentors already in the 
         field. Explore our intern tracks below!
         </Typography>
-
-        <Button variant='contained' size="large" sx={{borderRadius:20, textTransform: 'none'}}>
-          Learn more about Spark
-        </Button>
+        <Link to="/about">
+          <Button variant='contained' size="large" sx={{borderRadius:20, textTransform: 'none'}}>
+            Learn more about Spark
+          </Button>
+        </Link>
       </div>
 
       <div className='intern-photo' style={photoStyle}>

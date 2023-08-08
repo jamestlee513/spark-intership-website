@@ -19,11 +19,3 @@ export default function HomePage() {
 
     )
 }
-
-/*
-  TODO:
-  1. fontFamily falls back, added a fall back to the font family. Also figure
-     out how to import the fonts. (Done)
-  2. Add the scale thing (forgot exactly the term) that fits different size of screen
-  3. inserting photo and adjust photo in the way it should show
-*/
