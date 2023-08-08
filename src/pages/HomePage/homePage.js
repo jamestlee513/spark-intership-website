@@ -13,9 +13,6 @@ export default function HomePage() {
     <HomePageMain />
 
     <InternshipTracks />
-    <div className="Footer">
-        <Footer />
-    </div></>
-
+    </>
     )
 }
