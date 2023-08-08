@@ -17,7 +17,7 @@ const HomePageMain = () => {
         <img src={SparkLogo} alt="Spark Logo" />
       </Container>
       <div className="description" >
-        <Typography variant='body1'>
+        <Typography variant='body1' style={desStyle}>
         <span style={{fontFamily: 'Bungee, san-serif', fontWeight: 'bold',fontSize: '32px', color: '#536FB4'}}>Spark </span>
         is a nonprofit that offers
         internship opportunities to undergraduate students. Our mission is to

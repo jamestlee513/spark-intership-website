@@ -7,7 +7,7 @@ export default function Header() {
     <header style={headerStyle}>
       <div style={rightCornerStyle}>
         <Link to="/about" style={linkStyle}>About Spark</Link>
-        <Link to="/application" style={applyStyle}>Apply</Link>
+        <Link to="/interns" style={applyStyle}>Apply</Link>
         <Link to="/profile" style={linkStyle}>
           <Avatar src="/broken-image.jpg"/>
         </Link>
