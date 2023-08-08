@@ -29,7 +29,7 @@ import PersonalIcon from "../../images/personal icon.svg"
 import EducationIcon from "../../images/Education icon.svg"
 import ProjectIcon from "../../images/Project Icon.svg"
 import ResumeIcon from "../../images/Resume icon.svg"
-import { MuiFileInput } from 'mui-file-input'
+import {MuiFileInput} from 'mui-file-input'
 
 const ApplicationPage = (props) => {
 
@@ -106,27 +106,6 @@ const ApplicationPage = (props) => {
     };
 
 
-// Styles
-    const titleColor = 'rgb(83 111 180)'
-
-    const entry = {
-        border: "2px",
-        borderStyle: "dashed",
-        borderColor: titleColor,
-        padding: "16px 16px 16px 16px",
-        borderRadius: "10px"
-    }
-
-    const imageContainer = {
-        width: "500px",
-        margin: "0 auto"
-    }
-
-    const errorStyle = {
-        border: "2px solid red",
-    }
-
-
     const changeDaState = (app) => {
         setFirstName(app.firstName)
         setLastName(app.lastName)
@@ -148,11 +127,11 @@ const ApplicationPage = (props) => {
         }
 
     }
-    
+
 
     // Start Effects
     useEffect(() => {
-        
+
         if (location.state != null) {
             const {stuff} = location.state
             if (stuff != null) {
@@ -178,16 +157,16 @@ const ApplicationPage = (props) => {
                 displayCoverLetter(coverLetter)
             }
         }
-            (async () => {
-                const attributes = await Auth.currentUserInfo()
-                if (attributes) {
-                    const app = (await DataStore.query(Application, (a) => a.and(a => [a.email.eq(attributes.attributes.email), a.job.eq(job)])))[0]
-                    if (app) {
-                        changeDaState(app)
-                    }
+        (async () => {
+            const attributes = await Auth.currentUserInfo()
+            if (attributes) {
+                const app = (await DataStore.query(Application, (a) => a.and(a => [a.email.eq(attributes.attributes.email), a.job.eq(job)])))[0]
+                if (app) {
+                    changeDaState(app)
                 }
+            }
 
-            })()
+        })()
 
 
     }, [])
@@ -204,24 +183,6 @@ const ApplicationPage = (props) => {
         }));
     }
 
-    // Draw Circle
-    const numSize = 50
-    const circle = (pg) => {
-        return {
-            borderRadius: "50%",
-            border: "2px solid " + titleColor,
-            width: `${numSize * 52 / 32}px`,
-            height: `${numSize * 52 / 32}px`,
-            padding: `${numSize * 8 / 32}px`,
-
-            background: pageNumber.page === pg ? titleColor : "white",
-            color: pageNumber.page === pg ? "white" : titleColor,
-            textAlign: "center",
-
-            font: `${numSize}px Arial, sans-serif`
-        }
-    }
-
     // Refs
     const university = useRef(0)
     const major = useRef(0)
@@ -231,7 +192,7 @@ const ApplicationPage = (props) => {
     const projName = useRef(0)
     const projDesc = useRef(0)
     const projLink = useRef(0)
-    const projFile = useRef(0)
+    const [projFile, setProjFile] = React.useState(null);
 
     const dialCodeRef = React.useRef(null)
 
@@ -321,7 +282,7 @@ const ApplicationPage = (props) => {
         const name = projName.current.value
         const desc = projDesc.current.value
         const link = projLink.current ? (projLink.current.value) : ''
-        const file = projFile.current ? (projFile.current.value) : ''
+        const file = projFile
         if (name === '' || desc === '') return
         setProjects(prevProject => {
             setProjectID(projectID + 1)
@@ -330,7 +291,7 @@ const ApplicationPage = (props) => {
         projName.current.value = null
         projDesc.current.value = null;
         projLink.current.value = null
-        projFile.current.value = null
+        setProjFile(null)
     }
 
 
@@ -362,7 +323,7 @@ const ApplicationPage = (props) => {
         getDisplayValue
     ) => {
         if (errorState.submit) {
-                const value =
+            const value =
                 currentValue && getDisplayValue
                     ? getDisplayValue(currentValue)
                     : currentValue;
@@ -375,7 +336,7 @@ const ApplicationPage = (props) => {
             return validationResponse;
         }
         return true
-        
+
     };
 
     async function save(e) {
@@ -427,8 +388,47 @@ const ApplicationPage = (props) => {
             );
         }
     }
+
     if (errorState.submit) {
-        
+
+    }
+    // Styles
+    const titleColor = 'rgb(83 111 180)'
+
+    const entry = {
+        border: "2px",
+        borderStyle: "dashed",
+        borderColor: titleColor,
+        padding: "16px 16px 16px 16px",
+        borderRadius: "10px"
+    }
+
+    const imageContainer = {
+        width: "500px",
+        margin: "0 auto"
+    }
+
+    const errorStyle = {
+        border: "2px solid red",
+    }
+
+    // Draw Circle
+    const pagereqs = [!firstName || !lastName || !phone || !city || !zipcode || !country || (!state && country === "US"), false, false, !resume]
+    const numSize = 50
+    const circle = (pg) => {
+        return {
+            borderRadius: "50%",
+            border: "2px solid " + titleColor,
+            width: `${numSize * 52 / 32}px`,
+            height: `${numSize * 52 / 32}px`,
+            padding: `${numSize * 8 / 32}px`,
+
+            background: pageNumber.page === pg ? titleColor : ((errorState.submit && pagereqs[pg - 1]) ? "rgb(225,50,50)" : "white"),
+            color: pageNumber.page === pg ? ((errorState.submit && pagereqs[pg - 1]) ? "rgb(225,50,50)" : "white") : titleColor,
+            textAlign: "center",
+
+            font: `${numSize}px Arial, sans-serif`
+        }
     }
 
     // HTML code
@@ -1425,7 +1425,7 @@ const ApplicationPage = (props) => {
                                 size="default"
                                 isDisabled={false}
                                 variation="primary"
-                                children="previous"
+                                children="Previous"
                                 order="0"
                                 onClick={(e) => {
                                     e.preventDefault();
@@ -1541,9 +1541,12 @@ const ApplicationPage = (props) => {
                                 >
                                     <ProjectList projects={projects} deleteProject={deleteProject}/>
                                     <div style={entry}>
-                                        <MuiFileInput 
-                                            label="Choose your project to upload (.rtf, .doc, .docx, .txt, .pdf)"
-                                            ref={projFile}
+                                        <MuiFileInput
+                                            label="Choose your project to upload (.pdf)"
+                                            value={projFile}
+                                            onChange={(file) => {
+                                                setProjFile(file)
+                                            }}
                                         />
                                         <TextField
                                             width="40vw"
@@ -1627,7 +1630,7 @@ const ApplicationPage = (props) => {
                                 size="default"
                                 isDisabled={false}
                                 variation="primary"
-                                children="previous"
+                                children="Previous"
                                 order="0"
                                 onClick={(e) => {
                                     e.preventDefault();
@@ -1666,86 +1669,196 @@ const ApplicationPage = (props) => {
                 <Slide
                     direction={pageNumber.prev < 4 || (pageNumber.prev === 4 && pageNumber.page < 4) ? "left" : "right"}
                     in={pageNumber.page === 4} mountOnEnter unmountOnExit>
-                    <div>
-                        <h1> page 4 </h1>
-                        <Form controlId="resume"
-                              defaultValue={state.resume}>
-                            <Form.Label>Resume</Form.Label>
-                            <input type="file" onChange={handleResumeChange} accept=".pdf,.doc,.docx"/>
-                        </Form>
-                        {resumeURL && (
-                            <div>
-                                <h3>Resume:</h3>
-                                {resume.type === 'application/pdf' ? (
-                                    <embed src={resumeURL} width="300" height="200" type="application/pdf"/>
-                                ) : (
-                                    <img src={resumeURL} alt="Uploaded Resume"/>
-                                )}
-                            </div>
-                        )}
-                        <Form controlId="coverLetter"
-                              defaultValue={state.coverLetter}>
-                            <Form.Label>Cover Letter</Form.Label>
-                            <input type="file" onChange={handleCoverLetterChange} accept=".pdf,.doc,.docx"/>
-                        </Form>
-                        {coverLetterURL && (
-                            <div>
-                                <h3>Cover Letter:</h3>
-                                {coverLetter.type === 'application/pdf' ? (
-                                    <embed src={coverLetterURL} width="300" height="200" type="application/pdf"/>
-                                ) : (
-                                    <img src={coverLetterURL} alt="Uploaded Cover Letter"/>
-                                )}
-                            </div>
-                        )}
-                        <button onClick={(e) => {
-                            e.preventDefault();
-                            changePage(3)
-                        }}> Previous
-                        </button>
-                        <button onClick={(e) => {
-                            e.preventDefault();
-                            if (!firstName || !lastName || !phone || !city || !resume || !zipcode || !country || !address || !job || (country === "US" && !state)) {
-                                setErrorState({
-                                    submit: true
-                                })
-                                console.log(firstName)
-                                runValidationTasks("firstName", firstName)
-                                runValidationTasks("lastName", lastName)
-                                runValidationTasks("phone", phone)
-                                runValidationTasks("address", address)
-                                runValidationTasks("country", country)
-                                runValidationTasks("state", state)
-                                runValidationTasks("city", city)
-                                runValidationTasks("zipcode", zipcode)
-                                console.log(errors.firstName?.hasError)
-                            } else {
-                                save(e)
-                                navigate("/review", {
-                                    state: {
-                                        stuff: {
-                                            firstName: firstName,
-                                            lastName: lastName,
-                                            phoneNumber: phone,
-                                            city: city,
-                                            resume: resume,
-                                            coverLetter: coverLetter,
-                                            zipCode: zipcode,
-                                            country: country,
-                                            state: state,
-                                            address: address,
-                                            job: job,
-                                            education: educations,
-                                            projects: projects
-                                        }
-                                    }
-                                })
-                            }
+                    <Flex
+                        gap="0"
+                        direction="column"
+                        width="95vw"
+                        height="unset"
+                        display="flex"
+                        flex="1 1 100%"
+                        justifyContent="flex-center"
+                        alignItems="flex-start"
+                        grow="1"
+                        shrink="1"
+                        basis="0"
+                        position="relative"
+                        padding="32px 0px 32px 0px"
+                        backgroundColor="rgba(255,0,255,1)"
+                        {...getOverrideProps(overrides, "Frame 411")}
+                    >
 
-                        }}> Submit
-                        </button>
-                        <img src={ResumeIcon} alt="Resume Icon"></img>
-                    </div>
+                        <Flex
+                            gap="32px"
+                            direction="row"
+                            width="unset"
+                            height="unset"
+                            justifyContent="space-around"
+                            alignItems="space-around"
+                            shrink="0"
+                            alignSelf="stretch"
+                            position="relative"
+                            padding="0px 0px 0px 0px"
+                            {...getOverrideProps(overrides, "Frame 313")}
+                        >
+                            <Flex
+                                gap="24px"
+                                direction="column"
+                                width="50vw"
+                                height="unset"
+                                justifyContent="flex-start"
+                                alignItems="flex-start"
+                                shrink="0"
+                                alignSelf="stretch"
+                                position="relative"
+                                padding="0px 32px 0px 32px"
+                                {...getOverrideProps(overrides, "Frame 406")}
+                            >
+                                <Text
+                                    fontFamily="Inter"
+                                    fontSize="36px"
+                                    fontWeight="800"
+                                    color="rgba(13,26,38,1)"
+                                    lineHeight="20px"
+                                    textAlign="left"
+                                    display="block"
+                                    direction="column"
+                                    justifyContent="unset"
+                                    width="unset"
+                                    height="unset"
+                                    gap="unset"
+                                    alignItems="unset"
+                                    shrink="0"
+                                    position="relative"
+                                    padding="0px 0px 0px 0px"
+                                    whiteSpace="pre-wrap"
+                                    children="Resume"
+                                ></Text>
+                                <MuiFileInput
+                                    label="Choose your project to upload (.pdf)"
+                                    value={resume}
+                                    onChange={(file) => {
+                                        setResume(file)
+                                    }}
+                                />
+                                <Text
+                                    fontFamily="Inter"
+                                    fontSize="36px"
+                                    fontWeight="800"
+                                    color="rgba(13,26,38,1)"
+                                    lineHeight="20px"
+                                    textAlign="left"
+                                    display="block"
+                                    direction="column"
+                                    justifyContent="unset"
+                                    width="unset"
+                                    height="unset"
+                                    gap="unset"
+                                    alignItems="unset"
+                                    shrink="0"
+                                    position="relative"
+                                    padding="0px 0px 0px 0px"
+                                    whiteSpace="pre-wrap"
+                                    children="Cover Letter"
+                                ></Text>
+                                <MuiFileInput
+                                    label="Choose your project to upload (.pdf)"
+                                    value={coverLetter}
+                                    onChange={(file) => {
+                                        setCoverLetter(file)
+                                    }}
+                                />
+                            </Flex>
+                            <img src={ResumeIcon} alt="Resume Icon"></img>
+                        </Flex>
+                        <View
+                            width="unset"
+                            display="flex"
+                            height="94px"
+                            gap="unset"
+                            alignItems="center"
+                            justifyContent="space-between"
+                            overflow="hidden"
+                            shrink="1"
+                            alignSelf="stretch"
+                            position="relative"
+                            padding="0px 0px 0px 45%"
+                            {...getOverrideProps(overrides, "Frame 412")}
+                        >
+                            <Button
+                                width="114px"
+                                height="unset"
+                                size="default"
+                                isDisabled={false}
+                                variation="primary"
+                                children="Previous"
+                                order="0"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    changePage(3);
+                                }}
+                                {...getOverrideProps(overrides, "Previous")}
+                            ></Button>
+                            <Button
+                                width="114px"
+                                height="unset"
+                                size="default"
+                                isDisabled={false}
+                                variation="primary"
+                                children="Submit"
+                                order="2"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    if (!firstName || !lastName || !phone || !city || !resume || !zipcode || !country || !address || !job || (country === "US" && !state)) {
+                                        setErrorState({
+                                            submit: true
+                                        })
+                                        runValidationTasks("firstName", firstName)
+                                        runValidationTasks("lastName", lastName)
+                                        runValidationTasks("phone", phone)
+                                        runValidationTasks("address", address)
+                                        runValidationTasks("country", country)
+                                        runValidationTasks("state", state)
+                                        runValidationTasks("city", city)
+                                        runValidationTasks("zipcode", zipcode)
+                                    } else {
+                                        save(e)
+                                        navigate("/review", {
+                                            state: {
+                                                stuff: {
+                                                    firstName: firstName,
+                                                    lastName: lastName,
+                                                    phoneNumber: phone,
+                                                    city: city,
+                                                    resume: resume,
+                                                    coverLetter: coverLetter,
+                                                    zipCode: zipcode,
+                                                    country: country,
+                                                    state: state,
+                                                    address: address,
+                                                    job: job,
+                                                    education: educations,
+                                                    projects: projects
+                                                }
+                                            }
+                                        })
+                                    }
+
+                                }}
+                                {...getOverrideProps(overrides, "Next")}
+                            ></Button>
+                            <Button
+                                width="114px"
+                                height="unset"
+                                backgroundColor="rgba(64,170,191,1)"
+                                size="default"
+                                variation="primary"
+                                children="Save"
+                                type="submit"
+                                isDisabled={Object.values(errors).some((e) => e?.hasError)}
+                                {...getOverrideProps(overrides, "Save")}
+                            ></Button>
+                        </View>
+                    </Flex>
                 </Slide>
             </div>
         </Flex>
