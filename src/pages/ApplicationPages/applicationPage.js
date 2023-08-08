@@ -56,32 +56,32 @@ const ApplicationPage = (props) => {
         state: "",
         zipcode: "",
         country: "",
-        job: "SWE",
+        job: "Software Engineer Internship",
         completeApplication: false,
     };
 
-    const jimothy = () => ( <div style={{margin: "auto"}}>
+    const jimothy = () => (<div style={{margin: "auto"}}>
         <p>
-        ⠀⠀⠀⠀⠀ ⠀⠀⠀⠀⠀ ⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀<br/>⠀⠀⠀
-        ⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⡿⠛⠉⠙⠛⠛⠛⠛⠻⢿⣿⣷⣤⡀⠀⠀⠀⠀<br/>⠀⠀⠀⠀
-        ⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⠋⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⠈⢻⣿⣿⡄⠀⠀⠀⠀ <br/>⠀⠀⠀
-        ⠀⠀⠀⠀⠀⠀⠀⣸⣿⡏⠀⠀⠀⣠⣶⣾⣿⣿⣿⠿⠿⠿⢿⣿⣿⣿⣄⠀⠀⠀ <br/>⠀⠀⠀
-        ⠀⠀⠀⠀⠀⠀⠀⣿⣿⠁⠀⠀⢰⣿⣿⣯⠁⠀⠀⠀⠀⠀⠀⠀⠈⠙⢿⣷⡄⠀ <br/>⠀⠀⠀
-        ⠀⠀⣀⣤⣴⣶⣶⣿⡟⠀⠀⠀⢸⣿⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣷⠀ <br/>⠀⠀⠀
-        ⠀⢰⣿⡟⠋⠉⣹⣿⡇⠀⠀⠀⠘⣿⣿⣿⣿⣷⣦⣤⣤⣤⣶⣶⣶⣶⣿⣿⣿⠀ <br/>⠀⠀⠀
-        ⠀⢸⣿⡇⠀⠀⣿⣿⡇⠀⠀⠀⠀⠹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠃⠀ <br/>⠀⠀⠀
-        ⠀⣸⣿⡇⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠉⠻⠿⣿⣿⣿⣿⡿⠿⠿⠛⢻⣿⡇⠀⠀ <br/>⠀⠀⠀
-        ⠀⣿⣿⠁⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣧⠀⠀ <br/>⠀⠀⠀
-        ⠀⣿⣿⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀ <br/>⠀⠀⠀
-        ⠀⣿⣿⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀ <br/>⠀⠀⠀
-        ⠀⢿⣿⡆⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡇⠀⠀ <br/>⠀⠀⠀
-        ⠀⠸⣿⣧⡀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠃⠀⠀ <br/>⠀⠀⠀
-        ⠀⠀⠛⢿⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⣰⣿⣿⣷⣶⣶⣶⣶⠶⠀⢠⣿⣿⠀⠀⠀ <br/>⠀⠀⠀
-        ⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⣽⣿⡏⠁⠀⠀⢸⣿⡇⠀⠀⠀ <br/>⠀⠀⠀
-        ⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⢹⣿⡆⠀⠀⠀⣸⣿⠇⠀⠀⠀ <br/>⠀⠀⠀
-        ⠀⠀⠀⠀⠀⠀⠀⢿⣿⣦⣄⣀⣠⣴⣿⣿⠁⠀⠈⠻⣿⣿⣿⣿⡿⠏⠀⠀⠀⠀ <br/>⠀⠀⠀
-        ⠀⠀⠀⠀⠈⠛⠻⠿⠿⠿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀<br/>⠀⠀⠀⠀⠀⠀⠀</p>
-    <p>This is Jimothy. You have uncovered his hiding spot. :)</p>
+            ⠀⠀⠀⠀⠀ ⠀⠀⠀⠀⠀ ⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀<br/>⠀⠀⠀
+            ⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⡿⠛⠉⠙⠛⠛⠛⠛⠻⢿⣿⣷⣤⡀⠀⠀⠀⠀<br/>⠀⠀⠀⠀
+            ⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⠋⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⠈⢻⣿⣿⡄⠀⠀⠀⠀ <br/>⠀⠀⠀
+            ⠀⠀⠀⠀⠀⠀⠀⣸⣿⡏⠀⠀⠀⣠⣶⣾⣿⣿⣿⠿⠿⠿⢿⣿⣿⣿⣄⠀⠀⠀ <br/>⠀⠀⠀
+            ⠀⠀⠀⠀⠀⠀⠀⣿⣿⠁⠀⠀⢰⣿⣿⣯⠁⠀⠀⠀⠀⠀⠀⠀⠈⠙⢿⣷⡄⠀ <br/>⠀⠀⠀
+            ⠀⠀⣀⣤⣴⣶⣶⣿⡟⠀⠀⠀⢸⣿⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣷⠀ <br/>⠀⠀⠀
+            ⠀⢰⣿⡟⠋⠉⣹⣿⡇⠀⠀⠀⠘⣿⣿⣿⣿⣷⣦⣤⣤⣤⣶⣶⣶⣶⣿⣿⣿⠀ <br/>⠀⠀⠀
+            ⠀⢸⣿⡇⠀⠀⣿⣿⡇⠀⠀⠀⠀⠹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠃⠀ <br/>⠀⠀⠀
+            ⠀⣸⣿⡇⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠉⠻⠿⣿⣿⣿⣿⡿⠿⠿⠛⢻⣿⡇⠀⠀ <br/>⠀⠀⠀
+            ⠀⣿⣿⠁⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣧⠀⠀ <br/>⠀⠀⠀
+            ⠀⣿⣿⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀ <br/>⠀⠀⠀
+            ⠀⣿⣿⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀ <br/>⠀⠀⠀
+            ⠀⢿⣿⡆⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡇⠀⠀ <br/>⠀⠀⠀
+            ⠀⠸⣿⣧⡀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠃⠀⠀ <br/>⠀⠀⠀
+            ⠀⠀⠛⢿⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⣰⣿⣿⣷⣶⣶⣶⣶⠶⠀⢠⣿⣿⠀⠀⠀ <br/>⠀⠀⠀
+            ⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⣽⣿⡏⠁⠀⠀⢸⣿⡇⠀⠀⠀ <br/>⠀⠀⠀
+            ⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⢹⣿⡆⠀⠀⠀⣸⣿⠇⠀⠀⠀ <br/>⠀⠀⠀
+            ⠀⠀⠀⠀⠀⠀⠀⢿⣿⣦⣄⣀⣠⣴⣿⣿⠁⠀⠈⠻⣿⣿⣿⣿⡿⠏⠀⠀⠀⠀ <br/>⠀⠀⠀
+            ⠀⠀⠀⠀⠈⠛⠻⠿⠿⠿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀<br/>⠀⠀⠀⠀⠀⠀⠀</p>
+        <p>This is Jimothy. You have uncovered his hiding spot. :)</p>
     </div>)
 
     const changeDaState = async (app) => {
@@ -105,7 +105,6 @@ const ApplicationPage = (props) => {
         setState(app.state)
         setZipcode(app.zipcode)
         setCountry(app.country)
-        setJob("SWE") // CHANGE THIS
         setCompleteApplication(app.completeApplication)
         if (app.education) {
             setEducations(app.education)
@@ -137,6 +136,7 @@ const ApplicationPage = (props) => {
                 initialValues = {
                     job: stuff.job,
                 };
+                setJob(stuff.job)
                 setPageNumber({
                     page: 1,
                     prev: 0
@@ -412,6 +412,7 @@ const ApplicationPage = (props) => {
     }
     // Styles
     const titleColor = 'rgb(83 111 180)'
+    const buttonColor = 'rgb(242,155,136)'
 
     const fileInput = {margin: "2vh 10vw 2vh 0"};
 
@@ -496,7 +497,7 @@ const ApplicationPage = (props) => {
             <div
                 style={{display: "flex", justifyContent: "center", overflow: "hidden"}}
             >
-                <Slide direction={(pageNumber.prev === 1 && pageNumber.page < 1) ? "left" : "right"}
+                <Slide timeout={300} direction={(pageNumber.prev === 1 && pageNumber.page < 1) ? "left" : "right"}
                        in={pageNumber.page === 1} mountOnEnter unmountOnExit>
                     <Flex
                         gap="0"
@@ -1244,7 +1245,7 @@ const ApplicationPage = (props) => {
                                 size="default"
                                 isDisabled={false}
                                 variation="primary"
-                                backgroundColor={titleColor}
+                                backgroundColor={buttonColor}
                                 children="Next"
                                 order="2"
                                 onClick={(e) => {
@@ -1256,7 +1257,7 @@ const ApplicationPage = (props) => {
                             <Button
                                 width="114px"
                                 height="unset"
-                                backgroundColor={titleColor}
+                                backgroundColor={buttonColor}
                                 size="default"
                                 variation="primary"
                                 children="Save"
@@ -1268,9 +1269,9 @@ const ApplicationPage = (props) => {
                         {(firstName.toLowerCase() === "among" && lastName.toLowerCase() === "us") ? jimothy() : <br/>}
                     </Flex>
                 </Slide>
-                <Slide
-                    direction={pageNumber.prev < 2 || (pageNumber.prev === 2 && pageNumber.page < 2) ? "left" : "right"}
-                    in={pageNumber.page === 2} mountOnEnter unmountOnExit>
+                <Slide timeout={300}
+                       direction={(pageNumber.prev < 2 || (pageNumber.prev === 2 && pageNumber.page < 2)) ? "left" : "right"}
+                       in={pageNumber.page === 2} mountOnEnter unmountOnExit>
                     <Flex
                         gap="0"
                         direction="column"
@@ -1409,7 +1410,9 @@ const ApplicationPage = (props) => {
                                             borderRadius="20px"
                                             variation="primary"
                                             children="Add university"
-                                            backgroundColor={titleColor}
+                                            backgroundColor={"white"}
+                                            border="2px solid black"
+                                            color={"black"}
                                             order="0"
                                             fontSize="15px"
                                             marginLeft="auto"
@@ -1446,7 +1449,7 @@ const ApplicationPage = (props) => {
                                 isDisabled={false}
                                 variation="primary"
                                 children="Previous"
-                                backgroundColor={titleColor}
+                                backgroundColor={buttonColor}
                                 order="0"
                                 margin="0 0 0 2vw"
                                 onClick={(e) => {
@@ -1461,7 +1464,7 @@ const ApplicationPage = (props) => {
                                 size="default"
                                 isDisabled={false}
                                 variation="primary"
-                                backgroundColor={titleColor}
+                                backgroundColor={buttonColor}
                                 children="Next"
                                 order="2"
                                 onClick={(e) => {
@@ -1473,7 +1476,7 @@ const ApplicationPage = (props) => {
                             <Button
                                 width="114px"
                                 height="unset"
-                                backgroundColor={titleColor}
+                                backgroundColor={buttonColor}
                                 size="default"
                                 variation="primary"
                                 children="Save"
@@ -1484,9 +1487,9 @@ const ApplicationPage = (props) => {
                         </View>
                     </Flex>
                 </Slide>
-                <Slide
-                    direction={pageNumber.prev < 3 || (pageNumber.prev === 3 && pageNumber.page < 3) ? "left" : "right"}
-                    in={pageNumber.page === 3} mountOnEnter unmountOnExit>
+                <Slide timeout={300}
+                       direction={(pageNumber.prev < 3 || (pageNumber.prev === 3 && pageNumber.page < 3)) ? "left" : "right"}
+                       in={pageNumber.page === 3} mountOnEnter unmountOnExit>
                     <Flex
                         gap="0"
                         direction="column"
@@ -1621,7 +1624,9 @@ const ApplicationPage = (props) => {
                                             borderRadius="20px"
                                             variation="primary"
                                             children="Add project"
-                                            backgroundColor={titleColor}
+                                            backgroundColor={"white"}
+                                            border="2px solid black"
+                                            color={"black"}
                                             order="0"
                                             fontSize="15px"
                                             marginLeft="auto"
@@ -1658,7 +1663,7 @@ const ApplicationPage = (props) => {
                                 isDisabled={false}
                                 variation="primary"
                                 children="Previous"
-                                backgroundColor={titleColor}
+                                backgroundColor={buttonColor}
                                 order="0"
                                 margin="0 0 0 2vw"
                                 onClick={(e) => {
@@ -1674,7 +1679,7 @@ const ApplicationPage = (props) => {
                                 isDisabled={false}
                                 variation="primary"
                                 children="Next"
-                                backgroundColor={titleColor}
+                                backgroundColor={buttonColor}
                                 order="2"
                                 onClick={(e) => {
                                     e.preventDefault();
@@ -1685,7 +1690,7 @@ const ApplicationPage = (props) => {
                             <Button
                                 width="114px"
                                 height="unset"
-                                backgroundColor={titleColor}
+                                backgroundColor={buttonColor}
                                 size="default"
                                 variation="primary"
                                 children="Save"
@@ -1696,9 +1701,9 @@ const ApplicationPage = (props) => {
                         </View>
                     </Flex>
                 </Slide>
-                <Slide
-                    direction={pageNumber.prev < 4 || (pageNumber.prev === 4 && pageNumber.page < 4) ? "left" : "right"}
-                    in={pageNumber.page === 4} mountOnEnter unmountOnExit>
+                <Slide timeout={300}
+                       direction={(pageNumber.prev < 4 || (pageNumber.prev === 4 && pageNumber.page < 4)) ? "left" : "right"}
+                       in={pageNumber.page === 4} mountOnEnter unmountOnExit>
                     <Flex
                         gap="0"
                         direction="column"
@@ -1826,7 +1831,7 @@ const ApplicationPage = (props) => {
                                 isDisabled={false}
                                 variation="primary"
                                 children="Previous"
-                                backgroundColor={titleColor}
+                                backgroundColor={buttonColor}
                                 order="0"
                                 margin="0 0 0 2vw"
                                 onClick={(e) => {
@@ -1841,7 +1846,7 @@ const ApplicationPage = (props) => {
                                 size="default"
                                 isDisabled={false}
                                 variation="primary"
-                                backgroundColor={titleColor}
+                                backgroundColor={buttonColor}
                                 children="Submit"
                                 order="2"
                                 onClick={(e) => {
@@ -1888,7 +1893,7 @@ const ApplicationPage = (props) => {
                             <Button
                                 width="114px"
                                 height="unset"
-                                backgroundColor={titleColor}
+                                backgroundColor={buttonColor}
                                 size="default"
                                 variation="primary"
                                 children="Save"
