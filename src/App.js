@@ -12,6 +12,7 @@ import  JobListingsPage from "./pages/JobListingsPages/jobListingsPage";
 import UpdateListingPage from "./pages/JobListingsPages/updateListingPage";
 import AdminJobListingPage from "./pages/JobListingsPages/adminJobListingsPage";
 import ListOfInterns from "./pages/HomePage/listOfInterns";
+import AboutSpark from "./pages/AboutSpark/aboutSpark";
 import { JobListing } from "./models";
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
         <Route path='/update' element={<UpdateListingPage/>}/>
         <Route path='/admin' element={<AdminJobListingPage/>}/>
         <Route path='/interns' element={<ListOfInterns/>}/>
+        <Route path='/about' element={<AboutSpark/>}/>
     </Routes>
     </div>
     </BrowserRouter>
