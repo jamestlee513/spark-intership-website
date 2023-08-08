@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Link, useLocation, useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {Auth} from 'aws-amplify';
 import {DataStore} from '@aws-amplify/datastore';
 import {Storage} from '@aws-amplify/storage';
@@ -19,10 +19,6 @@ const ReviewPage = () => {
         navigate('/application')
     }
 
-    const resume = stuff.resume
-    const [resumeURL, setResumeURL] = useState('');
-    const coverLetter = stuff.coverLetter
-    const [coverLetterURL, setCoverLetterURL] = useState('');
     const [email, setEmail] = useState('');
     let eduGroups = []
     let projGroups = []
@@ -33,22 +29,6 @@ const ReviewPage = () => {
             setEmail(attributes.attributes.email)
         })()
     }, [])
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-        setResumeURL(reader.result);
-    };
-    if (resume) {
-        reader.readAsDataURL(resume);
-    }
-
-    const reader2 = new FileReader();
-    reader2.onloadend = () => {
-        setCoverLetterURL(reader2.result);
-    };
-    if (coverLetter) {
-        reader2.readAsDataURL(coverLetter);
-    }
 
 
     async function submit() {
@@ -79,30 +59,24 @@ const ReviewPage = () => {
                 item.project = stuff.projects
                 item.completeApplication = true
             }));
-            if (stuff.resume) {
-                await Storage.put(email + stuff.job + "resume" + stuff.resume.name, stuff.resume, {
-                    level: 'public',
-                    contentType: 'application/pdf'
-                });
-            }
-            await DataStore.save(Application.copyOf(app, item => {
-                // Update the values on {item} variable to update DataStore entry
-                item.firstName = stuff.firstName
-                item.lastName = stuff.lastName
-                item.email = attributes.attributes.email
-                item.phone = stuff.phoneNumber
-                item.city = stuff.city
-                item.resume = stuff.resume.name
-                item.coverLetter = stuff.coverLetter.name
-                item.zipcode = Number(stuff.zipCode)
-                item.country = stuff.country
-                item.state = stuff.state
-                item.address = stuff.address
-                item.job = stuff.job
-                item.education = stuff.education
-                item.project = stuff.projects
-                item.completeApplication = true
-            }));
+            // await DataStore.save(Application.copyOf(app, item => {
+            //     // Update the values on {item} variable to update DataStore entry
+            //     item.firstName = stuff.firstName
+            //     item.lastName = stuff.lastName
+            //     item.email = attributes.attributes.email
+            //     item.phone = stuff.phoneNumber
+            //     item.city = stuff.city
+            //     item.resume = stuff.resume.name
+            //     item.coverLetter = stuff.coverLetter.name
+            //     item.zipcode = Number(stuff.zipCode)
+            //     item.country = stuff.country
+            //     item.state = stuff.state
+            //     item.address = stuff.address
+            //     item.job = stuff.job
+            //     item.education = stuff.education
+            //     item.project = stuff.projects
+            //     item.completeApplication = true
+            // }));
         } else {
             await DataStore.save(
                 new Application({
@@ -123,22 +97,39 @@ const ReviewPage = () => {
                     "completeApplication": true
                 })
             );
-            if (stuff.resume) {
-                await Storage.put(email + stuff.job + stuff.resume.name, stuff.resume, {
+        }
+        let filesToDelete;
+        await Storage.list(email).then(({results}) => {filesToDelete=results})
+        filesToDelete.forEach(async (fil) => {await Storage.remove(fil.key)})
+        if (stuff.resume) {
+            await Storage.put(email + stuff.job + "Resume" + stuff.resume.name, stuff.resume, {
+                level: 'public',
+                contentType: 'application/pdf'
+            });
+        }
+        if (stuff.coverLetter) {
+            await Storage.put(email + stuff.job + "CoverLetter" + stuff.coverLetter.name, stuff.coverLetter, {
+                level: 'public',
+                contentType: 'application/pdf'
+            });
+        }
+        stuff.projects.forEach(async (proj, i) => {
+            if (stuff.projFiles[i]) {
+                await Storage.put(email + stuff.job + "Proj" + proj.fileURL, stuff.projFiles[i], {
                     level: 'public',
                     contentType: 'application/pdf'
                 });
             }
-        }
+        })
         navigate("/submit", {state: {job: stuff.job}})
     }
 
     function eduAdd(edu) {
-        eduGroups.push([["Major", edu.major], ["University", edu.university], ["GPA", edu.GPA], ["Expected Graduation", edu.expectedGrad]])
+        eduGroups.push([["Major", edu.major], ["University", edu.unversity], ["GPA", edu.GPA], ["Expected Graduation", edu.expectedGrad]])
     }
 
-    function projAdd(proj) {
-        projGroups.push([["Project Name", proj.projectName], ["Project Description", proj.projectDesc], ["Link", proj.link], proj.file])
+    function projAdd(proj, i) {
+        projGroups.push([["Project Name", proj.projectName], ["Project Description", proj.projectDesc], ["Link", proj.link], stuff.projFiles[i]])
     }
 
     // Styles
@@ -184,7 +175,7 @@ const ReviewPage = () => {
                         <h2 style={t2}>Projects</h2>
                         <ReviewProjectList groups={projGroups}/>
                     </div>
-                        <h2 style={t2}>Resume and Cover Letter</h2>
+                    <h2 style={t2}>Resume and Cover Letter</h2>
                     <div style={{display: "flex"}}>
                         <MuiFileInput
                             label="Resume"

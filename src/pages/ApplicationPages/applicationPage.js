@@ -1,17 +1,14 @@
 import * as React from "react";
-import {useState, useEffect, useRef} from 'react'
-import {Form} from 'react-bootstrap';
+import _ from 'lodash'
+import {useEffect, useRef} from 'react'
 import {
     getOverrideProps,
-    useAuth,
-    useDataStoreCreateAction,
-    useNavigateAction,
-    useStateMutationAction,
 } from "@aws-amplify/ui-react/internal";
 import {Application, Project, Education} from "../../models";
 import {DataStore} from '@aws-amplify/datastore';
 import {fetchByPath, validateField} from "../../ui-components/utils";
 import {useLocation, useNavigate} from "react-router-dom";
+import {Storage} from '@aws-amplify/storage';
 import {
     Button,
     Flex,
@@ -22,7 +19,7 @@ import {
     View,
 } from "@aws-amplify/ui-react";
 import {Auth} from 'aws-amplify';
-import {Slide, Box} from '@mui/material'
+import {Slide} from '@mui/material'
 import EducationList from "./educationList"
 import ProjectList from "./projectList"
 import PersonalIcon from "../../images/personal icon.svg"
@@ -32,8 +29,6 @@ import ResumeIcon from "../../images/Resume icon.svg"
 import {MuiFileInput} from 'mui-file-input'
 
 const ApplicationPage = (props) => {
-
-
     // Nav constants
     const location = useLocation();
     const navigate = useNavigate()
@@ -65,54 +60,24 @@ const ApplicationPage = (props) => {
         completeApplication: false,
     };
 
-    //  Resume and Cover Letter Stuff
-    //
-    const [resumeURL, setResumeURL] = useState('');
-    const [coverLetterURL, setCoverLetterURL] = useState('');
 
-    // Handling resume change
-    const handleResumeChange = (event) => {
-        const selectedFile = event.target.files[0];
-        setResume(selectedFile);
-        displayResume(selectedFile);
-    };
-
-    const handleCoverLetterChange = (event) => {
-        const selectedFile = event.target.files[0];
-        setCoverLetter(selectedFile);
-        displayCoverLetter(selectedFile);
-    };
-
-    // Display Resume
-    const displayResume = (file) => {
-        if (file && file instanceof Blob) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setResumeURL(reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
-
-    };
-
-    const displayCoverLetter = (file) => {
-        if (file && file instanceof Blob) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setCoverLetterURL(reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-
-    const changeDaState = (app) => {
+    const changeDaState = async (app) => {
+        const attributes = await Auth.currentUserInfo()
         setFirstName(app.firstName)
         setLastName(app.lastName)
         setPhone(app.phone)
         setCity(app.city)
-        setResume("")
-        setCoverLetter("")
+        let file;
+        try {
+            file = await Storage.get(attributes.attributes.email + job + "Resume" + app.resume, {download: true})
+            setResume(new File([file.Body], app.resume))
+        } catch (e) {
+        }
+        try {
+            file = await Storage.get(attributes.attributes.email + job + "CoverLetter" + app.coverLetter, {download: true})
+            setCoverLetter(new File([file.Body], app.coverLetter))
+        } catch (e) {
+        }
         setAddress(app.address)
         setState(app.state)
         setZipcode(app.zipcode)
@@ -122,8 +87,19 @@ const ApplicationPage = (props) => {
         if (app.education) {
             setEducations(app.education)
         }
-        if (app.projects) {
-            setProjects(app.projects)
+        if (app.project) {
+            setProjects(app.project)
+            let pfiles = []
+            for (let i = 0; i < app.project.length; i++) {
+                try {
+                    file = await Storage.get(attributes.attributes.email + job + "Proj" + app.project[i].fileURL, {download: true})
+                    pfiles.push(new File([file.Body], projects[i].fileURL))
+                } catch (e) {
+                    pfiles.push(null)
+                }
+            }
+            setProjFiles(pfiles)
+            //console.log(pfiles)
         }
 
     }
@@ -142,19 +118,6 @@ const ApplicationPage = (props) => {
                     page: 1,
                     prev: 0
                 });
-                setResume(stuff.resume)
-                setCoverLetter(stuff.coverLetter)
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    setResumeURL(reader.result);
-                };
-                displayResume(resume)
-
-                const reader2 = new FileReader();
-                reader2.onloadend = () => {
-                    setCoverLetterURL(reader2.result);
-                };
-                displayCoverLetter(coverLetter)
             }
         }
         (async () => {
@@ -194,8 +157,6 @@ const ApplicationPage = (props) => {
     const projLink = useRef(0)
     const [projFile, setProjFile] = React.useState(null);
 
-    const dialCodeRef = React.useRef(null)
-
 
     // States
     const [firstName, setFirstName] = React.useState(initialValues.firstName);
@@ -222,6 +183,7 @@ const ApplicationPage = (props) => {
     });
     const [educations, setEducations] = React.useState([])
     const [projects, setProjects] = React.useState([])
+    const [projFiles, setProjFiles] = React.useState([])
     const [errorState, setErrorState] = React.useState({
         submit: false
     })
@@ -267,7 +229,7 @@ const ApplicationPage = (props) => {
 
     // Delete Education
     function deleteEducation(edu) {
-        const newEducations = educations.filter(education => edu.id !== education.id)
+        const newEducations = educations.filter(education => !_.isEqual(edu, education))
         setEducations(newEducations)
     }
 
@@ -281,7 +243,15 @@ const ApplicationPage = (props) => {
         const file = projFile
         if (name === '' || desc === '') return
         setProjects(prevProject => {
-            return [...prevProject, new Project({"projectName": name, "projectDesc": desc, "link": link, "fileURL": file})]
+            return [...prevProject, new Project({
+                "projectName": name,
+                "projectDesc": desc,
+                "link": link,
+                "fileURL": (file) ? file.name : ''
+            })]
+        })
+        setProjFiles(prevFiles => {
+            return [...prevFiles, file]
         })
         projName.current.value = null
         projDesc.current.value = null;
@@ -292,8 +262,11 @@ const ApplicationPage = (props) => {
 
 // Delete Project
     function deleteProject(pro) {
-        const newProjects = projects.filter(project => pro.id !== pro.id)
+        let index = projects.findIndex(project => !_.isEqual(pro, project))
+        const newProjects = projects.filter((p, i) => i==index)
+        const newFiles = projFiles.filter((p, i)=>i==index)
         setProjects(newProjects)
+        setProjFiles(newFiles)
     }
 
 
@@ -366,7 +339,7 @@ const ApplicationPage = (props) => {
                 new Application({
                     "firstName": firstName,
                     "lastName": lastName,
-                    "email": email,
+                    "email": attributes.attributes.email,
                     "phone": phone,
                     "city": city,
                     "resume": resume.name,
@@ -382,6 +355,29 @@ const ApplicationPage = (props) => {
                 })
             );
         }
+        let filesToDelete;
+        await Storage.list(attributes.attributes.email).then(({results}) => {filesToDelete=results})
+        filesToDelete.forEach(async (fil) => {await Storage.remove(fil.key)})
+        if (resume) {
+            await Storage.put(attributes.attributes.email + job + "Resume" + resume.name, resume, {
+                level: 'public',
+                contentType: 'application/pdf'
+            });
+        }
+        if (coverLetter) {
+            await Storage.put(attributes.attributes.email + job + "CoverLetter" + coverLetter.name, coverLetter, {
+                level: 'public',
+                contentType: 'application/pdf'
+            });
+        }
+        projects.forEach(async (proj, i) => {
+            if (projFiles[i]) {
+                await Storage.put(attributes.attributes.email + job + "Proj" + proj.fileURL, projFiles[i], {
+                    level: 'public',
+                    contentType: 'application/pdf'
+                });
+            }
+        })
     }
 
     if (errorState.submit) {
@@ -398,11 +394,6 @@ const ApplicationPage = (props) => {
         borderColor: titleColor,
         padding: "16px 16px 16px 16px",
         borderRadius: "10px"
-    }
-
-    const imageContainer = {
-        width: "500px",
-        margin: "0 auto"
     }
 
     const errorStyle = {
@@ -1540,7 +1531,7 @@ const ApplicationPage = (props) => {
                                     position="relative"
                                     padding="0px 32px 0px 32px"
                                 >
-                                    <ProjectList projects={projects} deleteProject={deleteProject}/>
+                                    <ProjectList projects={projects} files={projFiles} deleteProject={deleteProject}/>
                                     <div style={entry}>
                                         <MuiFileInput
                                             label="Choose your project to upload (.pdf)"
@@ -1548,7 +1539,7 @@ const ApplicationPage = (props) => {
                                             onChange={(file) => {
                                                 setProjFile(file)
                                             }}
-                                            inputProps={{accept:"application/pdf"}}
+                                            inputProps={{accept: "application/pdf"}}
                                             style={fileInput}
                                         />
                                         <TextField
@@ -1722,7 +1713,7 @@ const ApplicationPage = (props) => {
                                     fontFamily="Inter"
                                     fontSize="36px"
                                     fontWeight="800"
-                                    color= {(resume || !errorState.submit) ? "rgba(13,26,38,1)" : "rgb(225,50,50)"}
+                                    color={(resume || !errorState.submit) ? "rgba(13,26,38,1)" : "rgb(225,50,50)"}
                                     lineHeight="20px"
                                     textAlign="left"
                                     display="block"
@@ -1744,7 +1735,7 @@ const ApplicationPage = (props) => {
                                     onChange={(file) => {
                                         setResume(file)
                                     }}
-                                    inputProps={{accept:"application/pdf"}}
+                                    inputProps={{accept: "application/pdf"}}
                                     style={fileInput}
                                 />
                                 <Text
@@ -1773,7 +1764,7 @@ const ApplicationPage = (props) => {
                                     onChange={(file) => {
                                         setCoverLetter(file)
                                     }}
-                                    inputProps={{accept:"application/pdf"}}
+                                    inputProps={{accept: "application/pdf"}}
                                     style={fileInput}
                                 />
                             </Flex>
@@ -1847,7 +1838,8 @@ const ApplicationPage = (props) => {
                                                     address: address,
                                                     job: job,
                                                     education: educations,
-                                                    projects: projects
+                                                    projects: projects,
+                                                    projFiles: projFiles
                                                 }
                                             }
                                         })

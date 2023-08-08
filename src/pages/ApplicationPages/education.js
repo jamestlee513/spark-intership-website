@@ -23,8 +23,8 @@ export default function education({ education, deleteEducation }) {
       <TextField
           width="40vw"
           height="unset"
-          label="Universtiy"
-          placeholder="Enter Universtiy"
+          label="University"
+          placeholder="Enter University"
           shrink="0"
           alignSelf="stretch"
           size="large"
