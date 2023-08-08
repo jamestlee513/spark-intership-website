@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { API, graphqlOperation, Auth } from 'aws-amplify';
 import Footer from '../../ui-components/Footer';
+import Header from '../../ui-components/Header';
 
 const getApplication = `
   query getApplication {
@@ -52,6 +53,9 @@ console.log(applicationData);
   if (userEmail) {
     return (
       <>
+      <div>
+        <Header />
+      </div>
       <div>
         <a href="http://localhost:3000/">
           <div style={{ background: 'black', height: '80px' }}>
