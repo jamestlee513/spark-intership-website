@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import SparkLogo from "../../images/Spark Logo.png";
 import InternPhoto1 from "../../images/Rectangle 33.png";
 import InternPhoto2 from "../../images/Rectangle 34.png";
-import { 
+import {
   Button,
   Typography,
   Container,

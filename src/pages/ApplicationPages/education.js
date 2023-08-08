@@ -23,15 +23,15 @@ export default function education({ education, deleteEducation }) {
       <TextField
           width="40vw"
           height="unset"
-          label="Universtiy"
-          placeholder="Enter Universtiy"
+          label="University"
+          placeholder="Enter University"
           shrink="0"
           alignSelf="stretch"
           size="large"
           isDisabled={true}
           labelHidden={false}
           variation="default"
-          value={education.university}
+          value={education.unversity}
       ></TextField>
       <TextField
           width="40vw"
@@ -79,6 +79,7 @@ export default function education({ education, deleteEducation }) {
               isDisabled={false}
               variation="primary"
               children="Delete"
+              backgroundColor={titleColor}
               order="0"
               margin="20px 0px 0px 0px"
               onClick={handleEducationClick}

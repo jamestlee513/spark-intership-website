@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Link, useLocation, useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {Auth} from 'aws-amplify';
 import {DataStore} from '@aws-amplify/datastore';
 import {Storage} from '@aws-amplify/storage';
@@ -7,9 +7,15 @@ import {Application} from '../../models';
 import {Fade} from '@mui/material'
 import ReviewList from "./reviewList";
 import ListList from "./ListList"
+import {MuiFileInput} from "mui-file-input";
+import ReviewProjectList from "./reviewProjectList";
+import {Button, View} from "@aws-amplify/ui-react";
+import {getOverrideProps} from "@aws-amplify/ui-react/internal";
 
 
-const ReviewPage = () => {
+const ReviewPage = (props) => {
+
+    const overrides = props
 
     const {stuff} = useLocation().state
     const navigate = useNavigate()
@@ -17,10 +23,6 @@ const ReviewPage = () => {
         navigate('/application')
     }
 
-    const resume = stuff.resume
-    const [resumeURL, setResumeURL] = useState('');
-    const coverLetter = stuff.coverLetter
-    const [coverLetterURL, setCoverLetterURL] = useState('');
     const [email, setEmail] = useState('');
     let eduGroups = []
     let projGroups = []
@@ -31,22 +33,6 @@ const ReviewPage = () => {
             setEmail(attributes.attributes.email)
         })()
     }, [])
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-        setResumeURL(reader.result);
-    };
-    if (resume) {
-        reader.readAsDataURL(resume);
-    }
-
-    const reader2 = new FileReader();
-    reader2.onloadend = () => {
-        setCoverLetterURL(reader2.result);
-    };
-    if (coverLetter) {
-        reader2.readAsDataURL(coverLetter);
-    }
 
 
     async function submit() {
@@ -77,30 +63,24 @@ const ReviewPage = () => {
                 item.project = stuff.projects
                 item.completeApplication = true
             }));
-            if (stuff.resume) {
-                await Storage.put(email + stuff.job + "resume" + stuff.resume.name, stuff.resume, {
-                    level: 'public',
-                    contentType: 'application/pdf'
-                });
-            }
-            await DataStore.save(Application.copyOf(app, item => {
-                // Update the values on {item} variable to update DataStore entry
-                item.firstName = stuff.firstName
-                item.lastName = stuff.lastName
-                item.email = attributes.attributes.email
-                item.phone = stuff.phoneNumber
-                item.city = stuff.city
-                item.resume = stuff.resume.name
-                item.coverLetter = stuff.coverLetter.name
-                item.zipcode = Number(stuff.zipCode)
-                item.country = stuff.country
-                item.state = stuff.state
-                item.address = stuff.address
-                item.job = stuff.job
-                item.education = stuff.education
-                item.project = stuff.projects
-                item.completeApplication = true
-            }));
+            // await DataStore.save(Application.copyOf(app, item => {
+            //     // Update the values on {item} variable to update DataStore entry
+            //     item.firstName = stuff.firstName
+            //     item.lastName = stuff.lastName
+            //     item.email = attributes.attributes.email
+            //     item.phone = stuff.phoneNumber
+            //     item.city = stuff.city
+            //     item.resume = stuff.resume.name
+            //     item.coverLetter = stuff.coverLetter.name
+            //     item.zipcode = Number(stuff.zipCode)
+            //     item.country = stuff.country
+            //     item.state = stuff.state
+            //     item.address = stuff.address
+            //     item.job = stuff.job
+            //     item.education = stuff.education
+            //     item.project = stuff.projects
+            //     item.completeApplication = true
+            // }));
         } else {
             await DataStore.save(
                 new Application({
@@ -121,22 +101,43 @@ const ReviewPage = () => {
                     "completeApplication": true
                 })
             );
-            if (stuff.resume) {
-                await Storage.put(email + stuff.job + stuff.resume.name, stuff.resume, {
+        }
+        let filesToDelete;
+        await Storage.list(email).then(({results}) => {
+            filesToDelete = results
+        })
+        filesToDelete.forEach(async (fil) => {
+            await Storage.remove(fil.key)
+        })
+        if (stuff.resume) {
+            await Storage.put(email + stuff.job + "Resume" + stuff.resume.name, stuff.resume, {
+                level: 'public',
+                contentType: 'application/pdf'
+            });
+        }
+        if (stuff.coverLetter) {
+            await Storage.put(email + stuff.job + "CoverLetter" + stuff.coverLetter.name, stuff.coverLetter, {
+                level: 'public',
+                contentType: 'application/pdf'
+            });
+        }
+        stuff.projects.forEach(async (proj, i) => {
+            if (stuff.projFiles[i]) {
+                await Storage.put(email + stuff.job + "Proj" + proj.fileURL, stuff.projFiles[i], {
                     level: 'public',
                     contentType: 'application/pdf'
                 });
             }
-        }
+        })
         navigate("/submit", {state: {job: stuff.job}})
     }
 
     function eduAdd(edu) {
-        eduGroups.push([["Major", edu.major], ["University", edu.university], ["GPA", edu.GPA], ["Expected Graduation", edu.expectedGrad]])
+        eduGroups.push([["Major", edu.major], ["University", edu.unversity], ["GPA", edu.GPA], ["Expected Graduation", edu.expectedGrad]])
     }
 
-    function projAdd(proj) {
-        projGroups.push([["Project Name", proj.projectName], ["Project Description", proj.projectDesc], ["Link", proj.link]])
+    function projAdd(proj, i) {
+        projGroups.push([["Project Name", proj.projectName], ["Project Description", proj.projectDesc], ["Link", proj.link], stuff.projFiles[i]])
     }
 
     // Styles
@@ -147,6 +148,8 @@ const ReviewPage = () => {
 
     const t2 = {textAlign: "left", fontSize: "3.5vmin"}
 
+    const fileUpload = {margin: "2vh 10vw 2vh 0px"}
+
     stuff.education.forEach(eduAdd)
 
     stuff.projects.forEach(projAdd)
@@ -155,7 +158,7 @@ const ReviewPage = () => {
     return (
         <div>
             <Fade in={true}>
-                <div>
+                <div style={{padding: "0px 2vw 0px 2vw"}}>
                     <h1 style={{fontSize: "10vmin", color: titleColor}}> {stuff.job + " Application"}</h1>
                     <h1 style={t1}>Application Preview</h1>
                     <div>
@@ -178,22 +181,67 @@ const ReviewPage = () => {
                     </div>
                     <div>
                         <h2 style={t2}>Projects</h2>
-                        <ListList name={"Project"} groups={projGroups}/>
+                        <ReviewProjectList groups={projGroups}/>
                     </div>
-                    <div>
-                        <h2 style={t2}>Resume and Cover Letter</h2>
+                    <h2 style={t2}>Resume and Cover Letter</h2>
+                    <div style={{display: "flex"}}>
+                        <MuiFileInput
+                            label="Resume"
+                            value={stuff.resume}
+                            disabled
+                            style={fileUpload}
+                        />
+                        <MuiFileInput
+                            label="Cover Letter"
+                            value={stuff.coverLetter}
+                            disabled
+                            style={fileUpload}
+                        />
                     </div>
-
-
-                    <button onClick={() => {
-                        navigate("/application")
-                    }}> No no no no wait wait wait
-                    </button>
-                    <button onClick={submit}> Submit</button>
+                    <View
+                        width="unset"
+                        display="flex"
+                        height="94px"
+                        gap="unset"
+                        alignItems="center"
+                        justifyContent="space-between"
+                        overflow="hidden"
+                        shrink="1"
+                        alignSelf="stretch"
+                        position="relative"
+                        padding="0px 0px 0px 0"
+                        {...getOverrideProps(overrides, "Frame 406")}>
+                        <Button
+                            width="114px"
+                            height="unset"
+                            size="default"
+                            isDisabled={false}
+                            variation="primary"
+                            children="Previous"
+                            order="0"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                navigate("/application", {state: {job: stuff.job}})
+                            }}
+                            float="left"
+                        ></Button>
+                        <Button
+                            width="114px"
+                            height="unset"
+                            size="default"
+                            isDisabled={false}
+                            variation="primary"
+                            children="Submit"
+                            order="2"
+                            onClick={submit}
+                            float="right"
+                        ></Button>
+                    </View>
                 </div>
             </Fade>
         </div>
     )
 }
 
-export default ReviewPage;
+export default ReviewPage
+;
