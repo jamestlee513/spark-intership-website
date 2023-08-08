@@ -143,12 +143,12 @@ export default function UpdateListing(){
     <AdminHeader/>
     <ThemeProvider theme={theme}>
       <Stack sx={{justifyContent: 'center'}}>
-        <Box sx={{width: 1290, height: 726, border: '1px solid', borderColor: 'secondary.main', borderRadius: 5}}>
-        <Box sx={{width: 1290, height: 83, backgroundColor: 'secondary.main', textAlign: 'left', fontWeight: 500, fontSize: 25}}>
+        <Box sx={{width: '90vw', height: '70vh', border: '1px solid', borderColor: 'secondary.main', borderRadius: 5}}>
+        <Box sx={{width: '90vw', height: '8vh', backgroundColor: 'secondary.main', textAlign: 'left', fontWeight: 500, fontSize: 25}}>
           <div style={listingHeader}>Job Listing</div>
         </Box>
-        <Grid container spacing={2} sx={{m: 2, justifyContent: 'space-between', width: 1290}}>
-        <Grid item xs={5.5}>
+        <Grid container spacing={2} sx={{m: 2, justifyContent: 'space-between', width: '90vw'}}>
+        <Grid item xs={6}>
           <Stack sx={{textAlign: 'left', justifyContent: 'space-between', fontSize: 20, fontWeight: 700, flexDirection: 'column', alignContent: 'flex-start'}}>
             Job Title
             <TextField id="title" variant="outlined" inputRef={title} error={titleError !== ''} sx={{'& > :not(style)': {width: 519, height: 89}}} helperText={titleError} />
@@ -157,7 +157,7 @@ export default function UpdateListing(){
             <TextField id="description" multiline minRows={14}  error={descriptionError !== ''} sx={{'& > :not(style)': {width: 519, height: 355, textAlign: 'left' }}} variant="outlined" inputRef={description} helperText={descriptionError} />
           </Stack>
         </Grid>
-        <Grid item xs={5.5}>
+        <Grid item xs={6}>
           <Stack sx={{textAlign: 'left', justifyContent: 'space-between', fontSize: 20, fontWeight: 700, flexDirection: 'column', alignContent: 'flex-end'}}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               Application Deadline
@@ -175,9 +175,6 @@ export default function UpdateListing(){
         <Stack sx={{justifyContent: "center"}} spacing={2}>
           <Button variant="contained" size="large" onClick={updateListing} sx={{width: 144, height: 35}}>Update</Button>
           <Button variant="contained" size ="large" onClick={deleteListing} sx={{width: 144, height: 35}}>Delete</Button>
-        </Stack>
-        <Stack sx={{justifyContent: "center"}}>
-        <Button variant="contained" size ="large" onClick={handleBack} sx={{width: 144, height: 35}}>Back</Button>
         </Stack>  
         </Box>
       </Stack>
