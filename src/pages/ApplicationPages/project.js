@@ -3,6 +3,7 @@ import {
   Button,
   TextField,
 } from "@aws-amplify/ui-react";
+import { MuiFileInput } from 'mui-file-input'
 
 export default function project({ project, deleteProject }) {
   function handleProjectClick() {
@@ -15,11 +16,15 @@ export default function project({ project, deleteProject }) {
     border: "2px",
     borderStyle: "dashed",
     borderColor: titleColor,
-    padding: "4px 16px 4px 16px",
+    padding: "16px 16px 16px 16px",
     borderRadius: "10px"
   }
   return (
     <div style={border}>
+        <MuiFileInput
+        label="Choose your project to upload (.pdf)"
+        value={project.file}
+        />
       <TextField
           width="40vw"
           height="unset"
