@@ -143,6 +143,7 @@ const ReviewPage = (props) => {
     // Styles
 
     const titleColor = 'rgb(83 111 180)'
+    const buttonColor = 'rgb(242,155,136)'
 
     const t1 = {textAlign: "left", fontSize: "4vmin"}
 
@@ -219,6 +220,7 @@ const ReviewPage = (props) => {
                             variation="primary"
                             children="Previous"
                             order="0"
+                            backgroundColor={buttonColor}
                             onClick={(e) => {
                                 e.preventDefault();
                                 navigate("/application", {state: {job: stuff.job}})
@@ -233,6 +235,7 @@ const ReviewPage = (props) => {
                             variation="primary"
                             children="Submit"
                             order="2"
+                            backgroundColor={buttonColor}
                             onClick={submit}
                             float="right"
                         ></Button>

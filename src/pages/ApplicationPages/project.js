@@ -11,6 +11,7 @@ export default function project({project, deleteProject, file}) {
     }
 
     const titleColor = 'rgb(83 111 180)'
+    const buttonColor = 'rgb(242,155,136)'
 
     const border = {
         border: "2px",
@@ -70,7 +71,7 @@ export default function project({project, deleteProject, file}) {
                 isDisabled={false}
                 variation="primary"
                 children="Delete"
-                backgroundColor={titleColor}
+                backgroundColor={buttonColor}
                 order="0"
                 margin="20px 0px 0px 0px"
                 onClick={handleProjectClick}
