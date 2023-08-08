@@ -9,9 +9,13 @@ import ReviewList from "./reviewList";
 import ListList from "./ListList"
 import {MuiFileInput} from "mui-file-input";
 import ReviewProjectList from "./reviewProjectList";
+import {Button, View} from "@aws-amplify/ui-react";
+import {getOverrideProps} from "@aws-amplify/ui-react/internal";
 
 
-const ReviewPage = () => {
+const ReviewPage = (props) => {
+
+    const overrides = props
 
     const {stuff} = useLocation().state
     const navigate = useNavigate()
@@ -99,8 +103,12 @@ const ReviewPage = () => {
             );
         }
         let filesToDelete;
-        await Storage.list(email).then(({results}) => {filesToDelete=results})
-        filesToDelete.forEach(async (fil) => {await Storage.remove(fil.key)})
+        await Storage.list(email).then(({results}) => {
+            filesToDelete = results
+        })
+        filesToDelete.forEach(async (fil) => {
+            await Storage.remove(fil.key)
+        })
         if (stuff.resume) {
             await Storage.put(email + stuff.job + "Resume" + stuff.resume.name, stuff.resume, {
                 level: 'public',
@@ -190,15 +198,50 @@ const ReviewPage = () => {
                             style={fileUpload}
                         />
                     </div>
-                    <button onClick={() => {
-                        navigate("/application")
-                    }}> No no no no wait wait wait
-                    </button>
-                    <button onClick={submit}> Submit</button>
+                    <View
+                        width="unset"
+                        display="flex"
+                        height="94px"
+                        gap="unset"
+                        alignItems="center"
+                        justifyContent="space-between"
+                        overflow="hidden"
+                        shrink="1"
+                        alignSelf="stretch"
+                        position="relative"
+                        padding="0px 0px 0px 0"
+                        {...getOverrideProps(overrides, "Frame 406")}>
+                        <Button
+                            width="114px"
+                            height="unset"
+                            size="default"
+                            isDisabled={false}
+                            variation="primary"
+                            children="Previous"
+                            order="0"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                navigate("/application", {state: {job: stuff.job}})
+                            }}
+                            float="left"
+                        ></Button>
+                        <Button
+                            width="114px"
+                            height="unset"
+                            size="default"
+                            isDisabled={false}
+                            variation="primary"
+                            children="Submit"
+                            order="2"
+                            onClick={submit}
+                            float="right"
+                        ></Button>
+                    </View>
                 </div>
             </Fade>
         </div>
     )
 }
 
-export default ReviewPage;
+export default ReviewPage
+;

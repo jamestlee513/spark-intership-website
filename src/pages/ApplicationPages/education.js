@@ -79,6 +79,7 @@ export default function education({ education, deleteEducation }) {
               isDisabled={false}
               variation="primary"
               children="Delete"
+              backgroundColor={titleColor}
               order="0"
               margin="20px 0px 0px 0px"
               onClick={handleEducationClick}
