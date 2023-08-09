@@ -168,55 +168,63 @@ export default function UpdateListing(){
     <AdminHeader/>
     <ThemeProvider theme={theme}>
       <Stack sx={{justifyContent: 'center'}}>
-        <Box sx={{width: '90vw', height: '70vh', border: '1px solid', borderColor: 'secondary.main', borderRadius: 5}}>
-        <Box sx={{width: '90vw', height: '8vh', backgroundColor: 'secondary.main', textAlign: 'left', fontWeight: 500, fontSize: 25}}>
-          <div style={listingHeader}>Job Listing</div>
-        </Box>
-        <Grid container spacing={2} sx={{m: 2, justifyContent: 'space-between', width: '90vw'}}>
-        <Grid item xs={6}>
-          <Stack sx={{textAlign: 'left', justifyContent: 'space-between', fontSize: 20, fontWeight: 700, flexDirection: 'column', alignContent: 'flex-start'}}>
-            Job Title
-            <TextField id="title" variant="outlined" inputRef={title} error={titleError !== ''} sx={ {width: 519, height: 89}} helperText={titleError} />
-            <br></br>
-            Job Description
-            <TextField id="description" multiline minRows={14}  error={descriptionError !== ''} sx={ {width: 519, height: 355, textAlign: 'left' }} variant="outlined" inputRef={description} helperText={descriptionError} />
+        <Grid container sx={{width: '90vw', height: '71vh', border: '1px solid', borderColor: 'secondary.main', borderRadius: 5, justifyContent: 'center', direction: 'column'}}>
+          <Grid
+              container direction="row" justifyContent="space-between" alignItems="center"
+              sx={{width: '90vw', height: '8vh', backgroundColor: 'secondary.main', fontWeight: 500, fontSize: 25}}>
+              <Grid item xs={6} textAlign="left" paddingLeft="20px">Job Listing</Grid>
+          </Grid>
+        <Grid container sx={{justifyContent: 'space-between', width: '85vw', alignItems: 'space-evenly'}}>
+            <Grid>
+              <Stack sx={{textAlign: 'left', fontSize: 20, fontWeight: 700, flexDirection: 'column', justifyContent: 'flex-start', width: '36vw', height: '50vh'}}>
+                <Stack direction="column">
+                Job Title
+                <TextField id="title" variant="outlined" inputRef={title} error={titleError !== ''} inputProps={{sx:{height: '3vh'}}} helperText={titleError} />
+              </Stack>
+              <br></br>
+              <Stack direction="column">
+                Job Description
+                <TextField id="description" multiline minRows={10} maxRows={10} error={descriptionError !== ''} sx={{width: '36vw', height: '33vh'}} variant="outlined" inputRef={description} helperText={descriptionError} />
+              </Stack>
           </Stack>
         </Grid>
-        <Grid item xs={6}>
-          <Stack sx={{textAlign: 'left', justifyContent: 'space-between', fontSize: 20, fontWeight: 700, flexDirection: 'column', alignContent: 'flex-end'}}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              Application Deadline
-              <DatePicker value={dayjs(listing.state.listing.deadline, "YYYY-MM-DD")} inputRef={deadline} sx={ {width: 519, height: 89}}  slotProps={{
-          textField: {
-            variant: 'outlined',
-            error: deadlineError !== '',
-            helperText: deadlineError
-          },
-        }}/>
-            </LocalizationProvider>
-            <br></br>
-            Location
-            <TextField id="location" variant="outlined" inputRef={location} error={locationError !== ''} sx={ { width: 519, height: 89 }} helperText={locationError}/>
-            <br></br>
-            Qualifications
-            <TextField id="qualifications" variant="outlined" error={qualificationsError !== ''} inputRef={qualifications} sx={{ width: 519, height: 209 }} multiline minRows={8} helperText={qualificationsError}/>
-          </Stack>
-        </Grid>
+        <Grid>
+           <Stack sx={{textAlign: 'left', fontSize: 20, fontWeight: 700, flexDirection: 'column', justifyContent: 'flex-start', width: '36vw', height: '50vh'}}>
+              <Stack direction="column">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  Application Deadline
+                  <DatePicker value={dayjs(listing.state.listing.deadline, "YYYY-MM-DD")} inputRef={deadline} slotProps={{
+                    textField: {
+                    variant: 'outlined',
+                    error: deadlineError !== '',
+                    helperText: deadlineError
+                    },
+                    sx: {height: '3vh'}
+                  }}/>
+                </LocalizationProvider>
+              </Stack>
+              <br></br>
+              <Stack direction="column">
+              Location
+              <TextField id="location" variant="outlined" inputRef={location} error={locationError !== ''} inputProps={{sx:{height: '3vh'}}} helperText={locationError}/>
+              </Stack>
+              <br></br>
+              <Stack direction="column">
+              Qualifications
+              <TextField id="qualifications" variant="outlined" error={qualificationsError !== ''} inputRef={qualifications} multiline minRows={5} maxRows={5} helperText={qualificationsError}/>
+              </Stack>
+            </Stack>
+         </Grid>
         </Grid>
         <Stack sx={{justifyContent: "center"}} spacing={2}>
           <Button variant="contained" size="large" onClick={updateListing} sx={{width: 144, height: 35}}>Update</Button>
           <Button variant="contained" size ="large" onClick={deleteListing} sx={{width: 144, height: 35}}>Delete</Button>
         </Stack>  
-        </Box>
+      </Grid>
       </Stack>
       </ThemeProvider>
     </>
   )
-}
-
-const listingHeader = {
-  paddingLeft: 25,
-  paddingTop: 20
 }
 
 

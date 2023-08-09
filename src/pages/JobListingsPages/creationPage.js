@@ -102,7 +102,7 @@ export default function CreateListing() {
     qualifications.current.value = null
     location.current.value = null
     deadline.current.value = null
-    navigate('/listings')
+    navigate('/admin')
   }
 
   function wordCounter(string) {
@@ -153,49 +153,61 @@ return (
   <AdminHeader/>
   <ThemeProvider theme={theme}>
     <Stack sx={{justifyContent: 'center'}}>
-      <Box sx={{width: 1290, height: 726, border: '1px solid', borderColor: 'secondary.main', borderRadius: 5}}>
-      <Box sx={{width: 1290, height: 83, backgroundColor: 'secondary.main', textAlign: 'left', fontWeight: 500, fontSize: 25}}>
-        Job Listing
-      </Box>
-      <Grid container spacing={2} sx={{m: 2, justifyContent: 'space-between', width: 1290}}>
-      <Grid item xs={5.5}>
-        <Stack sx={{textAlign: 'left', justifyContent: 'space-between', fontSize: 20, fontWeight: 700, flexDirection: 'column', alignContent: 'flex-start'}}>
-          Job Title
-          <TextField id="title" error={nameError !== ''} variant="outlined" inputRef={jobName} helperText={nameError}  sx={{width: 519, height: 89}}/>
-          <br></br>
-          Job Description
-          <TextField id="description" multiline minRows={14} error={descriptionError !== ''} variant="outlined" inputRef={jobDescription} helperText={descriptionError} sx={{width: 519, height: 355, textAlign: 'left' }}/>
-        </Stack>
+      <Grid container sx={{width: '90vw', height: '71vh', border: '1px solid', borderColor: 'secondary.main', borderRadius: 5, justifyContent: 'center', direction: 'column'}}>
+          <Grid
+              container direction="row" justifyContent="space-between" alignItems="center"
+              sx={{width: '90vw', height: '8vh', backgroundColor: 'secondary.main', fontWeight: 500, fontSize: 25}}>
+              <Grid item xs={6} textAlign="left" paddingLeft="20px">New Job Listing</Grid>
+          </Grid>
+          <Grid container sx={{justifyContent: 'space-between', width: '85vw', alignItems: 'space-evenly'}}>
+            <Grid>
+              <Stack sx={{textAlign: 'left', fontSize: 20, fontWeight: 700, flexDirection: 'column', justifyContent: 'flex-start', width: '36vw', height: '50vh'}}>
+                <Stack direction="column">
+                  Job Title
+                  <TextField id="title" error={nameError !== ''} variant="outlined" inputRef={jobName} helperText={nameError} inputProps={{sx:{height: '3vh'}}} />
+                </Stack>
+                <br></br>
+                <Stack direction="column">
+                  Job Description
+                  <TextField id="description" multiline minRows={10} maxRows={10} error={descriptionError !== ''} variant="outlined" inputRef={jobDescription} helperText={descriptionError} sx={{width: '36vw', height: '33vh'}}/>
+                </Stack>
+              </Stack>
+            </Grid>
+            <Grid>
+              <Stack sx={{textAlign: 'left', fontSize: 20, fontWeight: 700, flexDirection: 'column', justifyContent: 'flex-start', width: '36vw', height: '50vh'}}>
+                <Stack direction="column">
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    Application Deadline
+                    <DatePicker inputRef={deadline} slotProps={{
+                      textField: {
+                        variant: 'outlined',
+                        error: dateError !== '',
+                        helperText: dateError,
+                      },
+                      sx: {height: '3vh'}
+                    }} />
+                  </LocalizationProvider>
+                </Stack>
+                <br></br>
+                <Stack direction="column">
+                Location
+                <TextField id="location" error={locationError !== ''} variant="outlined" inputRef={location} helperText={locationError} inputProps={{sx:{height: '3vh'}}}/>
+                </Stack>
+                <br></br>
+                <Stack direction="column">
+                Qualifications
+                <TextField id="qualifications" error={qualificationsError !== ''} variant="outlined" inputRef={qualifications} helperText={qualificationsError} multiline minRows={5} maxRows={5}/>
+                </Stack>
+                </Stack>
+            </Grid>
+          </Grid>
+          <Stack sx={{justifyContent: "center"}} spacing={2}>
+            <Button variant="contained" size="large" sx={{width: 144, height: 35}} onClick={makeListing}>Create</Button>
+            <Button variant="contained" size ="large" sx={{width: 144, height: 35}} onClick={goToJobListings}>Back</Button>
+          </Stack>
       </Grid>
-      <Grid item xs={5.5}>
-        <Stack sx={{textAlign: 'left', justifyContent: 'space-between', fontSize: 20, fontWeight: 700, flexDirection: 'column', alignContent: 'flex-end'}}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            Application Deadline
-            <DatePicker inputRef={deadline} sx={{width: 519, height: 89}} slotProps={{
-          textField: {
-            variant: 'outlined',
-            error: dateError !== '',
-            helperText: dateError,
-          },
-        }} />
-          </LocalizationProvider>
-          <br></br>
-          Location
-          <TextField id="location" error={locationError !== ''} variant="outlined" inputRef={location} helperText={locationError}sx={{ width: 519, height: 89 }}/>
-          <br></br>
-          Qualifications
-          <TextField id="qualifications" error={qualificationsError !== ''} variant="outlined" inputRef={qualifications} helperText={qualificationsError} sx={ { width: 519, height: 209 }} multiline minRows={8}/>
-        </Stack>
-      </Grid>
-      </Grid>
-      <br></br>
-      <Stack sx={{justifyContent: "center"}} spacing={2}>
-        <Button variant="contained" size="large" sx={{width: 144, height: 35}} onClick={makeListing}>Create</Button>
-        <Button variant="contained" size ="large" sx={{width: 144, height: 35}} onClick={goToJobListings}>Back</Button>
-      </Stack>  
-      </Box>
     </Stack>
     </ThemeProvider>
   </>
-)
+  )
 }
