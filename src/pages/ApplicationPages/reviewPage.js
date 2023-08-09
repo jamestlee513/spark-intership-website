@@ -42,9 +42,6 @@ const ReviewPage = (props) => {
         if (app !== undefined) {
             /* Models in DataStore are immutable. To update a record you must use the copyOf function
             to apply updates to the item’s fields rather than mutating the instance directly */
-            if (stuff.resume) {
-                await Storage.remove(email + stuff.job + "resume" + app.resume.name, {level: 'public'});
-            }
             await DataStore.save(Application.copyOf(app, item => {
                 // Update the values on {item} variable to update DataStore entry
                 item.firstName = stuff.firstName
@@ -103,27 +100,27 @@ const ReviewPage = (props) => {
             );
         }
         let filesToDelete;
-        await Storage.list(email).then(({results}) => {
+        await Storage.list(email + '/' + stuff.job).then(({results}) => {
             filesToDelete = results
         })
         filesToDelete.forEach(async (fil) => {
             await Storage.remove(fil.key)
         })
         if (stuff.resume) {
-            await Storage.put(email + stuff.job + "Resume" + stuff.resume.name, stuff.resume, {
+            await Storage.put(email + '/' + stuff.job + "Resume" + stuff.resume.name, stuff.resume, {
                 level: 'public',
                 contentType: 'application/pdf'
             });
         }
         if (stuff.coverLetter) {
-            await Storage.put(email + stuff.job + "CoverLetter" + stuff.coverLetter.name, stuff.coverLetter, {
+            await Storage.put(email + '/' + stuff.job + "CoverLetter" + stuff.coverLetter.name, stuff.coverLetter, {
                 level: 'public',
                 contentType: 'application/pdf'
             });
         }
         stuff.projects.forEach(async (proj, i) => {
             if (stuff.projFiles[i]) {
-                await Storage.put(email + stuff.job + "Proj" + proj.fileURL, stuff.projFiles[i], {
+                await Storage.put(email + '/' + stuff.job + "Proj" + proj.fileURL, stuff.projFiles[i], {
                     level: 'public',
                     contentType: 'application/pdf'
                 });
