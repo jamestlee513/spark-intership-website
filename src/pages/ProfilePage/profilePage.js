@@ -4,45 +4,57 @@ import Footer from '../../ui-components/Footer';
 import Header from '../../ui-components/Header';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 
+
 const getApplication = `
-  query getApplication {
-    getApplication(id: "d0adfd2d-207d-4b7e-ad10-f6ad33fb253f") {
-      email
-      firstName
-    }
-  }`;
+query getApplication {
+  getApplication(id: "99bdcd8b-538e-4db0-af28-0de0f1258337") {
+    firstName
+    lastName
+    job
+    email
+    country
+    city
+    address
+    phone
+    state
+  }
+}`;
 
 const ProfilePage = () => {
   const [applicationData, setApplicationData] = useState([]);
   const [isBoxCollapsed, setIsBoxCollapsed] = useState(true);
   const [userLoaded, setUserLoaded] = useState(false);
+  const [userApplicationLoaded, setUserApplicationLoaded] = useState(false);
   const [userEmail, setUserEmail] = useState('');
 
   useEffect(() => {
-    loadUserInfo();
+   // loadUserInfo();
     loadApplicationData();
   }, []);
 
-  const loadUserInfo = async () => {
-    try {
-      const userInfo = await Auth.currentUserInfo();
-      setUserEmail(userInfo.attributes.email);
-      setUserLoaded(true);
-    } catch (error) {
-      console.error("Error fetching user info:", error);
-      setUserLoaded(true);
-    }
-  };
+  
 
-  const loadApplicationData = async () => {
-    try {
-      const { data } = await API.graphql(graphqlOperation(getApplication));
-      setApplicationData(data.getApplication?.items);
-    } catch (error) {
-      console.error("Error fetching application data:", error);
-    }
-  };
-console.log(applicationData);
+ const loadApplicationData = async () => {
+  try {
+    const { data } = await API.graphql(graphqlOperation(getApplication));
+    console.log('API Response:', data); // Add this line for debugging
+    setApplicationData(data.getApplication);
+    setUserApplicationLoaded(true);
+  } catch (error) {
+    console.error("Error fetching application data:", error);
+    setUserApplicationLoaded(true);
+  }
+
+  try {
+    const userInfo = await Auth.currentUserInfo();
+    setUserEmail(userInfo.attributes.email);
+    setUserLoaded(true);
+  } catch (error) {
+    console.error("Error fetching user info:", error);
+    setUserLoaded(true);
+  }
+};
+
   const handleBoxToggle = () => {
     setIsBoxCollapsed(!isBoxCollapsed);
   };
@@ -52,6 +64,7 @@ console.log(applicationData);
   }
 
   if (userEmail) {
+   
     return (
       <>
       <div>
@@ -65,7 +78,7 @@ console.log(applicationData);
           </div>
           <div style={{ cursor: 'pointer', margin: '0 10px' , alignItems: '-moz-initial'}} onClick={handleBoxToggle}>
             <p style = {{alignItems: 'center'}}>
-              {isBoxCollapsed ? 'Application +' : 'Application -'}
+              {isBoxCollapsed ? 'Application -' : 'Application +'}
             </p>
           </div>
         </div>
@@ -77,13 +90,14 @@ console.log(applicationData);
               alt="user's pic"
               style={{ width: '100px', height: '100px', margin: '10px', border: '2px solid black' }}
             />
-            <h2>Email</h2>
-            <p>{userEmail}</p>
-            {/* Education Level */}
-            <h2>Education level</h2>
-            <p>Rising Sophomore</p>
-            <h3>City</h3>
-            <p>Mukilteo, WA</p>
+           <h2>Name: {applicationData.firstName} {applicationData.lastName}</h2>
+            <p>Email: {userEmail}</p>
+          <p>Job: {applicationData.job}</p>
+          <p>Country: {applicationData.country}</p>
+          <p>City: {applicationData.city}</p>
+          <p>Address: {applicationData.address}</p>
+          <p>Phone: {applicationData.phone}</p>
+          <p>State: {applicationData.state}</p>
           </div>
         )}
       </div>
@@ -92,6 +106,7 @@ console.log(applicationData);
       </div>
       </>
     );
+        
   } else {
     withAuthenticator(ProfilePage);
   }
