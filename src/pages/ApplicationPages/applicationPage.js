@@ -347,7 +347,7 @@ const ApplicationPage = (props) => {
                 item.firstName = firstName
                 item.lastName = lastName
                 item.email = attributes.attributes.email
-                item.phone = phone
+                item.phone = Number(phone)
                 item.city = city
                 item.resume = resume.name
                 item.coverLetter = coverLetter.name
@@ -365,7 +365,7 @@ const ApplicationPage = (props) => {
                     "firstName": firstName,
                     "lastName": lastName,
                     "email": attributes.attributes.email,
-                    "phone": phone,
+                    "phone": Number(phone),
                     "city": city,
                     "resume": resume.name,
                     "coverLetter": coverLetter.name,
@@ -1878,7 +1878,7 @@ const ApplicationPage = (props) => {
                                                 stuff: {
                                                     firstName: firstName,
                                                     lastName: lastName,
-                                                    phoneNumber: phone,
+                                                    phoneNumber: Number(phone),
                                                     city: city,
                                                     resume: resume,
                                                     coverLetter: coverLetter,
