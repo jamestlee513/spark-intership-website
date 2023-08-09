@@ -42,15 +42,12 @@ const ReviewPage = (props) => {
         if (app !== undefined) {
             /* Models in DataStore are immutable. To update a record you must use the copyOf function
             to apply updates to the item’s fields rather than mutating the instance directly */
-            if (stuff.resume) {
-                await Storage.remove(email + stuff.job + "resume" + app.resume.name, {level: 'public'});
-            }
             await DataStore.save(Application.copyOf(app, item => {
                 // Update the values on {item} variable to update DataStore entry
                 item.firstName = stuff.firstName
                 item.lastName = stuff.lastName
                 item.email = email
-                item.phone = stuff.phoneNumber
+                item.phone = Number(stuff.phoneNumber)
                 item.city = stuff.city
                 item.resume = stuff.resume.name
                 item.coverLetter = stuff.coverLetter.name
@@ -87,7 +84,7 @@ const ReviewPage = (props) => {
                     "firstName": stuff.firstName,
                     "lastName": stuff.lastName,
                     "email": email,
-                    "phone": stuff.phoneNumber,
+                    "phone": Number(stuff.phoneNumber),
                     "city": stuff.city,
                     "resume": stuff.resume.name,
                     "coverLetter": stuff.coverLetter.name,
@@ -103,27 +100,27 @@ const ReviewPage = (props) => {
             );
         }
         let filesToDelete;
-        await Storage.list(email).then(({results}) => {
+        await Storage.list(email + '/' + stuff.job).then(({results}) => {
             filesToDelete = results
         })
         filesToDelete.forEach(async (fil) => {
             await Storage.remove(fil.key)
         })
         if (stuff.resume) {
-            await Storage.put(email + stuff.job + "Resume" + stuff.resume.name, stuff.resume, {
+            await Storage.put(email + '/' + stuff.job + "Resume" + stuff.resume.name, stuff.resume, {
                 level: 'public',
                 contentType: 'application/pdf'
             });
         }
         if (stuff.coverLetter) {
-            await Storage.put(email + stuff.job + "CoverLetter" + stuff.coverLetter.name, stuff.coverLetter, {
+            await Storage.put(email + '/' + stuff.job + "CoverLetter" + stuff.coverLetter.name, stuff.coverLetter, {
                 level: 'public',
                 contentType: 'application/pdf'
             });
         }
         stuff.projects.forEach(async (proj, i) => {
             if (stuff.projFiles[i]) {
-                await Storage.put(email + stuff.job + "Proj" + proj.fileURL, stuff.projFiles[i], {
+                await Storage.put(email + '/' + stuff.job + "Proj" + proj.fileURL, stuff.projFiles[i], {
                     level: 'public',
                     contentType: 'application/pdf'
                 });
@@ -143,6 +140,7 @@ const ReviewPage = (props) => {
     // Styles
 
     const titleColor = 'rgb(83 111 180)'
+    const buttonColor = 'rgb(242,155,136)'
 
     const t1 = {textAlign: "left", fontSize: "4vmin"}
 
@@ -155,11 +153,12 @@ const ReviewPage = (props) => {
     stuff.projects.forEach(projAdd)
 
 
+    console.log(stuff.job + " Review")
     return (
         <div>
             <Fade in={true}>
                 <div style={{padding: "0px 2vw 0px 2vw"}}>
-                    <h1 style={{fontSize: "10vmin", color: titleColor}}> {stuff.job + " Application"}</h1>
+                    <h1 style={{fontSize: "8vmin", color: titleColor, textAlign: "center"}}> {stuff.job + " Application"}</h1>
                     <h1 style={t1}>Application Preview</h1>
                     <div>
                         <h2 style={t2}>Personal Information</h2>
@@ -219,6 +218,7 @@ const ReviewPage = (props) => {
                             variation="primary"
                             children="Previous"
                             order="0"
+                            backgroundColor={buttonColor}
                             onClick={(e) => {
                                 e.preventDefault();
                                 navigate("/application", {state: {job: stuff.job}})
@@ -233,6 +233,7 @@ const ReviewPage = (props) => {
                             variation="primary"
                             children="Submit"
                             order="2"
+                            backgroundColor={buttonColor}
                             onClick={submit}
                             float="right"
                         ></Button>

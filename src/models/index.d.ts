@@ -49,7 +49,7 @@ type EagerApplication = {
   readonly firstName?: string | null;
   readonly lastName?: string | null;
   readonly email?: string | null;
-  readonly phone?: string | null;
+  readonly phone?: number | null;
   readonly city?: string | null;
   readonly resume?: string | null;
   readonly coverLetter?: string | null;
@@ -74,7 +74,7 @@ type LazyApplication = {
   readonly firstName?: string | null;
   readonly lastName?: string | null;
   readonly email?: string | null;
-  readonly phone?: string | null;
+  readonly phone?: number | null;
   readonly city?: string | null;
   readonly resume?: string | null;
   readonly coverLetter?: string | null;

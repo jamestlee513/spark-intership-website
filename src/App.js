@@ -18,7 +18,6 @@ import { JobListing } from "./models";
 function App() {
   return (
     <BrowserRouter>
-    <div className="App">
     <Routes>
         { /* Put your page(s) here */}
         <Route path='/' element ={<HomePage/>}/>s
@@ -33,7 +32,6 @@ function App() {
         <Route path='/interns' element={<ListOfInterns/>}/>
         <Route path='/about' element={<AboutSpark/>}/>
     </Routes>
-    </div>
     </BrowserRouter>
   );
 }

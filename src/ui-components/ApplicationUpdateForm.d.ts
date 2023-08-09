@@ -17,7 +17,7 @@ export declare type ApplicationUpdateFormInputValues = {
     firstName?: string;
     lastName?: string;
     email?: string;
-    phone?: string;
+    phone?: number;
     city?: string;
     resume?: string;
     coverLetter?: string;
@@ -34,7 +34,7 @@ export declare type ApplicationUpdateFormValidationValues = {
     firstName?: ValidationFunction<string>;
     lastName?: ValidationFunction<string>;
     email?: ValidationFunction<string>;
-    phone?: ValidationFunction<string>;
+    phone?: ValidationFunction<number>;
     city?: ValidationFunction<string>;
     resume?: ValidationFunction<string>;
     coverLetter?: ValidationFunction<string>;
