@@ -282,7 +282,7 @@ export default function ApplicationUpdateForm(props) {
     firstName: [],
     lastName: [],
     email: [],
-    phone: [{ type: "Phone" }],
+    phone: [],
     city: [],
     resume: [],
     coverLetter: [],
@@ -517,10 +517,13 @@ export default function ApplicationUpdateForm(props) {
         label="Phone"
         isRequired={false}
         isReadOnly={false}
-        type="tel"
+        type="number"
+        step="any"
         value={phone}
         onChange={(e) => {
-          let { value } = e.target;
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
           if (onChange) {
             const modelFields = {
               firstName,

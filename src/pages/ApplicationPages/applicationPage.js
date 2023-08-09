@@ -162,8 +162,6 @@ const ApplicationPage = (props) => {
 // Change page to next or previous page
     const changePage = (num) => {
         verify()
-        addEducation()
-        addProject()
         setPageNumber((prevState) => ({
             ...prevState,
             page: num,
@@ -210,7 +208,12 @@ const ApplicationPage = (props) => {
     const [projects, setProjects] = React.useState([])
     const [projFiles, setProjFiles] = React.useState([])
     const [errorState, setErrorState] = React.useState({
-        submit: false
+        submit: false,
+        addEducationSubmit: false,
+        addProjectSubmit: false
+    })
+    const [errorMessage, setErrorMessage] = React.useState({
+        educationGPA: "",
     })
 
     const resetStateValues = () => {
@@ -233,7 +236,17 @@ const ApplicationPage = (props) => {
 
 // Add Education
     function addEducation() {
-        if (!university.current || !university.current.value || !major.current || !major.current.value || !grad.current || !Number(grad.current.value) || !gpa.current || !Number(gpa.current.value) || Number(gpa.current.value) < 0 || Number(gpa.current.value) > 5) return
+        if (!university.current || !university.current.value || !major.current || !major.current.value || !grad.current || !Number(grad.current.value) || !gpa.current || !Number(gpa.current.value) || Number(gpa.current.value) < 0 || Number(gpa.current.value) > 5) {
+            setErrorState({
+                ...errorState,
+                addEducationSubmit: true,
+            })
+            return
+        }
+        setErrorState({
+            ...errorState,
+            addEducationSubmit: false,
+        })
         const univ = university.current.value
         const maj = major.current.value
         const gra = grad.current.value
@@ -261,7 +274,17 @@ const ApplicationPage = (props) => {
 
 // Add Project
     function addProject() {
-        if (!projName.current || !projName.current.value || !projDesc.current || !projDesc.current.value) return
+        if (!projName.current || !projName.current.value || !projDesc.current || !projDesc.current.value) {
+            setErrorState({
+                ...errorState,
+                addProjectSubmit: true
+            })
+            return
+        }
+        setErrorState({
+            ...errorState,
+            addProjectSubmit: false
+        })
         const name = projName.current.value
         const desc = projDesc.current.value
         const link = projLink.current ? (projLink.current.value) : ''
@@ -334,8 +357,6 @@ const ApplicationPage = (props) => {
 
     async function save(e) {
         e.preventDefault();
-        addEducation()
-        addProject()
         const attributes = await Auth.currentUserInfo()
         let apps = await DataStore.query(Application, (a) => a.and(a => [a.email.eq(attributes.attributes.email), a.job.eq(job)]))
         let app = apps[0]
@@ -365,7 +386,7 @@ const ApplicationPage = (props) => {
                     "firstName": firstName,
                     "lastName": lastName,
                     "email": attributes.attributes.email,
-                    "phone": phone,
+                    "phone": Number(phone),
                     "city": city,
                     "resume": resume.name,
                     "coverLetter": coverLetter.name,
@@ -1367,7 +1388,7 @@ const ApplicationPage = (props) => {
                                     padding="0px 32px 0px 32px"
                                 >
                                     <EducationList educations={educations} deleteEducation={deleteEducation}/>
-                                    <div style={entry}>
+                                    {(educations.length < 5) ? <div style={entry}>
                                         <TextField
                                             width="40vw"
                                             height="unset"
@@ -1380,6 +1401,8 @@ const ApplicationPage = (props) => {
                                             isDisabled={false}
                                             labelHidden={false}
                                             variation="default"
+                                            errorMessage={"The value is requried"}
+                                            hasError={errorState.addEducationSubmit && university.current && university.current.value == ''}
                                         ></TextField>
                                         <TextField
                                             width="40vw"
@@ -1393,6 +1416,8 @@ const ApplicationPage = (props) => {
                                             isDisabled={false}
                                             labelHidden={false}
                                             variation="default"
+                                            errorMessage={"The value is requried"}
+                                            hasError={errorState.addEducationSubmit && major.current && major.current.value == ''}
                                         ></TextField>
                                         <TextField
                                             width="40vw"
@@ -1406,6 +1431,8 @@ const ApplicationPage = (props) => {
                                             isDisabled={false}
                                             labelHidden={false}
                                             variation="default"
+                                            errorMessage={"The value is requried"}
+                                            hasError={errorState.addEducationSubmit && grad.current && grad.current.value == ''}
                                         ></TextField>
                                         <TextField
                                             width="40vw"
@@ -1419,8 +1446,10 @@ const ApplicationPage = (props) => {
                                             isDisabled={false}
                                             labelHidden={false}
                                             variation="default"
+                                            errorMessage={errorMessage.educationGPA}
+                                            hasError={errorState.addEducationSubmit && gpa.current && (gpa.current.value == '' || gpa.current.value < 0 || gpa.current.value > 5)}
                                         ></TextField>
-                                    </div>
+                                    </div>  : null}
                                     {(educations.length < 5) ? <Button
                                         width="228px"
                                         height="unset"
@@ -1439,6 +1468,17 @@ const ApplicationPage = (props) => {
                                         marginTop={"0.25vh"}
                                         onClick={(e) => {
                                             e.preventDefault();
+                                            if (gpa.current && (gpa.current.value == '')) {
+                                                setErrorMessage({
+                                                    ...errorMessage,
+                                                    educationGPA: "The value is required"
+                                                })
+                                            } else if (gpa.current && (gpa.current.value < 0 || gpa.current.value > 5)) {
+                                                setErrorMessage({
+                                                    ...errorMessage,
+                                                    educationGPA: "The value must be in the range of 0-5"
+                                                })
+                                            }
                                             addEducation()
                                         }}/> : null}
                                 </Flex>
@@ -1583,7 +1623,7 @@ const ApplicationPage = (props) => {
                                     padding="0px 32px 0px 32px"
                                 >
                                     <ProjectList projects={projects} files={projFiles} deleteProject={deleteProject}/>
-                                    <div style={entry}>
+                                    {(projects.length < 10) ? <div style={entry}>
                                         <MuiFileInput
                                             label="Choose your project to upload (.pdf) (Optional)"
                                             value={projFile}
@@ -1605,6 +1645,8 @@ const ApplicationPage = (props) => {
                                             isDisabled={false}
                                             labelHidden={false}
                                             variation="default"
+                                            hasError={errorState.addProjectSubmit && projName.current && projName.current.value == ''}
+                                            errorMessage={"The value is required"}
                                         ></TextField>
                                         <TextField
                                             width="40vw"
@@ -1617,6 +1659,8 @@ const ApplicationPage = (props) => {
                                             size="large"
                                             isDisabled={false}
                                             labelHidden={false}
+                                            hasError={errorState.addProjectSubmit && projDesc.current && projDesc.current.value == ''}
+                                            errorMessage={"The value is required"}
                                             variation="default"
                                         ></TextField>
                                         <TextField
@@ -1632,7 +1676,7 @@ const ApplicationPage = (props) => {
                                             labelHidden={false}
                                             variation="default"
                                         ></TextField>
-                                        {(projects.length < 10) ? <Button
+                                        <Button
                                             width="228px"
                                             height="unset"
                                             size="default"
@@ -1652,8 +1696,8 @@ const ApplicationPage = (props) => {
                                                 e.preventDefault();
                                                 addProject()
                                             }}
-                                        ></Button> : null}
-                                    </div>
+                                        ></Button>
+                                    </div>  : null}
                                 </Flex>
                             </Flex>
                             <img src={ProjectIcon} alt="Projects Icon"/>
@@ -1868,6 +1912,7 @@ const ApplicationPage = (props) => {
                                     e.preventDefault();
                                     if (!firstName || !lastName || !phone || !city || !resume || !zipcode || !country || !address || !job || !Number(zipcode) || Number(zipcode) < 0 || (country === "US" && !state)) {
                                         setErrorState({
+                                            ...errorState,
                                             submit: true
                                         })
                                         verify()
