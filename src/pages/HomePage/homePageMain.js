@@ -82,4 +82,13 @@ const photo2 = {
     zIndex: '1',
 }
 
+const mediaQuery = window.matchMedia('(max-width: 600px)');
+
+if (mediaQuery.matches) {
+  // Small screens
+  desStyle.fontSize = '20px'; // Adjust font size
+  photoStyle.margin = '10px'; // Adjust margin\
+  photo2.bottom = '-50px'; // Adjust photo width
+}
+
 export default HomePageMain;

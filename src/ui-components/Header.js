@@ -11,7 +11,9 @@ export default function Header() {
           <Link to="/">
             <img style={logoStyle} src={SparkLogo}/>
           </Link>
+          <Link to='/' style={{textDecoration: 'none'}}>
           <p style={{fontFamily: 'Bungee, san-serif', fontWeight: 'bold',fontSize: '30px', color: '#536FB4'}}>Spark</p>
+          </Link>
         </div>
         <div style={rightCornerStyle}>
           <Link to="/about" style={linkStyle}>About Spark</Link>

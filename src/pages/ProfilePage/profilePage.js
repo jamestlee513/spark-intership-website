@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { API, graphqlOperation, Auth } from 'aws-amplify';
 import Footer from '../../ui-components/Footer';
 import Header from '../../ui-components/Header';
+import { withAuthenticator } from '@aws-amplify/ui-react';
 
 const getApplication = `
   query getApplication {
@@ -57,13 +58,6 @@ console.log(applicationData);
         <Header />
       </div>
       <div>
-        <a href="http://localhost:3000/">
-          <div style={{ background: 'black', height: '80px' }}>
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', color: 'white' }}>
-              Back To Home Page
-            </div>
-          </div>
-        </a>
         <div style={{ margin: '20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', padding: '20px', background: '#f0f0f0', color: 'black', border: '1px solid black' }}>
           <div style={{ flex: 1, flexDirection: 'column' }}>
@@ -99,8 +93,8 @@ console.log(applicationData);
       </>
     );
   } else {
-    return <p>No info to display, try logging in!</p>;
+    withAuthenticator(ProfilePage);
   }
 };
 
-export default ProfilePage;
+export default withAuthenticator(ProfilePage);

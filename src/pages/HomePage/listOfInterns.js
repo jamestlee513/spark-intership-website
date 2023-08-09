@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { Button, ListItemButton } from "@mui/material"; 
+import { Button, ListItemButton } from "@mui/material";
+import Header from "../../ui-components/Header";
 
 export default function ListOfInterns() {
     const navigate = useNavigate();
@@ -27,6 +28,7 @@ export default function ListOfInterns() {
     }
     return (
         <>
+        <Header />
         <div>
             Get Ready to Spark Your Career!
         </div>
