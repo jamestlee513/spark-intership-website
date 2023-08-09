@@ -92,12 +92,12 @@ const ApplicationPage = (props) => {
         setCity(app.city)
         let file;
         try {
-            file = await Storage.get(attributes.attributes.email + thejob + "Resume" + app.resume, {download: true})
+            file = await Storage.get(attributes.attributes.email + '/' + thejob + "Resume" + app.resume, {download: true})
             setResume(new File([file.Body], app.resume))
         } catch (e) {
         }
         try {
-            file = await Storage.get(attributes.attributes.email + thejob + "CoverLetter" + app.coverLetter, {download: true})
+            file = await Storage.get(attributes.attributes.email + '/' + thejob + "CoverLetter" + app.coverLetter, {download: true})
             setCoverLetter(new File([file.Body], app.coverLetter))
         } catch (e) {
         }
@@ -114,7 +114,7 @@ const ApplicationPage = (props) => {
             let pfiles = []
             for (let i = 0; i < app.project.length; i++) {
                 try {
-                    file = await Storage.get(attributes.attributes.email + thejob + "Proj" + app.project[i].fileURL, {download: true})
+                    file = await Storage.get(attributes.attributes.email + '/' + thejob + "Proj" + app.project[i].fileURL, {download: true})
                     pfiles.push(new File([file.Body], app.project[i].fileURL))
                 } catch (e) {
                     console.log(e)
@@ -233,7 +233,7 @@ const ApplicationPage = (props) => {
 
 // Add Education
     function addEducation() {
-        if (!university.current || !university.current.value || !major.current || !major.current.value || !grad.current || !Number(grad.current.value) || !gpa.current || !Number(gpa.current.value) || Number(gpa.current.value) < 0 || Number(gpa.current.value) > 4) return
+        if (!university.current || !university.current.value || !major.current || !major.current.value || !grad.current || !Number(grad.current.value) || !gpa.current || !Number(gpa.current.value) || Number(gpa.current.value) < 0 || Number(gpa.current.value) > 5) return
         const univ = university.current.value
         const maj = major.current.value
         const gra = grad.current.value
@@ -381,27 +381,27 @@ const ApplicationPage = (props) => {
             );
         }
         let filesToDelete;
-        await Storage.list(attributes.attributes.email).then(({results}) => {
+        await Storage.list(attributes.attributes.email + '/' + job).then(({results}) => {
             filesToDelete = results
         })
         filesToDelete.forEach(async (fil) => {
             await Storage.remove(fil.key)
         })
         if (resume) {
-            await Storage.put(attributes.attributes.email + job + "Resume" + resume.name, resume, {
+            await Storage.put(attributes.attributes.email + '/' + job + "Resume" + resume.name, resume, {
                 level: 'public',
                 contentType: 'application/pdf'
             });
         }
         if (coverLetter) {
-            await Storage.put(attributes.attributes.email + job + "CoverLetter" + coverLetter.name, coverLetter, {
+            await Storage.put(attributes.attributes.email + '/' + job + "CoverLetter" + coverLetter.name, coverLetter, {
                 level: 'public',
                 contentType: 'application/pdf'
             });
         }
         projects.forEach(async (proj, i) => {
             if (projFiles[i]) {
-                await Storage.put(attributes.attributes.email + job + "Proj" + proj.fileURL, projFiles[i], {
+                await Storage.put(attributes.attributes.email + '/' + job + "Proj" + proj.fileURL, projFiles[i], {
                     level: 'public',
                     contentType: 'application/pdf'
                 });
@@ -1421,7 +1421,7 @@ const ApplicationPage = (props) => {
                                             variation="default"
                                         ></TextField>
                                     </div>
-                                    <Button
+                                    {(educations.length < 5) ? <Button
                                         width="228px"
                                         height="unset"
                                         size="default"
@@ -1440,8 +1440,7 @@ const ApplicationPage = (props) => {
                                         onClick={(e) => {
                                             e.preventDefault();
                                             addEducation()
-                                        }}
-                                    ></Button>
+                                        }}/> : null}
                                 </Flex>
                             </Flex>
                             <img src={EducationIcon} alt="Education Icon"/>
@@ -1633,7 +1632,7 @@ const ApplicationPage = (props) => {
                                             labelHidden={false}
                                             variation="default"
                                         ></TextField>
-                                        <Button
+                                        {(projects.length < 10) ? <Button
                                             width="228px"
                                             height="unset"
                                             size="default"
@@ -1653,7 +1652,7 @@ const ApplicationPage = (props) => {
                                                 e.preventDefault();
                                                 addProject()
                                             }}
-                                        ></Button>
+                                        ></Button> : null}
                                     </div>
                                 </Flex>
                             </Flex>

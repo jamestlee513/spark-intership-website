@@ -8,6 +8,7 @@ import {Button, View} from "@aws-amplify/ui-react";
 import {getOverrideProps} from "@aws-amplify/ui-react/internal";
 import check from "../../images/img.png"
 import {Fade} from '@mui/material'
+import {Storage} from "@aws-amplify/storage";
 
 const SubmitPage = (props) => {
     const {job} = useLocation().state
@@ -20,6 +21,13 @@ const SubmitPage = (props) => {
         for (const app of apps) {
             await DataStore.delete(app)
         }
+        let filesToDelete;
+        await Storage.list(attributes.attributes.email + '/' + job).then(({results}) => {
+            filesToDelete = results
+        })
+        filesToDelete.forEach(async (fil) => {
+            await Storage.remove(fil.key)
+        })
         alert("Successfully Withdrawn")
         navigate('/')
     }
