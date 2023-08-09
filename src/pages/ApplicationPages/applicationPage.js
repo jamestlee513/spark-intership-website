@@ -8,6 +8,7 @@ import {Application, Project, Education} from "../../models";
 import {DataStore} from '@aws-amplify/datastore';
 import {fetchByPath, validateField} from "../../ui-components/utils";
 import {useLocation, useNavigate} from "react-router-dom";
+import { withAuthenticator } from '@aws-amplify/ui-react';
 import {Storage} from '@aws-amplify/storage';
 import {
     Button,
@@ -162,6 +163,12 @@ const ApplicationPage = (props) => {
 // Change page to next or previous page
     const changePage = (num) => {
         verify()
+        if (university.current && university.current.value && major.current && major.current.value && grad.current && grad.current.value && gpa.current && gpa.current.value) {
+            addEducation();
+        }
+        if (projName.current && projName.current.value && projDesc.current && projDesc.current.value) {
+            addProject();
+        }
         setPageNumber((prevState) => ({
             ...prevState,
             page: num,
@@ -1962,4 +1969,4 @@ const ApplicationPage = (props) => {
     );
 }
 
-export default ApplicationPage;
+export default withAuthenticator(ApplicationPage);
