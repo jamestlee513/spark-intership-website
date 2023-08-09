@@ -156,11 +156,12 @@ const ReviewPage = (props) => {
     stuff.projects.forEach(projAdd)
 
 
+    console.log(stuff.job + " Review")
     return (
         <div>
             <Fade in={true}>
                 <div style={{padding: "0px 2vw 0px 2vw"}}>
-                    <h1 style={{fontSize: "10vmin", color: titleColor}}> {stuff.job + " Application"}</h1>
+                    <h1 style={{fontSize: "8vmin", color: titleColor, textAlign: "center"}}> {stuff.job + " Application"}</h1>
                     <h1 style={t1}>Application Preview</h1>
                     <div>
                         <h2 style={t2}>Personal Information</h2>
