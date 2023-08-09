@@ -162,6 +162,12 @@ const ApplicationPage = (props) => {
 // Change page to next or previous page
     const changePage = (num) => {
         verify()
+        if (university.current && university.current.value && major.current && major.current.value && grad.current && grad.current.value && gpa.current && gpa.current.value) {
+            addEducation();
+        }
+        if (projName.current && projName.current.value && projDesc.current && projDesc.current.value) {
+            addProject();
+        }
         setPageNumber((prevState) => ({
             ...prevState,
             page: num,
