@@ -6,8 +6,8 @@ export default function educationList({educations, deleteEducation}) {
         return;
     }
   return (
-    educations.map((education) => {
-      return <Education key={education.id} deleteEducation ={deleteEducation} education={education} />
+    educations.map((education, i) => {
+      return <Education key={i} deleteEducation ={deleteEducation} education={education} />
     })
   )
 }

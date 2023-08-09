@@ -22,12 +22,11 @@ export default function project({project, deleteProject, file}) {
     }
     return (
         <div style={border}>
-            <MuiFileInput
+            {(file) ? <MuiFileInput
                 label="Choose your project to upload (.pdf)"
                 value={file}
                 disabled
-                style={{margin: "2vh 10vw 2vh 0"}}
-            />
+                style={{margin: "2vh 10vw 2vh 0"}}/> : null}
             <TextField
                 width="40vw"
                 height="unset"

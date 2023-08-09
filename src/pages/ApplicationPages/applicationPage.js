@@ -56,14 +56,14 @@ const ApplicationPage = (props) => {
         state: "",
         zipcode: "",
         country: "",
-        job: "Software Engineer Internship",
+        job: "",
         completeApplication: false,
     };
 
     const jimothy = () => (<div style={{margin: "auto"}}>
         <p>
-            ⠀⠀⠀⠀⠀ ⠀⠀⠀⠀⠀ ⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀<br/>⠀⠀⠀
-            ⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⡿⠛⠉⠙⠛⠛⠛⠛⠻⢿⣿⣷⣤⡀⠀⠀⠀⠀<br/>⠀⠀⠀⠀
+            ⠀⠀⠀⠀⠀     ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀<br/>⠀⠀⠀
+            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⡿⠛⠉⠙⠛⠛⠛⠛⠻⢿⣿⣷⣤⡀⠀⠀⠀⠀<br/>⠀⠀⠀⠀
             ⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⠋⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⠈⢻⣿⣿⡄⠀⠀⠀⠀ <br/>⠀⠀⠀
             ⠀⠀⠀⠀⠀⠀⠀⣸⣿⡏⠀⠀⠀⣠⣶⣾⣿⣿⣿⠿⠿⠿⢿⣿⣿⣿⣄⠀⠀⠀ <br/>⠀⠀⠀
             ⠀⠀⠀⠀⠀⠀⠀⣿⣿⠁⠀⠀⢰⣿⣿⣯⠁⠀⠀⠀⠀⠀⠀⠀⠈⠙⢿⣷⡄⠀ <br/>⠀⠀⠀
@@ -80,11 +80,11 @@ const ApplicationPage = (props) => {
             ⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⣽⣿⡏⠁⠀⠀⢸⣿⡇⠀⠀⠀ <br/>⠀⠀⠀
             ⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⢹⣿⡆⠀⠀⠀⣸⣿⠇⠀⠀⠀ <br/>⠀⠀⠀
             ⠀⠀⠀⠀⠀⠀⠀⢿⣿⣦⣄⣀⣠⣴⣿⣿⠁⠀⠈⠻⣿⣿⣿⣿⡿⠏⠀⠀⠀⠀ <br/>⠀⠀⠀
-            ⠀⠀⠀⠀⠈⠛⠻⠿⠿⠿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀<br/>⠀⠀⠀⠀⠀⠀⠀</p>
+            ⠀⠀⠀⠀⠀⠀⠀⠈⠛⠻⠿⠿⠿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀<br/>⠀⠀⠀⠀⠀⠀⠀</p>
         <p>This is Jimothy. You have uncovered his hiding spot. :)</p>
     </div>)
 
-    const changeDaState = async (app) => {
+    const changeDaState = async (app, thejob) => {
         const attributes = await Auth.currentUserInfo()
         setFirstName(app.firstName)
         setLastName(app.lastName)
@@ -92,12 +92,12 @@ const ApplicationPage = (props) => {
         setCity(app.city)
         let file;
         try {
-            file = await Storage.get(attributes.attributes.email + job + "Resume" + app.resume, {download: true})
+            file = await Storage.get(attributes.attributes.email + thejob + "Resume" + app.resume, {download: true})
             setResume(new File([file.Body], app.resume))
         } catch (e) {
         }
         try {
-            file = await Storage.get(attributes.attributes.email + job + "CoverLetter" + app.coverLetter, {download: true})
+            file = await Storage.get(attributes.attributes.email + thejob + "CoverLetter" + app.coverLetter, {download: true})
             setCoverLetter(new File([file.Body], app.coverLetter))
         } catch (e) {
         }
@@ -114,9 +114,10 @@ const ApplicationPage = (props) => {
             let pfiles = []
             for (let i = 0; i < app.project.length; i++) {
                 try {
-                    file = await Storage.get(attributes.attributes.email + job + "Proj" + app.project[i].fileURL, {download: true})
-                    pfiles.push(new File([file.Body], projects[i].fileURL))
+                    file = await Storage.get(attributes.attributes.email + thejob + "Proj" + app.project[i].fileURL, {download: true})
+                    pfiles.push(new File([file.Body], app.project[i].fileURL))
                 } catch (e) {
+                    console.log(e)
                     pfiles.push(null)
                 }
             }
@@ -127,9 +128,9 @@ const ApplicationPage = (props) => {
     }
 
 
-    // Start Effects
+// Start Effects
     useEffect(() => {
-
+        verify()
         if (location.state != null) {
             const {stuff} = location.state
             if (stuff != null) {
@@ -141,25 +142,26 @@ const ApplicationPage = (props) => {
                     page: 1,
                     prev: 0
                 });
+                (async () => {
+                    const attributes = await Auth.currentUserInfo()
+                    if (attributes) {
+                        const app = (await DataStore.query(Application, (a) => a.and(a => [a.email.eq(attributes.attributes.email), a.job.eq(stuff.job)])))[0]
+                        if (app) {
+                            changeDaState(app, stuff.job)
+                        }
+                    }
+
+                })()
             }
         }
-        (async () => {
-            const attributes = await Auth.currentUserInfo()
-            if (attributes) {
-                const app = (await DataStore.query(Application, (a) => a.and(a => [a.email.eq(attributes.attributes.email), a.job.eq(job)])))[0]
-                if (app) {
-                    changeDaState(app)
-                }
-            }
-
-        })()
 
 
     }, [])
 
 
-    // Change page to next or previous page
+// Change page to next or previous page
     const changePage = (num) => {
+        verify()
         addEducation()
         addProject()
         setPageNumber((prevState) => ({
@@ -169,7 +171,7 @@ const ApplicationPage = (props) => {
         }));
     }
 
-    // Refs
+// Refs
     const university = useRef(0)
     const major = useRef(0)
     const grad = useRef(0)
@@ -181,7 +183,7 @@ const ApplicationPage = (props) => {
     const [projFile, setProjFile] = React.useState(null);
 
 
-    // States
+// States
     const [firstName, setFirstName] = React.useState(initialValues.firstName);
     const [lastName, setLastName] = React.useState(initialValues.lastName);
     const [email, setEmail] = React.useState(initialValues.email);
@@ -229,9 +231,9 @@ const ApplicationPage = (props) => {
     };
 
 
-    // Add Education
+// Add Education
     function addEducation() {
-        if (!university.current || !university.current.value || !major.current || !major.current.value || !grad.current || !Number(grad.current.value) || !gpa.current || !Number(gpa.current.value)) return
+        if (!university.current || !university.current.value || !major.current || !major.current.value || !grad.current || !Number(grad.current.value) || !gpa.current || !Number(gpa.current.value) || Number(gpa.current.value) < 0 || Number(gpa.current.value) > 4) return
         const univ = university.current.value
         const maj = major.current.value
         const gra = grad.current.value
@@ -250,14 +252,14 @@ const ApplicationPage = (props) => {
         gpa.current.value = null
     }
 
-    // Delete Education
+// Delete Education
     function deleteEducation(edu) {
         const newEducations = educations.filter(education => !_.isEqual(edu, education))
         setEducations(newEducations)
     }
 
 
-    // Add Project
+// Add Project
     function addProject() {
         if (!projName.current || !projName.current.value || !projDesc.current || !projDesc.current.value) return
         const name = projName.current.value
@@ -285,9 +287,9 @@ const ApplicationPage = (props) => {
 
 // Delete Project
     function deleteProject(pro) {
-        let index = projects.findIndex(project => !_.isEqual(pro, project))
-        const newProjects = projects.filter((p, i) => i == index)
-        const newFiles = projFiles.filter((p, i) => i == index)
+        let index = projects.findIndex(project => _.isEqual(pro, project))
+        const newProjects = projects.filter((p, i) => i !== index)
+        const newFiles = projFiles.filter((p, i) => i !== index)
         setProjects(newProjects)
         setProjFiles(newFiles)
     }
@@ -303,7 +305,7 @@ const ApplicationPage = (props) => {
         coverLetter: [],
         address: [{type: "Required"}],
         state: [],
-        zipcode: [{type: "Required"}],
+        zipcode: [{type: "Required"}, {type: "GreaterThanNum", numValues: [0]}],
         country: [{type: "Required"}],
         job: [],
         completeApplication: [],
@@ -407,10 +409,17 @@ const ApplicationPage = (props) => {
         })
     }
 
-    if (errorState.submit) {
-
+    const verify = () => {
+        runValidationTasks("firstName", firstName)
+        runValidationTasks("lastName", lastName)
+        runValidationTasks("phone", phone)
+        runValidationTasks("address", address)
+        runValidationTasks("country", country)
+        runValidationTasks("state", state)
+        runValidationTasks("city", city)
+        runValidationTasks("zipcode", zipcode)
     }
-    // Styles
+// Styles
     const titleColor = 'rgb(83 111 180)'
     const buttonColor = 'rgb(242,155,136)'
 
@@ -428,8 +437,8 @@ const ApplicationPage = (props) => {
         border: "2px solid rgb(225,50,50)",
     }
 
-    // Draw Circle
-    const pagereqs = [!firstName || !lastName || !phone || !city || !zipcode || !country || (!state && country === "US"), false, false, !resume]
+// Draw Circle
+    const pagereqs = [!firstName || !lastName || !phone || !city || !zipcode || !country || !address || (!state && country === "US") || !Number(zipcode) || Number(zipcode) < 0, false, false, !resume]
     const numSize = 32
     const circle = (pg) => {
         return {
@@ -447,7 +456,7 @@ const ApplicationPage = (props) => {
         }
     }
 
-    // HTML code
+// HTML code
     return (
         <Flex
             gap="24px"
@@ -465,11 +474,16 @@ const ApplicationPage = (props) => {
             {...getOverrideProps(overrides, "FormCheckout")}
             {...rest}
         >
-            <h1 style={{fontSize: "10vmin", color: titleColor, margin: "auto"}}> {job + " Application"}</h1>
+            <h1 style={{
+                fontSize: "8vmin",
+                color: titleColor,
+                margin: "auto",
+                textAlign: "center"
+            }}> {job + " Application"}</h1>
             <div style={{
                 display: "flex",
                 justifyContent: "space-between",
-                width: "1000px",
+                width: "70vw",
                 margin: "auto",
                 backgroundColor: "black",
                 background: "linear-gradient(to top, transparent, transparent 45%, " + titleColor + " 45%, " + titleColor + " 55%, transparent 55%, transparent 100%)",
@@ -577,7 +591,7 @@ const ApplicationPage = (props) => {
                                         alignItems="center"
                                         basis="0"
                                         position="relative"
-                                        padding="32px 10% 32px 0px"
+                                        padding="0 10% 1vh 0px"
                                         backgroundColor="rgba(255,255,255,1)"
                                     >
                                         <TextField
@@ -722,6 +736,7 @@ const ApplicationPage = (props) => {
                                         labelHidden={false}
                                         variation="default"
                                         value={address}
+                                        marginTop={"1vh"}
                                         onChange={(e) => {
                                             let {value} = e.target;
                                             if (onChange) {
@@ -757,6 +772,7 @@ const ApplicationPage = (props) => {
                                         width="unset"
                                         height="unset"
                                         label="Country"
+                                        marginTop={"1vh"}
                                         shrink="0"
                                         size="large"
                                         isDisabled={false}
@@ -1049,6 +1065,7 @@ const ApplicationPage = (props) => {
                                         width="unset"
                                         height="unset"
                                         label="State"
+                                        marginTop={"1vh"}
                                         shrink="0"
                                         size="large"
                                         isDisabled={country !== "US"}
@@ -1138,6 +1155,7 @@ const ApplicationPage = (props) => {
                                         height="unset"
                                         label="City"
                                         placeholder="Enter city"
+                                        marginTop={"1vh"}
                                         shrink="0"
                                         alignSelf="stretch"
                                         size="large"
@@ -1180,6 +1198,7 @@ const ApplicationPage = (props) => {
                                         width="unset"
                                         height="unset"
                                         label="Zipcode"
+                                        marginTop={"1vh"}
                                         placeholder="Enter zipcode"
                                         shrink="0"
                                         alignSelf="stretch"
@@ -1262,7 +1281,6 @@ const ApplicationPage = (props) => {
                                 variation="primary"
                                 children="Save"
                                 type="submit"
-                                isDisabled={Object.values(errors).some((e) => e?.hasError)}
                                 {...getOverrideProps(overrides, "Save")}
                             ></Button>
                         </View>
@@ -1402,28 +1420,28 @@ const ApplicationPage = (props) => {
                                             labelHidden={false}
                                             variation="default"
                                         ></TextField>
-                                        <Button
-                                            width="228px"
-                                            height="unset"
-                                            size="default"
-                                            isDisabled={false}
-                                            borderRadius="20px"
-                                            variation="primary"
-                                            children="Add university"
-                                            backgroundColor={"white"}
-                                            border="2px solid black"
-                                            color={"black"}
-                                            order="0"
-                                            fontSize="15px"
-                                            marginLeft="auto"
-                                            marginRight="auto"
-                                            marginTop={"20px"}
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                addEducation()
-                                            }}
-                                        ></Button>
                                     </div>
+                                    <Button
+                                        width="228px"
+                                        height="unset"
+                                        size="default"
+                                        isDisabled={false}
+                                        borderRadius="20px"
+                                        variation="primary"
+                                        children="Add university"
+                                        backgroundColor={"white"}
+                                        border="2px solid black"
+                                        color={"black"}
+                                        order="0"
+                                        fontSize="15px"
+                                        marginLeft="auto"
+                                        marginRight="auto"
+                                        marginTop={"0.25vh"}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            addEducation()
+                                        }}
+                                    ></Button>
                                 </Flex>
                             </Flex>
                             <img src={EducationIcon} alt="Education Icon"/>
@@ -1481,7 +1499,6 @@ const ApplicationPage = (props) => {
                                 variation="primary"
                                 children="Save"
                                 type="submit"
-                                isDisabled={Object.values(errors).some((e) => e?.hasError)}
                                 {...getOverrideProps(overrides, "Save")}
                             ></Button>
                         </View>
@@ -1569,7 +1586,7 @@ const ApplicationPage = (props) => {
                                     <ProjectList projects={projects} files={projFiles} deleteProject={deleteProject}/>
                                     <div style={entry}>
                                         <MuiFileInput
-                                            label="Choose your project to upload (.pdf)"
+                                            label="Choose your project to upload (.pdf) (Optional)"
                                             value={projFile}
                                             onChange={(file) => {
                                                 setProjFile(file)
@@ -1695,7 +1712,6 @@ const ApplicationPage = (props) => {
                                 variation="primary"
                                 children="Save"
                                 type="submit"
-                                isDisabled={Object.values(errors).some((e) => e?.hasError)}
                                 {...getOverrideProps(overrides, "Save")}
                             ></Button>
                         </View>
@@ -1851,18 +1867,11 @@ const ApplicationPage = (props) => {
                                 order="2"
                                 onClick={(e) => {
                                     e.preventDefault();
-                                    if (!firstName || !lastName || !phone || !city || !resume || !zipcode || !country || !address || !job || (country === "US" && !state)) {
+                                    if (!firstName || !lastName || !phone || !city || !resume || !zipcode || !country || !address || !job || !Number(zipcode) || Number(zipcode) < 0 || (country === "US" && !state)) {
                                         setErrorState({
                                             submit: true
                                         })
-                                        runValidationTasks("firstName", firstName)
-                                        runValidationTasks("lastName", lastName)
-                                        runValidationTasks("phone", phone)
-                                        runValidationTasks("address", address)
-                                        runValidationTasks("country", country)
-                                        runValidationTasks("state", state)
-                                        runValidationTasks("city", city)
-                                        runValidationTasks("zipcode", zipcode)
+                                        verify()
                                     } else {
                                         save(e)
                                         navigate("/review", {
@@ -1898,7 +1907,6 @@ const ApplicationPage = (props) => {
                                 variation="primary"
                                 children="Save"
                                 type="submit"
-                                isDisabled={Object.values(errors).some((e) => e?.hasError)}
                                 {...getOverrideProps(overrides, "Save")}
                             ></Button>
                         </View>

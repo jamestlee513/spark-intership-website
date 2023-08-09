@@ -14,7 +14,7 @@ export default function ListList({groups}) {
             {groups.map((group, i) => {
                 return (<div key={i}>
                     <h2 style = {t2}> {"Project " + Number(i+1) }</h2>
-                    <MuiFileInput value={group[3]} disabled style={{float: "left"}}/>
+                        {(group[3]) ? <MuiFileInput value={group[3]} disabled style={{float: "left"}}/> : null}
                     <div style={{display: "flex", justifyItems: "Center", width: "80vw", margin: "auto", flexWrap: "wrap", justifyContent: "flex-start"}}>
                         <ReviewList pairs={group.slice(0,3)} />
                     </div>

@@ -27,6 +27,7 @@ const SubmitPage = (props) => {
     const titleColor = 'rgb(83 111 180)'
     const buttonColor = 'rgb(242,155,136)'
 
+    console.log(job + " Submitted")
     return (
         <div>
             <Fade in={true}>
@@ -35,13 +36,15 @@ const SubmitPage = (props) => {
                     backgroundSize: "100% 100%",
                     backgroundPosition: "50% 50%",
                     backgroundRepeat: "no-repeat",
-                    width: "100vw",
+                    width: "95vw",
                     height: "100vh",
                     display: "flex",
                     alignItems: "center"
                 }}>
-                    <img src={icon} alt={"Submit Icon"} style={{margin: "0 14vw 5vh 0"}}/>
-                    <div style={{display: "flex", flexDirection: "column"}}>
+                    <div style={{width: "80vw"}}>
+                        <img src={icon} alt={"Submit Icon"} style={{margin: "0 0 5vh 0"}}/>
+                    </div>
+                    <div style={{display: "flex", flexDirection: "column", margin: "auto auto auto auto"}}>
                         <div style={{
                             backgroundColor: titleColor,
                             margin: "10vh auto auto auto",
@@ -50,13 +53,14 @@ const SubmitPage = (props) => {
                             borderRadius: "50%",
                         }}>
                             <img src={check} alt={"Check Mark"}
-                                 style={{width: "6vmin", height: "6vmin", margin: "2vmin 0.5vmin 0 0"}}/>
+                                 style={{width: "6vmin", height: "6vmin", margin: "2vmin 0vmin 0 1.5vmin"}}/>
                         </div>
-                        <h1 style={{color: titleColor, fontSize: "10vmin"}}>Thank you for applying to Spark!</h1>
+                        <h1 style={{color: titleColor, fontSize: "8vmin", margin: "auto", width: "40vw", textAlign: "center"}}>Thank you for applying to Spark!</h1>
                         <p style={{
                             color: titleColor,
                             fontSize: "4vmin",
-                            margin: "2vmin 0 2vmin 0"
+                            margin: "5vmin 2vmin 5vmin 2vmin",
+                            textAlign: "center"
                         }}> {"We have received your " + job + " application and will contact you soon about the status of your application"}</p>
                         <View
                             width="unset"
@@ -80,6 +84,7 @@ const SubmitPage = (props) => {
                                 children="Edit Application"
                                 order="0"
                                 backgroundColor={buttonColor}
+                                textAlign={"center"}
                                 onClick={() => {navigate('/application', {state: {stuff: {job: job}}})}}
                                 float="left"
                             ></Button>
@@ -92,6 +97,7 @@ const SubmitPage = (props) => {
                                 children="Withdraw Application"
                                 order="0"
                                 backgroundColor={buttonColor}
+                                textAlign={"center"}
                                 onClick={withdraw}
                             ></Button>
                             <Button
@@ -105,6 +111,7 @@ const SubmitPage = (props) => {
                                 marginRight={"2vw"}
                                 backgroundColor={buttonColor}
                                 onClick={() => {navigate('/')}}
+                                textAlign={"center"}
                                 float="right"
                             ></Button>
                         </View>
