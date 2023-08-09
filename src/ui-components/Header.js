@@ -32,6 +32,7 @@ const headerStyle = {
   background: 'white',
   color: 'black',
   padding: '10px',
+  margin: '0px 30px',
 };
 
 const headerContainer = {
