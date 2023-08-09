@@ -4,9 +4,9 @@ import { JobListing } from '../../models';
 import AdminJobListings from './adminJobListings';
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {Auth} from 'aws-amplify';
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider, styled } from '@mui/material/styles';
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material';
-import {Stack, Button, Box, } from '@mui/material';
+import {Stack, Button, Box, Grid} from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -14,7 +14,6 @@ import AdminHeader from '../../ui-components/AdminHeader';
 import theme from './theme';
 
 export default function ListJobs() {
-
   const [listings, setListings] = useState([])
   const navigate = useNavigate()
 
@@ -39,25 +38,29 @@ export default function ListJobs() {
     }));
   }
 
-  useEffect(() => {fetchListings()})
+  useEffect(() => {fetchListings()}, [])
 
   return(
     <>
     <AdminHeader/>
     <ThemeProvider theme={theme}>
-      <Stack sx={{justifyContent: 'center'}}>
-        <Box sx={{width: '90vw', height: '70vh', border: '1px solid', borderColor: 'secondary.main', borderRadius: 5}}>
-        <Box sx={{width: '90vw', height: '8vh', backgroundColor: 'secondary.main', textAlign: 'left', fontWeight: 500, fontSize: 25}}>
-          <div style={listingHeader}>Jobs</div>
-        </Box>
+      <Grid container sx={{justifyContent: 'center'}}>
+        <Grid sx={{width: '90vw', height: '70vh', border: '1px solid', borderColor: 'secondary.main', borderRadius: 5}}>
+        <Grid 
+          container direction="row" justifyContent="space-between" alignItems="center"
+          sx={{width: '90vw', height: '8vh', backgroundColor: 'secondary.main', fontWeight: 500, fontSize: 25}}>
+          <Grid item xs={6} textAlign="left" paddingLeft="20px">Jobs</Grid>
+          <Grid item xs={6} textAlign="right"><Button variant="text" sx={{fontSize: 30}} onClick={() => {navigate('/create')}}>+</Button></Grid>
+        </Grid>
+        <Grid>
         <TableContainer>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell sx={{fontSize: 20, fontWeight: 600}}>Position</TableCell>
                 <TableCell sx={{fontSize: 20, fontWeight: 600}}>Applicants</TableCell>
-                <TableCell sx={{fontSize: 20, fontWeight: 600}}>Status</TableCell>
-                <TableCell sx={{fontSize: 20, fontWeight: 600}}>Posting Date</TableCell>
+                <TableCell sx={{fontSize: 20, fontWeight: 600, textAlign: 'center'}}>Status</TableCell>
+                <TableCell sx={{fontSize: 20, fontWeight: 600, textAlign: 'right'}}>Posting Date</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -66,10 +69,10 @@ export default function ListJobs() {
                   key={listing.title}
                 >
                   <TableCell component="th" scope="row">
-                    <Button onClick={() => {navigate('/update', {state: {listing}})}} sx={{fontSize: 20, fontWeight: 400, textTransform: 'none'}}>{listing.title}</Button>
+                    <UnderLinedButton onClick={() => {navigate('/update', {state: {listing}})}} sx={{fontSize: 20, fontWeight: 400}}>{listing.title}</UnderLinedButton>
                   </TableCell>
                   <TableCell sx={{fontSize: 20, fontWeight: 400}}>{listing.applicants}</TableCell>
-                  <TableCell>
+                  <TableCell sx={{textAlign: 'center'}}>
                     <Select variant="standard" onChange={(evt) => {handleChange(evt, listing)}} defaultValue={listing.status}>
                       <MenuItem value={"Interviewing"}>Interviewing</MenuItem>
                       <MenuItem value={"Filled"}>Filled</MenuItem>
@@ -77,19 +80,24 @@ export default function ListJobs() {
                       <MenuItem value={"On Hold"}>On Hold</MenuItem>
                     </Select>
                   </TableCell>
-                  <TableCell sx={{fontSize: 17, fontWeight: 400}}>{listing.createdAt.substring(0, 10)}</TableCell>
+                  <TableCell sx={{fontSize: 17, fontWeight: 400, textAlign: 'right'}}>{listing.createdAt.substring(0, 10)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
-        </Box>
-      </Stack>
+        </Grid>
+        </Grid>
+      </Grid>
     </ThemeProvider>
     </>
   )
 }
-const listingHeader = {
-  paddingLeft: 25,
-  paddingTop: 20
-}
+
+const UnderLinedButton = styled(Button)({
+  textTransform: 'none',
+  '&:hover': {
+    textDecoration: 'underline',
+    backgroundColor: 'white',
+  },
+})

@@ -14,6 +14,7 @@ import AdminJobListingPage from "./pages/JobListingsPages/adminJobListingsPage";
 import ListOfInterns from "./pages/HomePage/listOfInterns";
 import AboutSpark from "./pages/AboutSpark/aboutSpark";
 import { JobListing } from "./models";
+import PrivateRoute from "./pages/JobListingsPages/PrivateRoute";
 
 function App() {
   return (
@@ -27,7 +28,7 @@ function App() {
         <Route path='/create' element={<CreateListingsPage/>}/>
         <Route path='/profile' element={<ProfilePage/>}/>
         <Route path='/listings' element={<JobListingsPage/>}/>
-        <Route path='/update' element={<UpdateListingPage/>}/>
+        <Route path='/update' element={<PrivateRoute><UpdateListingPage/></PrivateRoute>}/>
         <Route path='/admin' element={<AdminJobListingPage/>}/>
         <Route path='/interns' element={<ListOfInterns/>}/>
         <Route path='/about' element={<AboutSpark/>}/>
