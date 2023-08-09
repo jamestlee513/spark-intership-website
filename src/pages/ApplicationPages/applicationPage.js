@@ -386,7 +386,7 @@ const ApplicationPage = (props) => {
                     "firstName": firstName,
                     "lastName": lastName,
                     "email": attributes.attributes.email,
-                    "phone": phone,
+                    "phone": Number(phone),
                     "city": city,
                     "resume": resume.name,
                     "coverLetter": coverLetter.name,
@@ -1402,7 +1402,7 @@ const ApplicationPage = (props) => {
                                             labelHidden={false}
                                             variation="default"
                                             errorMessage={"The value is requried"}
-                                            hasError={university.current && university.current.value == ''}
+                                            hasError={errorState.addEducationSubmit && university.current && university.current.value == ''}
                                         ></TextField>
                                         <TextField
                                             width="40vw"
@@ -1417,7 +1417,7 @@ const ApplicationPage = (props) => {
                                             labelHidden={false}
                                             variation="default"
                                             errorMessage={"The value is requried"}
-                                            hasError={major.current && major.current.value == ''}
+                                            hasError={errorState.addEducationSubmit && major.current && major.current.value == ''}
                                         ></TextField>
                                         <TextField
                                             width="40vw"
@@ -1432,7 +1432,7 @@ const ApplicationPage = (props) => {
                                             labelHidden={false}
                                             variation="default"
                                             errorMessage={"The value is requried"}
-                                            hasError={grad.current && grad.current.value == ''}
+                                            hasError={errorState.addEducationSubmit && grad.current && grad.current.value == ''}
                                         ></TextField>
                                         <TextField
                                             width="40vw"
@@ -1447,7 +1447,7 @@ const ApplicationPage = (props) => {
                                             labelHidden={false}
                                             variation="default"
                                             errorMessage={errorMessage.educationGPA}
-                                            hasError={gpa.current && (gpa.current.value == '' || gpa.current.value < 0 || gpa.current.value > 5)}
+                                            hasError={errorState.addEducationSubmit && gpa.current && (gpa.current.value == '' || gpa.current.value < 0 || gpa.current.value > 5)}
                                         ></TextField>
                                     </div>  : null}
                                     {(educations.length < 5) ? <Button
