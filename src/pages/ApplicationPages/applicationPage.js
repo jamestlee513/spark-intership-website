@@ -8,6 +8,7 @@ import {Application, Project, Education} from "../../models";
 import {DataStore} from '@aws-amplify/datastore';
 import {fetchByPath, validateField} from "../../ui-components/utils";
 import {useLocation, useNavigate} from "react-router-dom";
+import { withAuthenticator } from '@aws-amplify/ui-react';
 import {Storage} from '@aws-amplify/storage';
 import {
     Button,
@@ -1968,4 +1969,4 @@ const ApplicationPage = (props) => {
     );
 }
 
-export default ApplicationPage;
+export default withAuthenticator(ApplicationPage);
