@@ -146,7 +146,7 @@ export default function CreateListing() {
   }
 
   function goToJobListings() {
-    navigate('/listings')
+    navigate('/admin')
   }
 return (
   <>
