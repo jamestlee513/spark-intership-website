@@ -1080,7 +1080,7 @@ const ApplicationPage = (props) => {
                                         <option value="UZ">Uzbekistan</option>
                                         <option value="VU">Vanuatu</option>
                                         <option value="VE">Venezuela</option>
-                                        <option value="VN">Viet Nam</option>
+                                        <option value="VN">Vietnam</option>
                                         <option value="VG">Virgin Islands, British</option>
                                         <option value="VI">Virgin Islands, U.s.</option>
                                         <option value="WF">Wallis and Futuna</option>
@@ -1635,7 +1635,12 @@ const ApplicationPage = (props) => {
                                             label="Choose your project to upload (.pdf) (Optional)"
                                             value={projFile}
                                             onChange={(file) => {
-                                                setProjFile(file)
+                                                if (file && file.type === "application/pdf") {
+                                                    setProjFile(file)
+                                                }
+                                                if (!file) {
+                                                    setProjFile(file)
+                                                }
                                             }}
                                             inputProps={{accept: "application/pdf"}}
                                             style={fileInput}
@@ -1839,7 +1844,12 @@ const ApplicationPage = (props) => {
                                     label="Upload your resume (.pdf)"
                                     value={resume}
                                     onChange={(file) => {
-                                        setResume(file)
+                                        if (file && file.type === "application/pdf") {
+                                            setResume(file)
+                                        }
+                                        if (!file) {
+                                            setResume(file)
+                                        }
                                     }}
                                     inputProps={{accept: "application/pdf"}}
                                     style={fileInput}
@@ -1868,7 +1878,13 @@ const ApplicationPage = (props) => {
                                     label="Upload your cover letter (.pdf)"
                                     value={coverLetter}
                                     onChange={(file) => {
-                                        setCoverLetter(file)
+                                        if (file && file.type === "application/pdf") {
+                                            setCoverLetter(file)
+                                        }
+                                        if (!file) {
+                                            setCoverLetter(file)
+                                        }
+                                        
                                     }}
                                     inputProps={{accept: "application/pdf"}}
                                     style={fileInput}
