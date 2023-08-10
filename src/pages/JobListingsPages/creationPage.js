@@ -156,8 +156,8 @@ return (
       <Grid container sx={{width: '90vw', height: '71vh', border: '1px solid', borderColor: 'secondary.main', borderRadius: 5, justifyContent: 'center', direction: 'column'}}>
           <Grid
               container direction="row" justifyContent="space-between" alignItems="center"
-              sx={{width: '90vw', height: '8vh', backgroundColor: 'secondary.main', fontWeight: 500, fontSize: 25}}>
-              <Grid item xs={6} textAlign="left" paddingLeft="20px">New Job Listing</Grid>
+              sx={{width: '90vw', height: '8vh', backgroundColor: 'secondary.main', fontWeight: 500, fontSize: 25, borderTopRightRadius: 10, borderTopLeftRadius: 10}}>
+              <Grid item xs={6} textAlign="left" paddingLeft="20px" color="white">New Job Listing</Grid>
           </Grid>
           <Grid container sx={{justifyContent: 'space-between', width: '85vw', alignItems: 'space-evenly'}}>
             <Grid>

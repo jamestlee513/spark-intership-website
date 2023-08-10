@@ -5,8 +5,8 @@ import SparkLogo from '../images/Spark Logo.png';
 export default function AdminHeader() {
   return (
     <div style={headerStyle}>
-      <Grid container direction="column" sx={{background: '#D1D1D1', color: 'black', width: '100vw', height: '18vh', marginBottom: 30}}>
-        <Grid item xs={9} sx={{display: 'flex', alignItems: 'center', color: 'white', fontSize: 30, fontWeight: 400,}}>
+      <Grid container direction="column" sx={{background: '#BDD0FF', color: 'black', width: '100vw', height: '18vh', marginBottom: 30}}>
+        <Grid item xs={9} sx={{display: 'flex', alignItems: 'center', fontFamily: 'Bungee', color: 'white', fontSize: 30, fontWeight: 400,}}>
             <img src={SparkLogo} alt="Spark Logo" style={logoStyle}></img>
             Spark Recruiting
         </Grid>
@@ -21,7 +21,7 @@ export default function AdminHeader() {
 }
 
 const headerStyle = {
-    background: '#D1D1D1',
+    background: '#BDD0FF',
     color: 'black',
     width: '100vw',
     height: '18vh',
@@ -35,9 +35,9 @@ const linkStyle = {
 };
 
 const logoStyle = {
-    width: '28px',
-    height: '28px',
+    width: '26.5px',
+    height: '40px',
     flexShrink: '0',
     margin: 30,
-    marginRight: 10
+    marginRight: 15
 }
