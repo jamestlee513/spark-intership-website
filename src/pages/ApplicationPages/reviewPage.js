@@ -47,7 +47,7 @@ const ReviewPage = (props) => {
                 item.firstName = stuff.firstName
                 item.lastName = stuff.lastName
                 item.email = email
-                item.phone = Number(stuff.phoneNumber)
+                item.phone = stuff.phoneNumber
                 item.city = stuff.city
                 item.resume = stuff.resume.name
                 item.coverLetter = stuff.coverLetter.name
@@ -84,11 +84,11 @@ const ReviewPage = (props) => {
                     "firstName": stuff.firstName,
                     "lastName": stuff.lastName,
                     "email": email,
-                    "phone": Number(stuff.phoneNumber),
+                    "phone": stuff.phoneNumber,
                     "city": stuff.city,
                     "resume": stuff.resume.name,
                     "coverLetter": stuff.coverLetter.name,
-                    "zipcode": Number(stuff.zipCode),
+                    "zipcode": stuff.zipCode,
                     "country": stuff.country,
                     "state": stuff.state,
                     "address": stuff.address,

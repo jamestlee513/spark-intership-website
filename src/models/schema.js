@@ -34,7 +34,7 @@ export const schema = {
                 "phone": {
                     "name": "phone",
                     "isArray": false,
-                    "type": "Int",
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -342,5 +342,5 @@ export const schema = {
         }
     },
     "codegenVersion": "3.4.4",
-    "version": "d160435f465a15e5af58b67dd33b2c6d"
+    "version": "bc07f5143d65daa6881e4aefe840e63d"
 };
