@@ -48,7 +48,7 @@ export default function ListJobs() {
         <Grid sx={{width: '90vw', height: '70vh', border: '1px solid', borderColor: 'secondary.main', borderRadius: 5}}>
         <Grid 
           container direction="row" justifyContent="space-between" alignItems="center" color="white"
-          sx={{width: '90vw', height: '8vh', backgroundColor: 'secondary.main', fontWeight: 500, fontSize: 25}}>
+          sx={{width: '90vw', height: '8vh', backgroundColor: 'secondary.main', fontWeight: 500, fontSize: 25, borderTopRightRadius: 10, borderTopLeftRadius: 10}}>
           <Grid item xs={6} textAlign="left" paddingLeft="20px">Jobs</Grid>
           <Grid item xs={6} textAlign="right"><Button variant="text" sx={{fontSize: 30, color: 'white'}} onClick={() => {navigate('/create')}}>+</Button></Grid>
         </Grid>
