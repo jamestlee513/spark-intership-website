@@ -393,7 +393,7 @@ const ApplicationPage = (props) => {
                     "firstName": firstName,
                     "lastName": lastName,
                     "email": attributes.attributes.email,
-                    "phone": Number(phone),
+                    "phone": phone,
                     "city": city,
                     "resume": resume.name,
                     "coverLetter": coverLetter.name,
@@ -437,6 +437,7 @@ const ApplicationPage = (props) => {
         })
     }
 
+
     const verify = () => {
         runValidationTasks("firstName", firstName)
         runValidationTasks("lastName", lastName)
@@ -466,7 +467,7 @@ const ApplicationPage = (props) => {
     }
 
 // Draw Circle
-    const pagereqs = [!firstName || !lastName || !phone || !city || !zipcode || !country || !address || (!state && country === "US") || !Number(zipcode) || Number(zipcode) < 0, false, false, !resume]
+    const pagereqs = [!firstName || !lastName || !phone || !Number(phone)|| !city || !zipcode || !country || !address || (!state && country === "US") || !Number(zipcode) || Number(zipcode) < 0, false, false, !resume]
     const numSize = 32
     const circle = (pg) => {
         return {
@@ -1933,7 +1934,7 @@ const ApplicationPage = (props) => {
                                 order="2"
                                 onClick={(e) => {
                                     e.preventDefault();
-                                    if (!firstName || !lastName || !phone || !city || !resume || !zipcode || !country || !address || !job || !Number(zipcode) || Number(zipcode) < 0 || (country === "US" && !state)) {
+                                    if (!firstName || !lastName || !phone || !city || !resume || !zipcode || !country || !address || !job || !Number(phone) || !Number(zipcode) || Number(zipcode) < 0 || (country === "US" && !state)) {
                                         setErrorState({
                                             ...errorState,
                                             submit: true

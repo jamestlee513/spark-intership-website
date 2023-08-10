@@ -518,13 +518,9 @@ export default function ApplicationCreateForm(props) {
         label="Phone"
         isRequired={false}
         isReadOnly={false}
-        type="number"
-        step="any"
         value={phone}
         onChange={(e) => {
-          let value = isNaN(parseInt(e.target.value))
-            ? e.target.value
-            : parseInt(e.target.value);
+          let { value } = e.target;
           if (onChange) {
             const modelFields = {
               firstName,
