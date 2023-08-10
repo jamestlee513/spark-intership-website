@@ -64,39 +64,40 @@ export default function UpdateListing(){
   }
 
   async function updateListing() {
+    let error = false
     if (title.current.value === '') {
       setNameError('Field Missing')
-      return
+      error = true
     } else if (wordCounter(title.current.value) > 20) {
       setNameError('Word limit is 20')
-      return
+      error = true
     } else {
       setNameError('')
     }
     if (description.current.value === '') {
       setDescriptionError('Field Missing')
-      return
+      error = true
     } else if (wordCounter(description.current.value) > 100) {
       setDescriptionError('Word limit is 100')
-      return
+      error = true
     } else {
       setDescriptionError('')
     }
     if (location.current.value === '') {
       setLocationError('Field Missing')
-      return
+      error = true
     } else if (wordCounter(location.current.value) > 20) {
       setLocationError('Word limit is 20')
-      return
+      error = true
     } else {
       setLocationError('')
     }
     if (qualifications.current.value === '') {
       setQualificationsError('Field Missing')
-      return
+      error = true
     } else if (wordCounter(qualifications.current.value) > 150) {
       setQualificationsError('Word limit is 150')
-      return
+      error = true
     } else {
       setQualificationsError('')
     }
@@ -105,10 +106,11 @@ export default function UpdateListing(){
       return
     } else if (!dateError(deadline.current.value)) {
       setDeadlineError('Date is in the past')
-      return
+      error = true
     } else {
       setDeadlineError('')
     }
+    if (error) return
     const original = await DataStore.query(JobListing, id);
     const updatedListing = await DataStore.save(
     JobListing.copyOf(original, updated => {

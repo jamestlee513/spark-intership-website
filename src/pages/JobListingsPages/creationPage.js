@@ -33,6 +33,7 @@ export default function CreateListing() {
 
 
   async function makeListing(e) {
+    let error = false
     const name = jobName.current.value
     const description = jobDescription.current.value
     const qual = qualifications.current.value
@@ -40,37 +41,37 @@ export default function CreateListing() {
     const date = deadline.current.value 
     if (name === '') {
       setNameError('Field Missing')
-      return
+      error = true
     } else if (wordCounter(name) > 20) {
       setNameError('Word limit is 20')
-      return
+      error = true
     } else {
       setNameError('')
     }
     if (description === '') {
       setDescriptionError('Field Missing')
-      return
+      error = true
     } else if (wordCounter(description) > 100) {
       setDescriptionError('Word limit is 100')
-      return
+      error = true
     } else {
       setDescriptionError('')
     }
     if (loc === '') {
       setLocationError('Field Missing')
-      return
+      error = true
     } else if (wordCounter(loc) > 20) {
       setLocationError('Word limit is 20')
-      return
+      error = true
     } else {
       setLocationError('')
     }
     if (qual === '') {
       setQualificationsError('Field Missing')
-      return
+      error = true
     } else if (wordCounter(qual) > 150) {
       setQualificationsError('Word limit is 150')
-      return
+      error = true
     } else {
       setQualificationsError('')
     }
@@ -81,10 +82,11 @@ export default function CreateListing() {
     const fixedDate = dateFixer(date)
     if (!fixedDate.future) {
       setDateError('Date is in the past')
-      return
+      error = true
     } else {
       setDateError('')
     }
+    if (error) return
     const attributes = await Auth.currentUserInfo()
     const email = attributes.attributes.email
     await DataStore.save(new JobListing({
