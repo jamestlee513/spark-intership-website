@@ -38,7 +38,9 @@ export default function ListJobs() {
     }));
   }
 
-  useEffect(() => {fetchListings()}, [])
+  //useEffect(() => {fetchListings()}, [])
+
+  useEffect(() => {fetchListings()})
 
   return(
     <>
@@ -80,7 +82,7 @@ export default function ListJobs() {
                       <MenuItem value={"On Hold"}>On Hold</MenuItem>
                     </Select>
                   </TableCell>
-                  <TableCell sx={{fontSize: 17, fontWeight: 400, textAlign: 'right'}}>{listing.createdAt.substring(0, 10)}</TableCell>
+                  <TableCell sx={{fontSize: 17, fontWeight: 400, textAlign: 'right'}}>{listing.createdAt?.substring(0, 10)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
