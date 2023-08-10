@@ -6,7 +6,13 @@ export default function AboutSpark() {
     return (
         <>
         <Header />
-        <img src={SparkGroupPhoto}/>
+        <img src={SparkGroupPhoto} style={imgStyle}/>
         </>
     )
+}
+
+const imgStyle = {
+    width: '2000px',
+    height: '500px',
+    radius: '33px, 0px, 0px, 33px',
 }
