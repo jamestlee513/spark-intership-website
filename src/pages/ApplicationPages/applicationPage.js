@@ -221,6 +221,7 @@ const ApplicationPage = (props) => {
     })
     const [errorMessage, setErrorMessage] = React.useState({
         educationGPA: "",
+        educationGrad: "",
     })
 
     const resetStateValues = () => {
@@ -1439,8 +1440,8 @@ const ApplicationPage = (props) => {
                                             isDisabled={false}
                                             labelHidden={false}
                                             variation="default"
-                                            errorMessage={"The value is requried"}
-                                            hasError={errorState.addEducationSubmit && grad.current && grad.current.value == ''}
+                                            errorMessage={errorMessage.educationGrad}
+                                            hasError={errorState.addEducationSubmit && grad.current && (grad.current.value == ''  || !Number(grad.current.value))}
                                         ></TextField>
                                         <TextField
                                             width="40vw"
@@ -1485,6 +1486,17 @@ const ApplicationPage = (props) => {
                                                 setErrorMessage({
                                                     ...errorMessage,
                                                     educationGPA: "The value must be in the range of 0-5"
+                                                })
+                                            }
+                                            if (grad.current && (grad.current.value == '')) {
+                                                setErrorMessage({
+                                                    ...errorMessage,
+                                                    educationGrad: "The value is required"
+                                                })
+                                            } else if (grad.current && !Number(grad.current.value)) {
+                                                setErrorMessage({
+                                                    ...errorMessage,
+                                                    educationGrad: "The value must be a number"
                                                 })
                                             }
                                             addEducation()
